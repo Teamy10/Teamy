@@ -18,7 +18,6 @@ export function Services() {
         <SectionHeading
           id="services-title"
           tone="night"
-          eyebrow={`For ${siteConfig.audience}`}
           title="What we build for D2C brands."
           highlight="D2C brands."
           sub="Three stages, one team. From the first product page to your thousandth repeat order."

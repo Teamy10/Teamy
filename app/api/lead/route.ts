@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { PLAN_CHOICES, normaliseIndianMobile, normaliseInstagram, type LeadPayload } from "@/lib/leads";
+import { normaliseIndianMobile, normaliseInstagram, type LeadPayload } from "@/lib/leads";
 
 /**
  * Receives leads from the contact form and forwards them to LEAD_WEBHOOK_URL
@@ -28,7 +28,6 @@ export async function POST(req: Request) {
     brand,
     whatsapp: `+91${whatsapp}`,
     instagram: body.instagram ? normaliseInstagram(String(body.instagram)) ?? undefined : undefined,
-    plan: PLAN_CHOICES.find((p) => p === body.plan),
     submittedAt: new Date().toISOString(),
   };
 

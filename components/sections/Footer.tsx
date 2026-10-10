@@ -1,7 +1,7 @@
 import { Mail } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
-import { InstagramIcon, LinkedInIcon, WhatsAppIcon } from "@/components/ui/Icons";
+import { WhatsAppIcon } from "@/components/ui/Icons";
 import { WhatsAppLink } from "@/components/ui/TrackedLink";
 import { siteConfig } from "@/site.config";
 
@@ -25,12 +25,6 @@ export function Footer() {
             </WhatsAppLink>
             <a href={`mailto:${contact.email}`} aria-label="Email" className={social}>
               <Mail className="size-5" aria-hidden="true" />
-            </a>
-            <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className={social}>
-              <InstagramIcon className="size-5" />
-            </a>
-            <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className={social}>
-              <LinkedInIcon className="size-5" />
             </a>
           </div>
           <nav aria-label="Legal" className="flex gap-2 text-on-night-soft">

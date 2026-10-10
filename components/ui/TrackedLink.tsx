@@ -27,9 +27,16 @@ export function WhatsAppLink({
   section,
   brand,
   message,
+  onClickTrack,
   onClick,
   ...props
-}: Omit<ComponentProps<"a">, "href"> & { section: string; brand?: string; message?: "bookCall" }) {
+}: Omit<ComponentProps<"a">, "href"> & {
+  section: string;
+  brand?: string;
+  message?: "bookCall";
+  /** An extra event to fire alongside whatsapp_click (e.g. pricing_cta_click). */
+  onClickTrack?: AnalyticsEvent;
+}) {
   return (
     <a
       href={whatsappLink(brand, message)}
@@ -38,6 +45,7 @@ export function WhatsAppLink({
       {...props}
       onClick={(e) => {
         trackWhatsApp(section);
+        if (onClickTrack) track(onClickTrack, { section });
         onClick?.(e);
       }}
     />

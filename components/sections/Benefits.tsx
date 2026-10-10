@@ -7,36 +7,34 @@ import { siteConfig, type IconName } from "@/site.config";
 
 /* Small animated visuals per benefit. They animate in when the card is revealed (.pop). */
 
+/** A thin progress track from first call to launch; the fill sweeps across when revealed. */
 function DaysVisual() {
-  const days = Array.from({ length: siteConfig.launchDays }, (_, i) => i + 1);
   return (
-    <div className="mt-8 flex flex-wrap items-center gap-2" aria-hidden="true">
-      {days.map((d, i) => (
-        <span
-          key={d}
-          className="pop fill-on-show grid h-11 min-w-11 place-items-center rounded-xl bg-accent px-2 text-sm font-bold text-ink"
-          style={{ ["--d" as string]: 120 + i * 110 }}
-        >
-          {i === days.length - 1 ? "Live 🚀" : `D${d}`}
-        </span>
-      ))}
+    <div className="mt-8" aria-hidden="true">
+      <div className="h-1.5 overflow-hidden rounded-full bg-line-night">
+        <div className="grow-on-show h-full origin-left rounded-full bg-[linear-gradient(90deg,var(--accent),var(--sky))]" />
+      </div>
+      <div className="mt-3 flex justify-between text-sm text-on-night-soft">
+        <span>First call</span>
+        <span className="font-semibold text-on-night">Live in {siteConfig.launchDays} days</span>
+      </div>
     </div>
   );
 }
 
 function CheckoutVisual() {
   return (
-    <div className="mt-8 flex flex-wrap gap-2" aria-hidden="true">
+    <ul className="mt-8 grid grid-cols-3 gap-2 text-sm" aria-hidden="true">
       {["UPI", "Cards", "COD"].map((m, i) => (
-        <span
+        <li
           key={m}
-          className="pop inline-flex items-center gap-1.5 rounded-full bg-night-2 px-3.5 py-2 text-sm font-semibold text-on-night ring-1 ring-line-night"
+          className="pop flex flex-col items-start gap-2 rounded-xl bg-night-2 p-3 font-semibold text-on-night ring-1 ring-line-night"
           style={{ ["--d" as string]: 150 + i * 120 }}
         >
           <Check className="size-4 text-accent" strokeWidth={3} /> {m}
-        </span>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 
@@ -67,17 +65,17 @@ function OwnVisual() {
     [<KeyRound key="k" className="size-4" />, "Logins"],
   ];
   return (
-    <div className="mt-8 flex flex-wrap gap-2" aria-hidden="true">
+    <ul className="mt-8 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4" aria-hidden="true">
       {items.map(([icon, label], i) => (
-        <span
+        <li
           key={label}
-          className="pop inline-flex items-center gap-2 rounded-full bg-accent px-3.5 py-2 text-sm font-semibold text-ink"
+          className="pop flex items-center gap-2 rounded-xl bg-night-2 px-3 py-2.5 font-semibold text-on-night ring-1 ring-line-night"
           style={{ ["--d" as string]: 150 + i * 110 }}
         >
-          {icon} {label}
-        </span>
+          <span className="text-accent">{icon}</span> {label}
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 
@@ -97,7 +95,6 @@ export function Benefits() {
       <div className="container-page">
         <SectionHeading
           id="why-title"
-          eyebrow="Why Teamy"
           title="One team for your whole store."
           highlight="whole store."
           sub="Design, build, payments, WhatsApp and the fixes after launch. You run the brand; we run the tech."

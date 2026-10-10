@@ -31,7 +31,6 @@ export function SplitWords({ text, highlight, tone }: { text: string; highlight?
 
 export function SectionHeading({
   id,
-  eyebrow,
   title,
   highlight,
   sub,
@@ -39,7 +38,6 @@ export function SectionHeading({
   tone = "light",
 }: {
   id: string;
-  eyebrow?: string;
   title: string;
   highlight?: string;
   sub?: ReactNode;
@@ -49,16 +47,6 @@ export function SectionHeading({
   const night = tone === "night";
   return (
     <Reveal as="header" className={align === "center" ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
-      {eyebrow && (
-        <p
-          className={`mb-4 inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold uppercase tracking-[0.14em] ${
-            night ? "bg-night-2 text-accent ring-1 ring-line-night" : "bg-support/10 text-support"
-          }`}
-        >
-          <span aria-hidden="true" className={`size-1.5 rounded-full ${night ? "bg-accent" : "bg-support"}`} />
-          {eyebrow}
-        </p>
-      )}
       <h2 id={id} className={`h2-size font-extrabold ${night ? "text-on-night" : ""}`}>
         <span className="sr-only">{title}</span>
         <span aria-hidden="true">

@@ -1,8 +1,5 @@
 /** Shared lead validation, used by the form, the quiz and the API route. */
 
-/** "Which plan are you leaning towards?" (optional). */
-export const PLAN_CHOICES = ["Launch", "Growth", "Not sure yet"] as const;
-export type PlanChoice = (typeof PLAN_CHOICES)[number];
 
 export type LeadPayload = {
   source: "form";
@@ -10,7 +7,6 @@ export type LeadPayload = {
   brand: string;
   whatsapp: string;
   instagram?: string;
-  plan?: PlanChoice;
   /** Honeypot: real people leave it empty. */
   company?: string;
 };

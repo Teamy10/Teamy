@@ -13,6 +13,9 @@
   --accent: #c8f25a; /* electric lime — CTAs (navy text, 13.9:1) and highlights on dark */
   --accent-hover: #b8e63f;
   --support: #3b5bdb; /* indigo — links and focus on light, 5.7:1 on white */
+  --accent-ink: #0e1726; /* text on --accent */
+  --night-rgb: 14 23 38;
+  --accent-rgb: 200 242 90;
   --violet: #7c5cff; /* decorative glow / gradients */
   --sky: #38bdf8; /* decorative glow / gradients */
   --line: #e4e4dc;
@@ -32,6 +35,7 @@
   --color-on-night-soft: var(--on-night-soft);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
+  --color-accent-ink: var(--accent-ink);
   --color-support: var(--support);
   --color-violet: var(--violet);
   --color-sky: var(--sky);
@@ -153,6 +157,27 @@ h3 {
   opacity: 0;
   transform: translateY(0.55em);
   transition: none;
+}
+
+/* ---------- Surfaces ---------- */
+
+@utility surface-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 1px 2px rgb(var(--night-rgb) / 0.04),
+    0 12px 32px -16px rgb(var(--night-rgb) / 0.16);
+}
+
+@utility surface-night {
+  background-color: var(--night);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+}
+
+@utility glow-blob {
+  border-radius: 999px;
+  background: radial-gradient(closest-side, rgb(var(--accent-rgb) / 0.28), transparent);
 }
 
 /* ---------- Effects ---------- */
@@ -354,9 +379,11 @@ h3 {
   opacity: 0;
   transform: translateY(10px) scale(0.85);
 }
-[data-reveal="on"] .reveal:not([data-shown]) .fill-on-show {
-  background-color: var(--line-night);
-  color: var(--on-night-soft);
+.grow-on-show {
+  transition: transform 1.4s var(--ease-brand) 300ms;
+}
+[data-reveal="on"] .reveal:not([data-shown]) .grow-on-show {
+  transform: scaleX(0.04);
 }
 
 /* Pulsing status dot. */

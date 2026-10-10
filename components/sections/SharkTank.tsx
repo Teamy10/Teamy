@@ -21,10 +21,6 @@ export function SharkTank() {
 
       <div className="container-page relative grid gap-12 lg:grid-cols-[1.25fr_1fr] lg:items-center lg:gap-16">
         <Reveal as="header">
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-support/10 px-3 py-1 text-sm font-semibold uppercase tracking-[0.14em] text-support">
-            <span aria-hidden="true" className="size-1.5 rounded-full bg-support" />
-            {t.eyebrow}
-          </p>
           <h2 id="shark-title" className="font-display text-[clamp(2.25rem,1.4rem+3.6vw,4.25rem)] font-extrabold leading-[1.02] tracking-[-0.025em]">
             <span className="sr-only">{t.title}</span>
             <span aria-hidden="true">

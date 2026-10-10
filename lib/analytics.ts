@@ -5,7 +5,7 @@
 export type AnalyticsEvent =
   | "hero_cta_click"
   | "whatsapp_click"
-  | "plan_cta_click"
+  | "pricing_cta_click"
   | "form_submitted"
   | "pricing_viewed";
 

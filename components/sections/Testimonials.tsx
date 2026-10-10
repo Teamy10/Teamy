@@ -83,7 +83,6 @@ export function Testimonials() {
           id="testimonials-title"
           tone="night"
           align="center"
-          eyebrow="Founders on Teamy"
           title="Don't take our word for it."
           highlight="our word"
         />

@@ -9,7 +9,6 @@ export function Process() {
       <div className="container-page">
         <SectionHeading
           id="process-title"
-          eyebrow="How it works"
           title="From first call to first order."
           highlight="first order."
           sub="Four clear steps, with the same people on WhatsApp from start to finish."

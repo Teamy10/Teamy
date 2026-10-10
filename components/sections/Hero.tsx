@@ -44,11 +44,7 @@ export function Hero() {
 
       <div className="container-page relative grid grid-cols-1 items-center gap-16 pb-24 lg:grid-cols-[1.15fr_1fr] lg:gap-10 lg:pb-32 lg:pt-12">
         <div className="min-w-0">
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-sm font-semibold text-on-night backdrop-blur">
-            <span className="pulse-dot size-2 rounded-full bg-accent" aria-hidden="true" />
-            {hero.eyebrow}
-          </p>
-          <div className="mt-6">
+          <div>
             <HeroHeadline lines={hero.headlines} rotateMs={hero.rotateMs} srText={hero.srHeadline} />
           </div>
           <p className="mt-4 max-w-xl text-lg text-on-night-soft md:text-xl">{hero.sub}</p>
