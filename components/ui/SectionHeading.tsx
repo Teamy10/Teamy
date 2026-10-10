@@ -1,0 +1,71 @@
+import { Fragment, type ReactNode } from "react";
+import { Reveal } from "./Reveal";
+
+/**
+ * Splits a heading into words that rise in one after another when the section is revealed.
+ * `highlight` (exact substring) gets the shimmering lime gradient on dark, indigo on light.
+ */
+export function SplitWords({ text, highlight, tone }: { text: string; highlight?: string; tone: "light" | "night" }) {
+  const words = text.split(" ");
+  const hl = highlight?.split(" ") ?? [];
+  const start = hl.length ? words.findIndex((_, i) => hl.every((h, j) => words[i + j] === h)) : -1;
+  return (
+    <>
+      {words.map((w, i) => {
+        const lit = start >= 0 && i >= start && i < start + hl.length;
+        return (
+          <Fragment key={i}>
+            <span
+              className={`rw ${lit ? (tone === "night" ? "text-shine" : "text-support") : ""}`}
+              style={{ ["--i" as string]: i }}
+            >
+              {w}
+            </span>
+            {i < words.length - 1 ? " " : null}
+          </Fragment>
+        );
+      })}
+    </>
+  );
+}
+
+export function SectionHeading({
+  id,
+  eyebrow,
+  title,
+  highlight,
+  sub,
+  align = "left",
+  tone = "light",
+}: {
+  id: string;
+  eyebrow?: string;
+  title: string;
+  highlight?: string;
+  sub?: ReactNode;
+  align?: "left" | "center";
+  tone?: "light" | "night";
+}) {
+  const night = tone === "night";
+  return (
+    <Reveal as="header" className={align === "center" ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
+      {eyebrow && (
+        <p
+          className={`mb-4 inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold uppercase tracking-[0.14em] ${
+            night ? "bg-night-2 text-accent ring-1 ring-line-night" : "bg-support/10 text-support"
+          }`}
+        >
+          <span aria-hidden="true" className={`size-1.5 rounded-full ${night ? "bg-accent" : "bg-support"}`} />
+          {eyebrow}
+        </p>
+      )}
+      <h2 id={id} className={`h2-size font-extrabold ${night ? "text-on-night" : ""}`}>
+        <span className="sr-only">{title}</span>
+        <span aria-hidden="true">
+          <SplitWords text={title} highlight={highlight} tone={tone} />
+        </span>
+      </h2>
+      {sub && <p className={`mt-4 text-lg ${night ? "text-on-night-soft" : "text-ink-soft"}`}>{sub}</p>}
+    </Reveal>
+  );
+}
