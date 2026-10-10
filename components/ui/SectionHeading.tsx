@@ -47,7 +47,7 @@ export function SectionHeading({
   const night = tone === "night";
   return (
     <Reveal as="header" className={align === "center" ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
-      <h2 id={id} className={`h2-size font-extrabold ${night ? "text-on-night" : ""}`}>
+      <h2 id={id} className={`h2-size font-bold ${night ? "text-on-night" : ""}`}>
         <span className="sr-only">{title}</span>
         <span aria-hidden="true">
           <SplitWords text={title} highlight={highlight} tone={tone} />

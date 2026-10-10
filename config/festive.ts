@@ -53,6 +53,12 @@ export type Festival = {
   favicon?: string;
 };
 
+/**
+ * Hero note for the default theme. Every theme shows exactly one note in the same slot,
+ * so switching themes never changes layout. Keep festive notes about this length.
+ */
+export const DEFAULT_HERO_NOTE = "Free call and a free store preview before you pay anything.";
+
 /** Premium base theme: Midnight & Lime. Used whenever no festival is active. */
 export const DEFAULT_TOKENS: ThemeTokens = {
   night: "#0e1726",

@@ -12,10 +12,11 @@ import "./globals.css";
  * Google's own "latin" files lack ₹, so every price would pull an extra 84KB latin-ext file
  * late in the load. Rebuild with scripts/build-fonts.py (see README → Fonts).
  */
-const bricolage = localFont({
-  src: "./fonts/bricolage.woff2",
-  weight: "400 800",
-  variable: "--font-bricolage",
+// Headlines: Inter Display (Inter at its display optical size). Body: Inter. Both preloaded.
+const interDisplay = localFont({
+  src: "./fonts/inter-display.woff2",
+  weight: "500 800",
+  variable: "--font-inter-display",
   display: "swap",
 });
 
@@ -68,7 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       data-theme={resolveThemeId(new Date())}
       // The boot script may change data-theme before React hydrates.
       suppressHydrationWarning
-      className={`${bricolage.variable} ${inter.variable}`}
+      className={`${interDisplay.variable} ${inter.variable}`}
     >
       <head>
         <style id="theme-tokens" dangerouslySetInnerHTML={{ __html: themeCss(FESTIVALS) }} />

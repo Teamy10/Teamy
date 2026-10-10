@@ -57,7 +57,7 @@ export function PhoneMockup() {
           {/* Demo store */}
           <div className="h-full overflow-hidden pt-9" aria-hidden="true">
             <div className="flex items-center justify-between px-4 pb-3">
-              <span className="font-display text-[17px] font-extrabold tracking-tight">kesar threads</span>
+              <span className="font-display text-[17px] font-bold tracking-tight">kesar threads</span>
               <ShoppingBag className="size-5" />
             </div>
             <div className="mx-4 rounded-2xl bg-[#FFE8D6] px-4 py-4">

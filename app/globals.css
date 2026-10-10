@@ -45,7 +45,7 @@
   --color-line: var(--line);
   --color-line-night: var(--line-night);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-bricolage), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter-display), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
   --shadow-soft: 0 1px 2px rgb(var(--night-rgb) / 0.05), 0 8px 24px -10px rgb(var(--night-rgb) / 0.14);
   --shadow-lift: 0 2px 4px rgb(var(--night-rgb) / 0.06), 0 22px 44px -16px rgb(var(--night-rgb) / 0.28);
@@ -62,7 +62,9 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
+  font-feature-settings: "cv11", "ss01";
+  text-rendering: optimizeLegibility;
   overflow-x: clip;
   -webkit-tap-highlight-color: transparent;
 }
@@ -71,8 +73,9 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: -0.03em;
-  line-height: 1.05;
+  line-height: 1.06;
   /* No text-wrap: balance: with negative letter-spacing it makes Chrome re-shape every
      heading several times and roughly doubles layout cost on load. */
 }
@@ -91,9 +94,10 @@ h3 {
   color: var(--accent-ink);
 }
 
+/* 1240px max content width; sections lay out on a 12-column grid inside it. */
 @utility container-page {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1240px;
   margin-inline: auto;
   padding-inline: max(20px, env(safe-area-inset-left));
 }
@@ -109,14 +113,14 @@ h3 {
 }
 
 @utility h1-size {
-  font-size: clamp(2.5rem, 1.55rem + 4.6vw, 4.75rem);
-  /* Big display sizes need a touch more air than the shared -0.03em. */
-  letter-spacing: -0.02em;
+  font-size: clamp(2.5rem, 1.6rem + 4.4vw, 4.75rem);
+  letter-spacing: -0.04em;
+  line-height: 1.02;
 }
 
 @utility h2-size {
-  font-size: clamp(2rem, 1.45rem + 2.4vw, 3.25rem);
-  letter-spacing: -0.025em;
+  font-size: clamp(2rem, 1.5rem + 2.2vw, 3.25rem);
+  letter-spacing: -0.035em;
 }
 
 /* Dark band texture: a faint dot grid plus static glows (gradients only, no filters). */
@@ -175,7 +179,23 @@ h3 {
 
 @utility surface-night {
   background-color: var(--night);
+  border: 1px solid var(--line-night);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.07),
+    0 24px 48px -28px rgb(0 0 0 / 0.6);
+}
+
+/* Raised card on a dark section. */
+@utility surface-night-2 {
+  background-color: var(--night-2);
+  border: 1px solid var(--line-night);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+}
+
+/* Fine grain on dark bands: a 2KB pre-rendered tile (no SVG filters, which delay first paint). */
+@utility grain {
+  background-image: url("/grain-dark.png");
+  background-repeat: repeat;
 }
 
 @utility glow-blob {

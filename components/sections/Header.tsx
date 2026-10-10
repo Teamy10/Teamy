@@ -32,6 +32,7 @@ export function Header() {
   // Lock scroll, close on Escape, keep focus inside the sheet while open.
   useEffect(() => {
     if (!open) return;
+    const button = menuButton.current;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     sheet.current?.querySelector<HTMLElement>("a,button")?.focus();
@@ -53,7 +54,7 @@ export function Header() {
     return () => {
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", onKey);
-      menuButton.current?.focus();
+      button?.focus();
     };
   }, [open]);
 

@@ -77,6 +77,7 @@ export function themeCss(festivals: readonly Festival[] = FESTIVALS): string {
     `:root{${declarations(DEFAULT_TOKENS)}}`,
     // Festive-only elements (greeting, motifs, dividers) are hidden unless their theme is active.
     `[data-festive],[data-motif],.festive-divider{display:none}`,
+    `:root:not([data-theme]) [data-festive="default"],:root[data-theme="default"] [data-festive="default"]{display:block}`,
   ];
   for (const f of valid) {
     const on = `:root[data-theme="${f.id}"]`;

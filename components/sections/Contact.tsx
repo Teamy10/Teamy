@@ -92,16 +92,16 @@ export function Contact() {
   const describedBy = (k: keyof Values) => (errors[k] ? `contact-${k}-error` : undefined);
 
   return (
-    <section id="contact" aria-labelledby="contact-title" className="on-night section-pad relative overflow-hidden bg-night">
+    <section id="contact" aria-labelledby="contact-title" className="on-night grain section-pad relative overflow-hidden bg-night">
       <FestiveDivider />
       <div className="aurora" aria-hidden="true">
         <span />
         <span />
         <span />
       </div>
-      <div className="container-page relative grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-16">
-        <Reveal>
-          <h2 id="contact-title" className="h2-size font-extrabold text-on-night">
+      <div className="container-page relative grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-8">
+        <Reveal className="lg:col-span-5">
+          <h2 id="contact-title" className="h2-size font-bold text-on-night">
             <span className="sr-only">Let&apos;s build your store.</span>
             <span aria-hidden="true">
               <SplitWords text="Let's build your store." highlight="your store." tone="night" />
@@ -129,7 +129,7 @@ export function Contact() {
           </p>
         </Reveal>
 
-        <Reveal delay={0.08}>
+        <Reveal delay={0.08} className="lg:col-span-6 lg:col-start-7">
           {status === "done" ? (
             <div
               ref={successRef}
@@ -140,7 +140,7 @@ export function Contact() {
               <span className="mx-auto grid size-14 place-items-center rounded-full bg-accent text-accent-ink">
                 <PartyPopper className="size-7" aria-hidden="true" />
               </span>
-              <p className="mt-5 font-display text-3xl font-extrabold tracking-tight">
+              <p className="mt-5 font-display text-3xl font-bold tracking-tight">
                 Thanks, {values.name.trim().split(" ")[0]}!
               </p>
               <p className="mt-2 text-lg text-ink-soft">

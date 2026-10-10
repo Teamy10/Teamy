@@ -13,7 +13,7 @@ function FloatCard({ className, icon, title, body }: { className: string; icon: 
   return (
     <div
       aria-hidden="true"
-      className={`absolute z-20 flex items-center gap-3 rounded-2xl border border-white/10 bg-night-2/80 px-4 py-3 text-on-night shadow-[0_20px_40px_-20px_rgb(0_0_0/0.8)] backdrop-blur-md ${className}`}
+      className={`surface-night-2 absolute z-20 flex items-center gap-3 rounded-2xl px-4 py-3 text-on-night shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_20px_40px_-20px_rgb(0_0_0/0.8)] ${className}`}
     >
       <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-accent text-accent-ink">{icon}</span>
       <span>
@@ -30,7 +30,7 @@ export function Hero() {
     <section
       id="top"
       aria-labelledby="hero-title"
-      className="on-night relative overflow-hidden bg-night pt-[calc(var(--header-h)+env(safe-area-inset-top)+28px)]"
+      className="on-night grain relative overflow-hidden bg-night pt-[calc(var(--header-h)+env(safe-area-inset-top)+28px)]"
     >
       {/* Drifting aurora + dot grid. */}
       <div className="aurora" aria-hidden="true">
@@ -45,8 +45,8 @@ export function Hero() {
 
       <HeroMotif />
 
-      <div className="container-page relative grid grid-cols-1 items-center gap-16 pb-24 lg:grid-cols-[1.15fr_1fr] lg:gap-10 lg:pb-32 lg:pt-12">
-        <div className="min-w-0">
+      <div className="container-page relative grid grid-cols-1 items-center gap-16 pb-24 lg:grid-cols-12 lg:gap-8 lg:pb-32 lg:pt-12">
+        <div className="min-w-0 lg:col-span-7">
           <div>
             <HeroHeadline lines={hero.headlines} rotateMs={hero.rotateMs} srText={hero.srHeadline} />
           </div>
@@ -81,7 +81,7 @@ export function Hero() {
         </div>
 
         {/* Phone tilts toward the cursor (desktop); cards float around it. */}
-        <div data-tilt-zone className="relative mx-auto w-full max-w-[460px] py-6">
+        <div data-tilt-zone className="relative mx-auto w-full max-w-[460px] py-6 lg:col-span-5">
           <div
             aria-hidden="true"
             className="absolute left-1/2 top-1/2 size-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/0.25),transparent)]"

@@ -89,7 +89,7 @@ export function Pricing() {
                     className="pop glow-card group flex h-full items-start gap-3 rounded-2xl bg-bg p-4 ring-1 ring-line transition-[translate,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-soft"
                     style={{ ["--d" as string]: 100 + i * 70 }}
                   >
-                    <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-ink text-accent transition-transform duration-300 group-hover:-rotate-6">
+                    <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-night text-accent transition-transform duration-300 group-hover:-rotate-6">
                       <Icon className="size-5" aria-hidden="true" />
                     </span>
                     <span className="min-w-0">
@@ -102,7 +102,7 @@ export function Pricing() {
               <li className="pop" style={{ ["--d" as string]: 100 + addOns.length * 70 }}>
                 <a
                   href="#contact"
-                  className="group flex h-full min-h-24 items-center justify-between gap-3 rounded-2xl bg-ink p-4 font-semibold text-on-night transition-[translate] duration-300 hover:-translate-y-0.5"
+                  className="group flex h-full min-h-24 items-center justify-between gap-3 rounded-2xl bg-night p-4 font-semibold text-on-night transition-[translate] duration-300 hover:-translate-y-0.5"
                 >
                   <span className="flex items-center gap-3">
                     <span className="grid size-10 place-items-center rounded-xl bg-accent text-accent-ink">

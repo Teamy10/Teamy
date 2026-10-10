@@ -87,7 +87,7 @@ const visuals: Partial<Record<IconName, () => ReactNode>> = {
 };
 
 // Bento layout: wide, narrow / narrow, wide.
-const spans = ["lg:col-span-2", "lg:col-span-1", "lg:col-span-1", "lg:col-span-2"];
+const spans = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-5", "lg:col-span-7"];
 
 export function Benefits() {
   return (
@@ -99,13 +99,13 @@ export function Benefits() {
           highlight="whole store."
           sub="Design, build, payments, WhatsApp and the fixes after launch. You run the brand; we run the tech."
         />
-        <ul className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+        <ul className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-12 lg:gap-5">
           {siteConfig.benefits.map((b, i) => {
             const Icon = icons[b.icon];
             const Visual = visuals[b.icon];
             return (
               <Reveal as="li" key={b.title} delay={i * 0.07} className={spans[i % 4]}>
-                <div className="glow-card on-night group relative h-full overflow-hidden rounded-[28px] bg-night p-7 text-on-night ring-1 ring-line-night transition-[translate,box-shadow] duration-300 ease-brand [--glow:rgb(var(--accent-rgb)/0.14)] hover:-translate-y-1 hover:shadow-[0_30px_60px_-30px_rgb(var(--night-rgb)/0.8)] sm:p-8">
+                <div className="glow-card on-night surface-night group relative h-full overflow-hidden rounded-[28px] p-7 text-on-night transition-[translate,box-shadow] duration-300 ease-brand [--glow:rgb(var(--accent-rgb)/0.14)] hover:-translate-y-1 hover:shadow-[0_30px_60px_-30px_rgb(var(--night-rgb)/0.8)] sm:p-8">
                   {/* Corner glow + giant faded number for depth. */}
                   <span
                     aria-hidden="true"
@@ -113,7 +113,7 @@ export function Benefits() {
                   />
                   <span
                     aria-hidden="true"
-                    className="absolute bottom-[-0.15em] right-4 font-display text-[9rem] font-extrabold leading-none text-white/[0.04]"
+                    className="absolute bottom-[-0.15em] right-4 font-display text-[9rem] font-bold leading-none text-white/[0.04]"
                   >
                     0{i + 1}
                   </span>
@@ -121,7 +121,7 @@ export function Benefits() {
                     <span className="grid size-12 place-items-center rounded-2xl bg-accent text-accent-ink transition-transform duration-500 ease-brand group-hover:-rotate-6 group-hover:scale-110">
                       <Icon className="size-6" aria-hidden="true" />
                     </span>
-                    <h3 className="mt-6 text-[28px] font-extrabold">{b.title}</h3>
+                    <h3 className="mt-6 text-[28px] font-bold">{b.title}</h3>
                     <p className="mt-2 max-w-md text-on-night-soft">{b.line}</p>
                     {Visual && <Visual />}
                   </div>
