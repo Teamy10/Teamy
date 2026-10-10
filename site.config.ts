@@ -223,7 +223,7 @@ export const siteConfig = {
   testimonials: [
     {
       name: "Jay Agrawal",
-      role: "Co-founder",
+      role: "Founder",
       brand: "Ganges",
       // ⚠️ CONFIRM: reworded from Jay's original (brand name and phrasing). Get his OK on this text.
       quote:
