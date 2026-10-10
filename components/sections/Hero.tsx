@@ -32,16 +32,12 @@ export function Hero() {
       aria-labelledby="hero-title"
       className="on-night grain relative overflow-hidden bg-night pt-[calc(var(--header-h)+env(safe-area-inset-top)+28px)]"
     >
-      {/* Drifting aurora + dot grid. */}
+      {/* Drifting aurora (fades in once the page is idle). */}
       <div className="aurora" aria-hidden="true">
         <span />
         <span />
         <span />
       </div>
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 [background-image:radial-gradient(rgb(255_255_255/0.08)_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_75%)]"
-      />
 
       <HeroMotif />
 

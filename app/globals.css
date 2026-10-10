@@ -485,6 +485,42 @@ h3 {
   }
 }
 
+/*
+ * Decorative motion starts only once the page is idle after load (RevealObserver sets
+ * data-fx="on"), so none of it competes with first paint on slower phones.
+ */
+:root:not([data-fx="on"]) :is(
+    .aurora > span,
+    .text-shine,
+    .float,
+    .float-slow,
+    .marquee-track,
+    .spin-border::before,
+    .sheen-idle::after,
+    .motif-spin,
+    .diya-flame,
+    .pulse-dot::after
+  ) {
+  animation-play-state: paused;
+}
+/* The big decorative layers aren't drawn during first paint; they fade in once idle. */
+.aurora,
+.motif-layer {
+  transition:
+    opacity 1.4s var(--ease-brand),
+    visibility 0s;
+}
+:root:not([data-fx="on"]) :is(.aurora, .motif-layer) {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Secondary auroras (testimonials, contact) stay still: fewer large GPU layers. */
+.aurora-static > span {
+  animation: none;
+  will-change: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

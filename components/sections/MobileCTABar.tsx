@@ -50,8 +50,8 @@ export function MobileCTABar() {
 
   return (
     <div
-      className={`on-night fixed inset-x-0 bottom-0 z-30 border-t border-line-night bg-night/95 px-4 pb-[calc(12px+env(safe-area-inset-bottom))] pt-3 backdrop-blur-md transition-transform duration-300 ease-brand md:hidden ${
-        show ? "translate-y-0" : "translate-y-full"
+      className={`on-night fixed inset-x-0 bottom-0 z-30 border-t border-line-night bg-night/95 px-4 pb-[calc(12px+env(safe-area-inset-bottom))] pt-3 transition-transform duration-300 ease-brand md:hidden ${
+        show ? "translate-y-0 backdrop-blur-md" : "translate-y-full"
       }`}
       inert={!show}
     >

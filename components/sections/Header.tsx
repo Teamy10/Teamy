@@ -61,10 +61,12 @@ export function Header() {
   return (
     <>
       <header className="on-night fixed inset-x-0 top-0 z-40 pt-[env(safe-area-inset-top)]">
+        {/* Always-on soft fade so nav text keeps AA contrast even when the hero glow drifts behind it. */}
+        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-night/80 to-night/0" />
         <div
           aria-hidden="true"
-          className={`absolute inset-0 border-b border-line-night bg-night/92 backdrop-blur-xl transition-opacity duration-300 ${
-            scrolled ? "opacity-100" : "opacity-0"
+          className={`absolute inset-0 border-b border-line-night bg-night/92 transition-opacity duration-300 ${
+            scrolled ? "opacity-100 backdrop-blur-xl" : "opacity-0"
           }`}
         />
         <div className="container-page relative flex h-16 items-center justify-between">

@@ -75,7 +75,7 @@ export function Testimonials() {
   return (
     <section id="testimonials" aria-labelledby="testimonials-title" className="on-night grain section-pad relative overflow-hidden bg-night">
       <FestiveDivider />
-      <div className="aurora opacity-60" aria-hidden="true">
+      <div className="aurora aurora-static opacity-60" aria-hidden="true">
         <span />
         <span />
         <span />

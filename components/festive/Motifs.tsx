@@ -55,7 +55,7 @@ function Diya({ className = "", idPrefix }: { className?: string; idPrefix: stri
 /** Large, faint motif behind the hero visual. */
 export function HeroMotif() {
   return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div aria-hidden="true" className="motif-layer pointer-events-none absolute inset-0 overflow-hidden">
       <div data-motif="rangoli" className="absolute -right-40 -top-32 size-[640px] opacity-25 lg:-right-24 lg:top-6">
         <Rangoli className="motif-spin size-full" />
       </div>

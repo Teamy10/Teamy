@@ -94,7 +94,7 @@ export function Contact() {
   return (
     <section id="contact" aria-labelledby="contact-title" className="on-night grain section-pad relative overflow-hidden bg-night">
       <FestiveDivider />
-      <div className="aurora" aria-hidden="true">
+      <div className="aurora aurora-static" aria-hidden="true">
         <span />
         <span />
         <span />

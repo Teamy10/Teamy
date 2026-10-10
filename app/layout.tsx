@@ -4,6 +4,7 @@ import { FESTIVALS } from "@/config/festive";
 import { InteractionFX } from "@/components/ui/InteractionFX";
 import { resolveThemeId, themeBootScript, themeCss } from "@/lib/festive";
 import { RevealObserver } from "@/components/ui/RevealObserver";
+import { formatINR } from "@/lib/format";
 import { siteConfig } from "@/site.config";
 import "./globals.css";
 
@@ -27,9 +28,8 @@ const inter = localFont({
   display: "swap",
 });
 
-const title = `${siteConfig.brand} | Online stores for D2C brands that sell and scale`;
-const description =
-  "Teamy designs, builds and runs fast, high-converting online stores for D2C brands. UPI, cards and COD, WhatsApp order updates, live in days. You own everything.";
+const title = `${siteConfig.brand} | Online stores for D2C brands, designed, built and run for you`;
+const description = `Teamy designs, builds and runs fast, high-converting online stores for D2C brands: UPI, cards and COD, WhatsApp order updates, live in ${siteConfig.launchDays} days. ${formatINR(siteConfig.plan.price)} one-time, and you own everything.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),

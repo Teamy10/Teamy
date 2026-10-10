@@ -49,7 +49,7 @@ export function PhoneMockup() {
 
   return (
     <figure ref={root} className="relative mx-auto w-[78%] max-w-[320px] lg:w-full">
-      <div className="relative aspect-[9/18.5] rounded-[44px] bg-[#05090f] p-[10px] shadow-[0_40px_80px_-30px_rgb(0_0_0/0.7)] ring-1 ring-line-night">
+      <div className="relative aspect-[9/18.5] rounded-[44px] bg-[#05090f] p-[10px] shadow-[0_24px_40px_-20px_rgb(0_0_0/0.7)] ring-1 ring-line-night">
         <div className="relative h-full overflow-hidden rounded-[36px] bg-surface text-ink">
           {/* Notch */}
           <div className="absolute left-1/2 top-2 z-20 h-5 w-20 -translate-x-1/2 rounded-full bg-[#05090f]" />
