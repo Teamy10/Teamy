@@ -1,4 +1,5 @@
 import { Mail } from "lucide-react";
+import { FestiveDivider } from "@/components/festive/Motifs";
 import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
 import { WhatsAppIcon } from "@/components/ui/Icons";
@@ -10,7 +11,8 @@ export function Footer() {
   const social =
     "grid size-12 place-items-center rounded-full bg-night-2 text-on-night ring-1 ring-line-night transition-[translate,color] hover:-translate-y-0.5 hover:text-accent";
   return (
-    <footer className="on-night bg-night pb-[calc(96px+env(safe-area-inset-bottom))] pt-14 text-on-night md:pb-14">
+    <footer className="on-night relative bg-night pb-[calc(96px+env(safe-area-inset-bottom))] pt-14 text-on-night md:pb-14">
+      <FestiveDivider />
       <div className="container-page flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
         <div>
           <Logo tone="light" className="h-8 w-auto" />

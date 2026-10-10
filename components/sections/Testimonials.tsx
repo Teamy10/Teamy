@@ -1,3 +1,4 @@
+import { FestiveDivider } from "@/components/festive/Motifs";
 import { ArrowUpRight, Star } from "lucide-react";
 import Image from "next/image";
 import { Reveal } from "@/components/ui/Reveal";
@@ -15,7 +16,7 @@ const initials = (name: string) =>
 function Card({ t, featured }: { t: Testimonial; featured: boolean }) {
   return (
     <figure className="spin-border h-full rounded-[32px]">
-      <div className="glow-card relative flex h-full flex-col overflow-hidden rounded-[30px] bg-night-2 p-7 text-on-night sm:p-10 [--glow:rgb(200_242_90/0.12)]">
+      <div className="glow-card relative flex h-full flex-col overflow-hidden rounded-[30px] bg-night-2 p-7 text-on-night sm:p-10 [--glow:rgb(var(--accent-rgb)/0.12)]">
         {/* Oversized quote mark. */}
         <span aria-hidden="true" className="float-slow absolute right-6 top-5 font-display text-[9rem] font-extrabold leading-[0.8] text-accent/15 sm:right-10">
           &ldquo;
@@ -38,7 +39,7 @@ function Card({ t, featured }: { t: Testimonial; featured: boolean }) {
           {t.photo ? (
             <Image src={t.photo} alt={t.name} width={56} height={56} className="size-14 rounded-full object-cover" />
           ) : (
-            <span className="grid size-14 shrink-0 place-items-center rounded-full bg-accent font-display text-lg font-extrabold text-ink" aria-hidden="true">
+            <span className="grid size-14 shrink-0 place-items-center rounded-full bg-accent font-display text-lg font-extrabold text-accent-ink" aria-hidden="true">
               {initials(t.name)}
             </span>
           )}
@@ -73,6 +74,7 @@ export function Testimonials() {
 
   return (
     <section id="testimonials" aria-labelledby="testimonials-title" className="on-night section-pad relative overflow-hidden bg-night">
+      <FestiveDivider />
       <div className="aurora opacity-60" aria-hidden="true">
         <span />
         <span />

@@ -12,11 +12,11 @@ export function SharkTank() {
       {/* Soft colour wash behind the big statement. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-40 top-10 size-[36rem] rounded-full bg-[radial-gradient(closest-side,rgb(124_92_255/0.16),transparent)]"
+        className="pointer-events-none absolute -left-40 top-10 size-[36rem] rounded-full bg-[radial-gradient(closest-side,rgb(var(--violet-rgb)/0.16),transparent)]"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-40 bottom-0 size-[32rem] rounded-full bg-[radial-gradient(closest-side,rgb(200_242_90/0.35),transparent)]"
+        className="pointer-events-none absolute -right-40 bottom-0 size-[32rem] rounded-full bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/0.35),transparent)]"
       />
 
       <div className="container-page relative grid gap-12 lg:grid-cols-[1.25fr_1fr] lg:items-center lg:gap-16">
@@ -35,7 +35,7 @@ export function SharkTank() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="on-night relative rounded-[32px] bg-night p-6 text-on-night shadow-[0_40px_80px_-40px_rgb(14_23_38/0.8)] sm:p-8">
+          <div className="on-night relative rounded-[32px] bg-night p-6 text-on-night shadow-[0_40px_80px_-40px_rgb(var(--night-rgb)/0.8)] sm:p-8">
             <p className="text-sm font-semibold uppercase tracking-[0.14em] text-on-night-soft">The questions every Shark asks</p>
             <ul className="mt-5 space-y-3">
               {t.questions.map((q, i) => (
@@ -48,7 +48,7 @@ export function SharkTank() {
                 </li>
               ))}
             </ul>
-            <p className="pop mt-6 flex items-start gap-3 rounded-2xl bg-accent px-5 py-4 font-semibold text-ink" style={{ ["--d" as string]: 800 }}>
+            <p className="pop mt-6 flex items-start gap-3 rounded-2xl bg-accent px-5 py-4 font-semibold text-accent-ink" style={{ ["--d" as string]: 800 }}>
               <span aria-hidden="true" className="text-xl leading-none">→</span>
               {t.punchline}
             </p>

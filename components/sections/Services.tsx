@@ -1,10 +1,11 @@
+import { FestiveDivider } from "@/components/festive/Motifs";
 import { Check } from "lucide-react";
 import { icons } from "@/components/ui/IconMap";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { siteConfig } from "@/site.config";
 
 // Each card gets its own glow colour, so the stack reads as three distinct stages.
-const glows = ["rgb(200 242 90 / 0.35)", "rgb(56 189 248 / 0.35)", "rgb(124 92 255 / 0.45)"];
+const glows = ["rgb(var(--accent-rgb) / 0.35)", "rgb(var(--sky-rgb) / 0.35)", "rgb(var(--violet-rgb) / 0.45)"];
 
 /**
  * Sticky stacking cards: each stage pins under the header and the next one slides over it.
@@ -14,6 +15,7 @@ export function Services() {
   const groups = siteConfig.services;
   return (
     <section id="services" aria-labelledby="services-title" className="on-night section-pad relative bg-night [contain-intrinsic-size:auto_1800px]">
+      <FestiveDivider />
       <div className="container-page">
         <SectionHeading
           id="services-title"
@@ -44,7 +46,7 @@ export function Services() {
                   <div className="relative grid gap-8 md:grid-cols-[1.1fr_1fr] md:items-center">
                     <div>
                       <div className="flex items-center gap-3">
-                        <span className="grid size-12 place-items-center rounded-2xl bg-accent text-ink">
+                        <span className="grid size-12 place-items-center rounded-2xl bg-accent text-accent-ink">
                           <Icon className="size-6" aria-hidden="true" />
                         </span>
                         <span className="text-sm font-semibold uppercase tracking-[0.14em] text-on-night-soft">
@@ -63,7 +65,7 @@ export function Services() {
                           key={item}
                           className="flex items-center gap-3 rounded-2xl bg-night px-4 py-3.5 text-on-night ring-1 ring-line-night transition-colors duration-300 hover:ring-accent/60"
                         >
-                          <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent text-ink">
+                          <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent text-accent-ink">
                             <Check className="size-3.5" strokeWidth={3} aria-hidden="true" />
                           </span>
                           {item}

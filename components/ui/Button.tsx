@@ -10,7 +10,7 @@ const base =
 const variants: Record<Variant, string> = {
   // Navy on lime: 13.9:1. Lime glow grows on hover.
   primary:
-    "bg-accent text-ink shadow-[0_10px_30px_-10px_rgb(200_242_90/0.65)] hover:bg-accent-hover hover:shadow-[0_14px_40px_-8px_rgb(200_242_90/0.8)]",
+    "bg-accent text-accent-ink shadow-[0_10px_30px_-10px_rgb(var(--accent-rgb)/0.65)] hover:bg-accent-hover hover:shadow-[0_14px_40px_-8px_rgb(var(--accent-rgb)/0.8)]",
   // Outline button for dark bands.
   "ghost-night": "text-on-night ring-1 ring-inset ring-line-night hover:bg-night-2 hover:ring-on-night-soft/50",
   secondary: "bg-surface text-ink ring-1 ring-inset ring-line shadow-soft hover:shadow-lift",

@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { FESTIVALS } from "@/config/festive";
 import { InteractionFX } from "@/components/ui/InteractionFX";
+import { resolveThemeId, themeBootScript, themeCss } from "@/lib/festive";
 import { RevealObserver } from "@/components/ui/RevealObserver";
 import { siteConfig } from "@/site.config";
 import "./globals.css";
@@ -52,9 +54,26 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+// Re-render hourly so the server-picked festive theme follows the calendar (the boot script
+// below also corrects it on the visitor's device before first paint).
+export const revalidate = 3600;
+
+// `?theme=` previews are compiled in only for `next dev`, never for production builds.
+const allowThemePreview = process.env.NODE_ENV !== "production";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className={`${bricolage.variable} ${inter.variable}`}>
+    <html
+      lang="en-IN"
+      data-theme={resolveThemeId(new Date())}
+      // The boot script may change data-theme before React hydrates.
+      suppressHydrationWarning
+      className={`${bricolage.variable} ${inter.variable}`}
+    >
+      <head>
+        <style id="theme-tokens" dangerouslySetInnerHTML={{ __html: themeCss(FESTIVALS) }} />
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript(FESTIVALS, allowThemePreview) }} />
+      </head>
       <body>
         <a
           href="#main"

@@ -16,6 +16,9 @@
   --accent-ink: #0e1726; /* text on --accent */
   --night-rgb: 14 23 38;
   --accent-rgb: 200 242 90;
+  --violet-rgb: 124 92 255;
+  --sky-rgb: 56 189 248;
+  --shine: #9be7ff;
   --violet: #7c5cff; /* decorative glow / gradients */
   --sky: #38bdf8; /* decorative glow / gradients */
   --line: #e4e4dc;
@@ -44,8 +47,8 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-bricolage), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
-  --shadow-soft: 0 1px 2px rgb(14 23 38 / 0.05), 0 8px 24px -10px rgb(14 23 38 / 0.14);
-  --shadow-lift: 0 2px 4px rgb(14 23 38 / 0.06), 0 22px 44px -16px rgb(14 23 38 / 0.28);
+  --shadow-soft: 0 1px 2px rgb(var(--night-rgb) / 0.05), 0 8px 24px -10px rgb(var(--night-rgb) / 0.14);
+  --shadow-lift: 0 2px 4px rgb(var(--night-rgb) / 0.06), 0 22px 44px -16px rgb(var(--night-rgb) / 0.28);
 }
 
 html {
@@ -85,7 +88,7 @@ h3 {
 
 ::selection {
   background: var(--accent);
-  color: var(--ink);
+  color: var(--accent-ink);
 }
 
 @utility container-page {
@@ -120,7 +123,7 @@ h3 {
 @utility night-texture {
   background-color: var(--night);
   background-image:
-    radial-gradient(60% 50% at 85% 10%, rgb(200 242 90 / 0.14), transparent 70%),
+    radial-gradient(60% 50% at 85% 10%, rgb(var(--accent-rgb) / 0.14), transparent 70%),
     radial-gradient(40% 40% at 0% 100%, rgb(59 91 219 / 0.22), transparent 70%),
     radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px);
   background-size:
@@ -205,19 +208,19 @@ h3 {
   animation: drift 24s ease-in-out infinite alternate;
 }
 .aurora > span:nth-child(1) {
-  --c: rgb(200 242 90 / 0.28);
+  --c: rgb(var(--accent-rgb) / 0.28);
   top: -38vmax;
   right: -22vmax;
 }
 .aurora > span:nth-child(2) {
-  --c: rgb(124 92 255 / 0.42);
+  --c: rgb(var(--violet-rgb) / 0.42);
   bottom: -42vmax;
   left: -28vmax;
   animation-duration: 30s;
   animation-delay: -8s;
 }
 .aurora > span:nth-child(3) {
-  --c: rgb(56 189 248 / 0.22);
+  --c: rgb(var(--sky-rgb) / 0.22);
   top: 15%;
   left: 25%;
   width: 45vmax;
@@ -239,7 +242,7 @@ h3 {
 
 /* Gradient text with a slow shimmer (lime → sky). */
 .text-shine {
-  background: linear-gradient(100deg, var(--accent) 15%, #9be7ff 40%, var(--accent) 65%) 0 0 / 250% 100%;
+  background: linear-gradient(100deg, var(--accent) 15%, var(--shine) 40%, var(--accent) 65%) 0 0 / 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -316,7 +319,7 @@ h3 {
   pointer-events: none;
   opacity: 0;
   transition: opacity 300ms var(--ease-brand);
-  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), var(--glow, rgb(124 92 255 / 0.12)), transparent 45%);
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), var(--glow, rgb(var(--violet-rgb) / 0.12)), transparent 45%);
 }
 .glow-card:hover::after {
   opacity: 1;
@@ -441,6 +444,27 @@ h3 {
   }
 }
 
+/* Festive motifs: a very slow rangoli turn and a soft diya flicker. */
+.motif-spin {
+  animation: spin 160s linear infinite;
+}
+.diya-flame {
+  transform-origin: 60px 44px;
+  animation: flicker 3.2s ease-in-out infinite;
+}
+@keyframes flicker {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  40% {
+    transform: scale(0.94, 1.06);
+  }
+  70% {
+    transform: scale(1.04, 0.96);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -459,6 +483,8 @@ h3 {
   .spin-border::before,
   .sheen-idle::after,
   .pulse-dot::after,
+  .motif-spin,
+  .diya-flame,
   .scroll-progress {
     animation: none !important;
   }

@@ -1,3 +1,4 @@
+import { FestiveDivider } from "@/components/festive/Motifs";
 import { ArrowRight, Check } from "lucide-react";
 import { buttonClass } from "@/components/ui/Button";
 import { CountUp } from "@/components/ui/CountUp";
@@ -15,6 +16,7 @@ export function Pricing() {
 
   return (
     <section id="pricing" aria-labelledby="pricing-title" className="section-pad relative overflow-hidden [contain-intrinsic-size:auto_1400px]">
+      <FestiveDivider />
       <ViewTracker event="pricing_viewed" />
       <div aria-hidden="true" className="glow-blob pointer-events-none absolute left-1/2 top-24 size-[44rem] -translate-x-1/2" />
       <div className="container-page relative">

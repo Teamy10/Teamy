@@ -1,6 +1,7 @@
 "use client";
 
 import { Clock, Mail, PartyPopper } from "lucide-react";
+import { FestiveDivider } from "@/components/festive/Motifs";
 import { useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { Button, buttonClass } from "@/components/ui/Button";
 import { confettiBurst } from "@/components/ui/confetti";
@@ -92,6 +93,7 @@ export function Contact() {
 
   return (
     <section id="contact" aria-labelledby="contact-title" className="on-night section-pad relative overflow-hidden bg-night">
+      <FestiveDivider />
       <div className="aurora" aria-hidden="true">
         <span />
         <span />
@@ -135,7 +137,7 @@ export function Contact() {
               role="status"
               className="rounded-[28px] bg-surface p-8 text-center text-ink shadow-lift ring-1 ring-line outline-none sm:p-10"
             >
-              <span className="mx-auto grid size-14 place-items-center rounded-full bg-accent text-ink">
+              <span className="mx-auto grid size-14 place-items-center rounded-full bg-accent text-accent-ink">
                 <PartyPopper className="size-7" aria-hidden="true" />
               </span>
               <p className="mt-5 font-display text-3xl font-extrabold tracking-tight">
