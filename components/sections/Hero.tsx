@@ -5,8 +5,9 @@ import { Storefront } from "@/components/mockup/Storefront";
 import { buttonClass } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 import { MaskWords } from "@/components/ui/MaskWords";
-import { TrackedLink, WhatsAppLink } from "@/components/ui/TrackedLink";
-import { siteConfig } from "@/site.config";
+import { TrackedLink } from "@/components/ui/TrackedLink";
+import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
+import { siteConfig } from "@/content/site";
 
 const rise = (d: number) => ({ "--d": `${d}s` }) as CSSProperties;
 
@@ -34,14 +35,14 @@ export function Hero() {
             <FestiveHeroNote />
           </div>
           <div className="hero-rise mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7" style={rise(0.6)}>
-            <WhatsAppLink
-              section="hero_book_call"
+            <WhatsAppCTA
+              source="hero_book_call"
               message="bookCall"
               data-magnetic=""
               className={buttonClass("primary", "w-full sm:w-auto", "lg")}
             >
               <WhatsAppIcon className="size-5" /> Book a free call
-            </WhatsAppLink>
+            </WhatsAppCTA>
             <TrackedLink href="#story" event="hero_cta_click" params={{ location: "hero_story" }} className={buttonClass("ghost")}>
               See the 7-day plan <ArrowDown className="size-4" aria-hidden="true" />
             </TrackedLink>

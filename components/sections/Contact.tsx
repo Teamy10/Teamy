@@ -1,16 +1,17 @@
 "use client";
 
-import { Check, Clock, Mail } from "lucide-react";
-import { useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
+import { Clock, Mail, MapPin } from "lucide-react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { FestiveDivider } from "@/components/festive/Motifs";
 import { Button, buttonClass } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 import { MaskWords } from "@/components/ui/MaskWords";
 import { Reveal } from "@/components/ui/Reveal";
-import { WhatsAppLink } from "@/components/ui/TrackedLink";
-import { track } from "@/lib/analytics";
-import { normaliseIndianMobile, normaliseInstagram, submitLead } from "@/lib/leads";
-import { siteConfig } from "@/site.config";
+import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
+import { isFilled, siteConfig } from "@/content/site";
+import { track, trackLead } from "@/lib/analytics";
+import { normaliseIndianMobile, normaliseInstagram } from "@/lib/leads";
+import { buildWhatsAppLink, openWhatsApp, previewRequestMessage } from "@/lib/whatsapp";
 
 type Values = { name: string; brand: string; whatsapp: string; instagram: string; company: string };
 type Errors = Partial<Record<keyof Values, string>>;
@@ -49,17 +50,25 @@ export function Contact() {
   const { contact, responseHours } = siteConfig;
   const [values, setValues] = useState<Values>({ name: "", brand: "", whatsapp: "", instagram: "", company: "" });
   const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
-  const successRef = useRef<HTMLDivElement>(null);
+  const [status, setStatus] = useState<"idle" | "opening">("idle");
   const formRef = useRef<HTMLFormElement>(null);
+
+  // If the visitor comes back to this tab (desktop) or the page (phone), let them send again.
+  useEffect(() => {
+    if (status !== "opening") return;
+    const t = setTimeout(() => setStatus("idle"), 4000);
+    return () => clearTimeout(t);
+  }, [status]);
 
   const set = (k: keyof Values) => (e: ChangeEvent<HTMLInputElement>) => {
     setValues((v) => ({ ...v, [k]: e.target.value }));
     if (errors[k]) setErrors((er) => ({ ...er, [k]: undefined }));
   };
 
-  const onSubmit = async (e: FormEvent) => {
+  // Synchronous on purpose: opening a new tab must happen inside the click/submit, or popup blockers step in.
+  const onSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (values.company) return; // honeypot: bots fill it, people never see it
     const errs = validate(values);
     setErrors(errs);
     const firstBad = (Object.keys(errs) as (keyof Values)[])[0];
@@ -67,22 +76,18 @@ export function Contact() {
       formRef.current?.querySelector<HTMLInputElement>(`[name="${firstBad}"]`)?.focus();
       return;
     }
-    setStatus("sending");
-    try {
-      await submitLead(siteConfig.leadEndpoint, {
-        source: "form",
+    setStatus("opening");
+    const url = buildWhatsAppLink(
+      previewRequestMessage({
         name: values.name.trim(),
         brand: values.brand.trim(),
         whatsapp: normaliseIndianMobile(values.whatsapp)!,
         instagram: values.instagram.trim() ? normaliseInstagram(values.instagram)! : undefined,
-        company: values.company,
-      });
-      track("form_submitted");
-      setStatus("done");
-      requestAnimationFrame(() => successRef.current?.focus());
-    } catch {
-      setStatus("error");
-    }
+      }),
+    );
+    track("form_submitted");
+    trackLead("contact_form");
+    openWhatsApp(url);
   };
 
   const describedBy = (k: keyof Values) => (errors[k] ? `contact-${k}-error` : undefined);
@@ -99,13 +104,13 @@ export function Contact() {
           </Reveal>
           <Reveal delay={0.15}>
             <p className="mt-6 max-w-md text-lg text-fg-2">
-              Tell us about your brand and we&apos;ll come back on WhatsApp with a free preview plan. No pitch decks, no
+              Tell us about your brand and we&apos;ll pick it up on WhatsApp with a free preview plan. No pitch decks, no
               pressure.
             </p>
             <div className="mt-9 flex flex-col items-start gap-4">
-              <WhatsAppLink section="contact" message="bookCall" brand={values.brand} className={buttonClass("secondary")}>
+              <WhatsAppCTA source="contact_call" message="bookCall" className={buttonClass("secondary")}>
                 <WhatsAppIcon className="size-5 text-accent" /> Book a free call on WhatsApp
-              </WhatsAppLink>
+              </WhatsAppCTA>
               <a href={`mailto:${contact.email}`} className={buttonClass("ghost")}>
                 <Mail className="size-4" aria-hidden="true" /> {contact.email}
               </a>
@@ -113,21 +118,16 @@ export function Contact() {
             <p className="mt-10 flex items-center gap-2 text-fg-2">
               <Clock className="size-4 text-fg-3" aria-hidden="true" /> We reply within {responseHours} hours, Monday to Saturday.
             </p>
+            <p className="mt-3 flex items-center gap-2 text-fg-2">
+              <MapPin className="size-4 text-fg-3" aria-hidden="true" />
+              {isFilled(contact.address.street)
+                ? `${contact.address.street}, ${contact.address.locality}, ${contact.address.region}, ${contact.address.countryName}`
+                : `${contact.address.locality}, ${contact.address.region}, ${contact.address.countryName}`}
+            </p>
           </Reveal>
         </div>
 
         <Reveal delay={0.08} className="lg:col-span-6 lg:col-start-7">
-          {status === "done" ? (
-            <div ref={successRef} tabIndex={-1} role="status" className="card rounded-[28px] p-8 text-center outline-none sm:p-12">
-              <span className="mx-auto grid size-12 place-items-center rounded-full bg-accent text-accent-ink">
-                <Check className="size-6" strokeWidth={2.5} aria-hidden="true" />
-              </span>
-              <p className="mt-6 font-display text-3xl font-semibold tracking-[-0.03em]">Thanks, {values.name.trim().split(" ")[0]}.</p>
-              <p className="mt-2 text-lg text-fg-2">
-                {values.brand.trim()} is on our list. We&apos;ll WhatsApp you within {responseHours} hours.
-              </p>
-            </div>
-          ) : (
             <form ref={formRef} onSubmit={onSubmit} noValidate className="card relative space-y-6 rounded-[28px] p-6 sm:p-10">
               <Field id="contact-name" label="Your name" error={errors.name}>
                 <input
@@ -195,18 +195,17 @@ export function Contact() {
                 <input id="contact-company" name="company" tabIndex={-1} autoComplete="off" value={values.company} onChange={set("company")} />
               </div>
 
-              {status === "error" && (
-                <p role="alert" className="rounded-xl bg-[#ff8f85]/10 p-4 font-medium text-[#ff8f85]">
-                  Couldn&apos;t send that, sorry. Please WhatsApp us instead, we reply fast.
-                </p>
-              )}
 
-              <Button type="submit" size="lg" disabled={status === "sending"} className="w-full">
-                {status === "sending" ? "Sending…" : "Get my free preview plan"}
+              <Button type="submit" size="lg" disabled={status === "opening"} className="w-full">
+                <WhatsAppIcon className="size-5" />
+                {status === "opening" ? "Opening WhatsApp…" : "Get my free preview plan"}
               </Button>
-              <p className="text-center text-sm text-fg-3">No spam. We only message you about your store.</p>
+              <p className="text-center text-sm text-fg-3" aria-live="polite">
+                {status === "opening"
+                  ? "Your details are ready in WhatsApp. Just press send."
+                  : "This opens WhatsApp with your details filled in. Nothing is sent until you press send."}
+              </p>
             </form>
-          )}
         </Reveal>
       </div>
     </section>

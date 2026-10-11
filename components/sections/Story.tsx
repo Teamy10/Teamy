@@ -1,7 +1,7 @@
 import { Storefront } from "@/components/mockup/Storefront";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 
 /**
  * "Idea → live in 7 days".

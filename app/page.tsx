@@ -4,14 +4,14 @@ import { Footer } from "@/components/sections/Footer";
 import { Header } from "@/components/sections/Header";
 import { Hero } from "@/components/sections/Hero";
 import { Marquee } from "@/components/sections/Marquee";
-import { MobileCTABar } from "@/components/sections/MobileCTABar";
+import { FloatingWhatsApp } from "@/components/sections/FloatingWhatsApp";
 import { Pricing } from "@/components/sections/Pricing";
 import { Process } from "@/components/sections/Process";
 import { Services } from "@/components/sections/Services";
 import { SharkTank } from "@/components/sections/SharkTank";
 import { Story } from "@/components/sections/Story";
 import { Testimonials } from "@/components/sections/Testimonials";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -51,7 +51,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
-      <MobileCTABar />
+      <FloatingWhatsApp />
     </>
   );
 }

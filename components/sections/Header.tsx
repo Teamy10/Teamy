@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { buttonClass } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/ui/Icons";
-import { WhatsAppLink } from "@/components/ui/TrackedLink";
+import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 
 const links = [
   { href: "#story", label: "7-day plan" },
@@ -80,20 +80,20 @@ export function Header() {
                 {l.label}
               </a>
             ))}
-            <WhatsAppLink section="header" message="bookCall" data-magnetic="" className={buttonClass("primary", "ml-2 !min-h-11 !px-5")}>
+            <WhatsAppCTA source="header" message="bookCall" data-magnetic="" className={buttonClass("primary", "ml-2 !min-h-11 !px-5")}>
               Book a free call
-            </WhatsAppLink>
+            </WhatsAppCTA>
           </nav>
 
           <div className="flex items-center gap-1 lg:hidden">
-            <WhatsAppLink
-              section="header"
+            <WhatsAppCTA
+              source="header"
               message="bookCall"
               aria-label="Book a free call on WhatsApp"
               className="grid size-12 place-items-center rounded-full text-accent"
             >
               <WhatsAppIcon className="size-6" />
-            </WhatsAppLink>
+            </WhatsAppCTA>
             <button
               ref={menuButton}
               type="button"
@@ -145,9 +145,9 @@ export function Header() {
             </a>
           ))}
           <div className="mt-auto pb-6">
-            <WhatsAppLink section="mobile_menu" message="bookCall" onClick={() => setOpen(false)} className={buttonClass("primary", "w-full", "lg")}>
+            <WhatsAppCTA source="mobile_menu" message="bookCall" onClick={() => setOpen(false)} className={buttonClass("primary", "w-full", "lg")}>
               <WhatsAppIcon className="size-5" /> Book a free call
-            </WhatsAppLink>
+            </WhatsAppCTA>
           </div>
         </nav>
       </div>

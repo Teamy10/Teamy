@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
 import { FestiveDivider } from "@/components/festive/Motifs";
 import { WhatsAppIcon } from "@/components/ui/Icons";
-import { WhatsAppLink } from "@/components/ui/TrackedLink";
-import { siteConfig } from "@/site.config";
+import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
+import { siteConfig } from "@/content/site";
 
 const link = "underline-anim inline-flex min-h-12 items-center gap-2 text-fg-2 transition-colors hover:text-fg";
 
@@ -25,9 +25,9 @@ export function Footer() {
             <p className="label-mono text-fg-3">Talk to us</p>
             <ul className="mt-3">
               <li>
-                <WhatsAppLink section="footer" className={link}>
+                <WhatsAppCTA source="footer" message="talk" className={link}>
                   <WhatsAppIcon className="size-4 text-accent" /> {contact.whatsappDisplay}
-                </WhatsAppLink>
+                </WhatsAppCTA>
               </li>
               <li>
                 <a href={`mailto:${contact.email}`} className={link}>

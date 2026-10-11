@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/LegalPage";
 import { formatINR } from "@/lib/format";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 
 export const metadata: Metadata = { title: `Terms | ${siteConfig.brand}`, robots: { index: false } };
 

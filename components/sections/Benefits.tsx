@@ -1,6 +1,6 @@
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 
 /** "Why Teamy": four principles in a quiet hairline row. */
 export function Benefits() {

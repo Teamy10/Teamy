@@ -6,7 +6,7 @@ import { FESTIVALS } from "@/config/festive";
 import { resolveThemeId, themeBootScript, themeCss } from "@/lib/festive";
 import { formatINR } from "@/lib/format";
 import { motionCss } from "@/lib/motion";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 import "./globals.css";
 
 /*

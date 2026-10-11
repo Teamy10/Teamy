@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { buttonClass } from "@/components/ui/Button";
 import { MaskWords } from "@/components/ui/MaskWords";
 import { Reveal } from "@/components/ui/Reveal";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 
 /** Words-only Shark Tank India angle. No logos, clips or endorsement-style styling. */
 export function SharkTank() {

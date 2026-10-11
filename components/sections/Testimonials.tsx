@@ -2,7 +2,7 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 import { FestiveDivider } from "@/components/festive/Motifs";
 import { Reveal } from "@/components/ui/Reveal";
-import { siteConfig, type Testimonial } from "@/site.config";
+import { siteConfig, type Testimonial } from "@/content/site";
 
 const initials = (name: string) =>
   name

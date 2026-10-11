@@ -4,10 +4,10 @@ import { buttonClass } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { WhatsAppLink } from "@/components/ui/TrackedLink";
+import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 import { ViewTracker } from "@/components/ui/ViewTracker";
 import { formatINR } from "@/lib/format";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 
 /** One plan, one price, one CTA. The ₹ figure here is the only price for Teamy on the site. */
 export function Pricing() {
@@ -55,15 +55,14 @@ export function Pricing() {
             </ul>
 
             <div className="relative mt-12 flex justify-center">
-              <WhatsAppLink
-                section="pricing"
-                message="bookCall"
-                onClickTrack="pricing_cta_click"
+              <WhatsAppCTA
+                source="pricing"
+                message="pricing"
                 data-magnetic=""
                 className={buttonClass("primary", "w-full sm:w-auto sm:min-w-72", "lg")}
               >
                 <WhatsAppIcon className="size-5" /> Book a free call
-              </WhatsAppLink>
+              </WhatsAppCTA>
             </div>
           </article>
         </Reveal>

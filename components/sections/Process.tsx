@@ -1,6 +1,6 @@
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 
 // Connector through the four step nodes (desktop). Drawn by scaling a clip rect (transform only).
 const PATH = "M24 24 C 120 2, 230 2, 336 24 S 552 46, 648 24 S 864 2, 960 24";

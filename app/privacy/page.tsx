@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/LegalPage";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 
 export const metadata: Metadata = { title: `Privacy Policy | ${siteConfig.brand}`, robots: { index: false } };
 

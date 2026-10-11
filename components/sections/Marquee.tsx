@@ -1,4 +1,4 @@
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 import { MarqueeToggle } from "./MarqueeToggle";
 
 /** Slow ticker of what Teamy handles. Text only. Pauses on hover, with the button, and offscreen. */

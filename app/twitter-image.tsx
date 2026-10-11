@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { DOT, LOGO_VIEWBOX, WORD_PATH } from "@/components/brand/logoPaths";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 
 export const alt = `${siteConfig.brand}: online stores for D2C brands`;
 export const size = { width: 1200, height: 630 };

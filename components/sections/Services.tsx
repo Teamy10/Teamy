@@ -2,7 +2,7 @@ import { FestiveDivider } from "@/components/festive/Motifs";
 import { AnimatedIcon } from "@/components/icons/AnimatedIcons";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 
 // Bento rhythm on the 12-column grid: wide / narrow, narrow / wide, half / half.
 const spans = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-5", "lg:col-span-7", "lg:col-span-6", "lg:col-span-6"];
