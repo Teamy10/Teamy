@@ -72,7 +72,15 @@ export function HeroMotif() {
 /** Tiny glyph used as the greeting's bullet: rangoli flower, diya, or a plain diamond. */
 function NoteGlyph({ motif }: { motif?: "rangoli" | "diya" }) {
   if (motif === "diya") return <Diya idPrefix="diya-note" className="mr-2 inline-block h-4 w-5 -translate-y-0.5" />;
-  if (motif === "rangoli") return <Rangoli className="mr-2 inline-block size-4 -translate-y-0.5" />;
+  if (motif === "rangoli")
+    return (
+      <svg viewBox="-10 -10 20 20" className="mr-2 inline-block size-4 -translate-y-0.5" fill="var(--hero-a)">
+        {[0, 45, 90, 135].map((r) => (
+          <ellipse key={r} rx="2.2" ry="8" transform={`rotate(${r})`} opacity="0.85" />
+        ))}
+        <circle r="2.4" fill="var(--bg)" />
+      </svg>
+    );
   return <span className="mr-2 inline-block size-1.5 -translate-y-0.5 rotate-45 bg-accent" />;
 }
 

@@ -15,8 +15,8 @@ export function Marquee() {
     </ul>
   );
   return (
-    <section id="marquee" aria-label="What Teamy handles" data-loop className="marquee relative border-y border-line">
-      <div className="overflow-hidden py-6 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
+    <section id="marquee" aria-label="What Teamy handles" data-loop className="marquee relative flex items-center border-y border-line">
+      <div className="min-w-0 flex-1 overflow-hidden py-6 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
         <div className="marquee-track">
           {row(false)}
           {row(true)}

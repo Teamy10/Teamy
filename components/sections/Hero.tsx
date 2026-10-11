@@ -58,7 +58,7 @@ export function Hero() {
 
         {/* Tilted storefront: cursor parallax on desktop (runtime), static tilt otherwise. */}
         <figure className="hero-rise relative mx-auto w-full max-w-[560px] lg:col-span-5 lg:max-w-none" style={rise(0.35)}>
-          <div data-tilt-zone data-loop className="relative px-4 py-10 sm:px-8 lg:-mr-10 lg:px-0">
+          <div data-tilt-zone data-loop className="relative px-4 py-10 sm:px-8 lg:px-0 xl:-mr-10">
             <div
               data-tilt
               className="relative [transform:perspective(1400px)_rotateY(-6deg)_rotateX(6deg)] lg:[transform:perspective(1400px)_rotateY(-14deg)_rotateX(7deg)]"

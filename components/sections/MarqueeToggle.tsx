@@ -20,7 +20,7 @@ export function MarqueeToggle() {
           else delete m.dataset.paused;
         }
       }}
-      className="absolute right-2 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-bg/80 text-fg-3 transition-colors hover:text-fg md:right-4"
+      className="mx-2 grid size-12 shrink-0 place-items-center rounded-full text-fg-3 ring-1 ring-inset ring-line transition-colors hover:text-fg md:mx-4"
     >
       {paused ? <Play className="size-4" aria-hidden="true" /> : <Pause className="size-4" aria-hidden="true" />}
     </button>

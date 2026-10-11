@@ -166,10 +166,10 @@ export function Storefront({ variant }: { variant: "hero" | "story" }) {
       </div>
       {!hero && (
         <>
-          <div className="absolute -right-[7%] top-[14%]">
+          <div className="absolute -right-[7%] top-[18%]">
             <AnalyticsCard />
           </div>
-          <div className="absolute -left-[6%] -top-8">
+          <div className="absolute -bottom-16 left-[4%]">
             <DropCard />
           </div>
         </>

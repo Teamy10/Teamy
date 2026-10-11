@@ -45,7 +45,7 @@ export function Story() {
           {/* The storefront that builds itself */}
           <figure className="lg:col-span-7">
             <Reveal>
-              <div className="px-6 py-12 sm:px-12 lg:px-10">
+              <div className="px-6 pb-24 pt-14 sm:px-12 lg:px-10">
                 <Storefront variant="story" />
               </div>
             </Reveal>

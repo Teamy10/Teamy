@@ -137,11 +137,13 @@ export function initMotion(): () => void {
     {
       desktop: "(min-width: 1024px)",
       fine: "(hover: hover) and (pointer: fine)",
+      // Always one matching query, so the callback runs on every device (gsap skips it otherwise).
+      motionOk: "(prefers-reduced-motion: no-preference)",
       reduce: "(prefers-reduced-motion: reduce)",
     },
     (ctx) => {
-      const c = ctx.conditions as { desktop: boolean; fine: boolean; reduce: boolean };
-      if (c.reduce) return; // final states everywhere
+      const c = ctx.conditions as { desktop: boolean; fine: boolean; motionOk: boolean; reduce: boolean };
+      if (!c.motionOk) return; // reduced motion: final states everywhere
       document.documentElement.dataset.motion = "on";
       const teardown: Array<() => void> = [() => delete document.documentElement.dataset.motion];
       if (c.desktop) teardown.push(story());
