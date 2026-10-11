@@ -1,7 +1,8 @@
 "use client";
 
-import { Check, Clock, Mail, PartyPopper } from "lucide-react";
-import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
+import { Clock, Mail, PartyPopper } from "lucide-react";
+import { FestiveDivider } from "@/components/festive/Motifs";
+import { useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { Button, buttonClass } from "@/components/ui/Button";
 import { confettiBurst } from "@/components/ui/confetti";
 import { WhatsAppIcon } from "@/components/ui/Icons";
@@ -9,8 +10,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SplitWords } from "@/components/ui/SectionHeading";
 import { WhatsAppLink } from "@/components/ui/TrackedLink";
 import { track } from "@/lib/analytics";
-import { PLAN_CHOICES, normaliseIndianMobile, normaliseInstagram, submitLead, type PlanChoice } from "@/lib/leads";
-import { PLAN_EVENT } from "@/lib/planEvent";
+import { normaliseIndianMobile, normaliseInstagram, submitLead } from "@/lib/leads";
 import { siteConfig } from "@/site.config";
 
 type Values = { name: string; brand: string; whatsapp: string; instagram: string; company: string };
@@ -48,21 +48,11 @@ function Field({ id, label, hint, error, children }: { id: string; label: string
 export function Contact() {
   const { contact, responseHours } = siteConfig;
   const [values, setValues] = useState<Values>({ name: "", brand: "", whatsapp: "", instagram: "", company: "" });
-  const [plan, setPlan] = useState<PlanChoice | null>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const successRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  // A "Choose Launch/Growth" click in Pricing preselects the plan here.
-  useEffect(() => {
-    const onPlan = (e: Event) => {
-      const id = (e as CustomEvent<string>).detail;
-      setPlan(id === "growth" ? "Growth" : "Launch");
-    };
-    window.addEventListener(PLAN_EVENT, onPlan);
-    return () => window.removeEventListener(PLAN_EVENT, onPlan);
-  }, []);
 
   const set = (k: keyof Values) => (e: ChangeEvent<HTMLInputElement>) => {
     setValues((v) => ({ ...v, [k]: e.target.value }));
@@ -86,10 +76,9 @@ export function Contact() {
         brand: values.brand.trim(),
         whatsapp: normaliseIndianMobile(values.whatsapp)!,
         instagram: values.instagram.trim() ? normaliseInstagram(values.instagram)! : undefined,
-        plan: plan ?? undefined,
         company: values.company,
       });
-      track("form_submitted", { plan: plan ?? "none" });
+      track("form_submitted");
       setStatus("done");
       requestAnimationFrame(() => {
         successRef.current?.focus();
@@ -103,19 +92,16 @@ export function Contact() {
   const describedBy = (k: keyof Values) => (errors[k] ? `contact-${k}-error` : undefined);
 
   return (
-    <section id="contact" aria-labelledby="contact-title" className="on-night section-pad relative overflow-hidden bg-night">
-      <div className="aurora" aria-hidden="true">
+    <section id="contact" aria-labelledby="contact-title" className="on-night grain section-pad relative overflow-hidden bg-night">
+      <FestiveDivider />
+      <div className="aurora aurora-static" aria-hidden="true">
         <span />
         <span />
         <span />
       </div>
-      <div className="container-page relative grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-16">
-        <Reveal>
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-night-2 px-3 py-1 text-sm font-semibold uppercase tracking-[0.14em] text-accent ring-1 ring-line-night">
-            <span aria-hidden="true" className="pulse-dot size-1.5 rounded-full bg-accent" />
-            Let&apos;s talk
-          </p>
-          <h2 id="contact-title" className="h2-size font-extrabold text-on-night">
+      <div className="container-page relative grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-8">
+        <Reveal className="lg:col-span-5">
+          <h2 id="contact-title" className="h2-size font-bold text-on-night">
             <span className="sr-only">Let&apos;s build your store.</span>
             <span aria-hidden="true">
               <SplitWords text="Let's build your store." highlight="your store." tone="night" />
@@ -143,7 +129,7 @@ export function Contact() {
           </p>
         </Reveal>
 
-        <Reveal delay={0.08}>
+        <Reveal delay={0.08} className="lg:col-span-6 lg:col-start-7">
           {status === "done" ? (
             <div
               ref={successRef}
@@ -151,10 +137,10 @@ export function Contact() {
               role="status"
               className="rounded-[28px] bg-surface p-8 text-center text-ink shadow-lift ring-1 ring-line outline-none sm:p-10"
             >
-              <span className="mx-auto grid size-14 place-items-center rounded-full bg-accent text-ink">
+              <span className="mx-auto grid size-14 place-items-center rounded-full bg-accent text-accent-ink">
                 <PartyPopper className="size-7" aria-hidden="true" />
               </span>
-              <p className="mt-5 font-display text-3xl font-extrabold tracking-tight">
+              <p className="mt-5 font-display text-3xl font-bold tracking-tight">
                 Thanks, {values.name.trim().split(" ")[0]}!
               </p>
               <p className="mt-2 text-lg text-ink-soft">
@@ -228,31 +214,6 @@ export function Contact() {
                 </div>
               </Field>
 
-              <fieldset>
-                <legend className="flex w-full items-baseline justify-between font-medium">
-                  Which plan are you leaning towards?
-                  <span className="text-sm font-normal text-ink-soft">Optional</span>
-                </legend>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {PLAN_CHOICES.map((c) => {
-                    const on = plan === c;
-                    return (
-                      <button
-                        key={c}
-                        type="button"
-                        aria-pressed={on}
-                        onClick={() => setPlan(on ? null : c)}
-                        className={`inline-flex min-h-12 items-center gap-1.5 rounded-full px-4 font-medium ring-2 ring-inset transition-[scale,background-color] duration-200 active:scale-[0.97] ${
-                          on ? "bg-ink text-on-night ring-ink" : "bg-surface ring-line hover:ring-ink/40"
-                        }`}
-                      >
-                        {on && <Check className="size-4 text-accent" aria-hidden="true" />}
-                        {c}
-                      </button>
-                    );
-                  })}
-                </div>
-              </fieldset>
 
               {/* Honeypot: hidden from people, tempting to bots. */}
               <div className="absolute -left-[9999px]" aria-hidden="true">

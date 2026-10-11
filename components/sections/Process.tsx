@@ -9,7 +9,6 @@ export function Process() {
       <div className="container-page">
         <SectionHeading
           id="process-title"
-          eyebrow="How it works"
           title="From first call to first order."
           highlight="first order."
           sub="Four clear steps, with the same people on WhatsApp from start to finish."
@@ -22,11 +21,11 @@ export function Process() {
           <ol className="relative grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => (
               <Reveal as="li" key={s.title} delay={i * 0.1}>
-                <div className="glow-card group h-full rounded-[28px] bg-surface p-6 shadow-soft ring-1 ring-line transition-[translate,box-shadow] duration-300 ease-brand hover:-translate-y-1 hover:shadow-lift lg:bg-transparent lg:p-0 lg:shadow-none lg:ring-0 lg:hover:translate-y-0 lg:hover:shadow-none">
-                  <span className="relative grid size-14 place-items-center rounded-full bg-ink font-display text-xl font-extrabold text-accent ring-8 ring-surface transition-transform duration-500 ease-brand group-hover:scale-110">
+                <div className="glow-card surface-card group h-full rounded-[28px] p-6 transition-[translate,box-shadow] duration-300 ease-brand hover:-translate-y-1 hover:shadow-lift lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none lg:ring-0 lg:hover:translate-y-0 lg:hover:shadow-none">
+                  <span className="relative grid size-14 place-items-center rounded-full bg-night font-display text-xl font-bold text-accent ring-8 ring-surface transition-transform duration-500 ease-brand group-hover:scale-110">
                     {i + 1}
                   </span>
-                  <h3 className="mt-6 text-2xl font-extrabold">{s.title}</h3>
+                  <h3 className="mt-6 text-2xl font-bold">{s.title}</h3>
                   <p className="mt-2 max-w-xs text-ink-soft">{s.line}</p>
                 </div>
               </Reveal>

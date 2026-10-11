@@ -24,6 +24,14 @@ export function RevealObserver() {
     });
     mo.observe(document.body, { childList: true, subtree: true });
     document.documentElement.dataset.reveal = "on";
+    // Start decorative animations once the browser is idle after load.
+    const startFx = () => (document.documentElement.dataset.fx = "on");
+    const idle = (cb: () => void) => {
+      if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(cb, { timeout: 2500 });
+      else setTimeout(cb, 1200); // Safari
+    };
+    if (document.readyState === "complete") idle(startFx);
+    else window.addEventListener("load", () => idle(startFx), { once: true });
     return () => {
       io.disconnect();
       mo.disconnect();

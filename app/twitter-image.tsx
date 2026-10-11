@@ -37,12 +37,12 @@ export default async function OgImage() {
           <circle cx={DOT.cx} cy={DOT.cy} r={DOT.r} fill="#C8F25A" />
         </svg>
         <div style={{ marginTop: 56, fontSize: 76, fontWeight: 800, letterSpacing: -3, lineHeight: 1.05, display: "flex", flexWrap: "wrap" }}>
-          <span>Storefronts that&nbsp;</span>
+          <span>Stores that&nbsp;</span>
           <span style={{ color: "#C8F25A" }}>sell</span>
           <span>&nbsp;while you sleep.</span>
         </div>
         <div style={{ marginTop: 24, fontSize: 32, color: "#A8B3C7" }}>
-          {`${siteConfig.tagline} Online stores for D2C brands · teamy.in`}
+          {`${siteConfig.tagline} Designed, built and run for you · teamy.in`}
         </div>
       </div>
     ),

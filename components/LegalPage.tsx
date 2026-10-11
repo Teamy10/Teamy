@@ -8,7 +8,7 @@ export function LegalPage({ title, children }: { title: string; children: ReactN
       <Link href="/" aria-label="Teamy home" className="inline-flex min-h-12 items-center">
         <Logo className="h-8 w-auto" />
       </Link>
-      <h1 className="h2-size mt-10 font-extrabold">{title}</h1>
+      <h1 className="h2-size mt-10 font-bold">{title}</h1>
       <div className="mt-6 space-y-4 text-ink-soft [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink">
         {children}
       </div>

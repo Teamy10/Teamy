@@ -63,7 +63,7 @@ export function HeroHeadline({ lines, rotateMs, srText }: { lines: HeroLine[]; r
       onFocus={() => setHovered(true)}
       onBlur={() => setHovered(false)}
     >
-      <h1 id="hero-title" className="h1-size font-extrabold text-on-night">
+      <h1 id="hero-title" className="h1-size font-bold text-on-night">
         <span className="sr-only">{srText}</span>
         <span aria-hidden="true" className="grid">
           {lines.map((l, i) => (

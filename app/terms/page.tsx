@@ -9,8 +9,8 @@ export default function Terms() {
   return (
     <LegalPage title="Terms">
       <p className="rounded-2xl bg-accent p-4 font-semibold text-ink">
-        [ADD REAL TERMS] This is a placeholder. Include your plan prices (Launch {formatINR(siteConfig.plans[0].price)},
-        Growth {formatINR(siteConfig.plans[1].price)}), payment schedule and refund terms in the final version.
+        [ADD REAL TERMS] This is a placeholder. Include your price ({formatINR(siteConfig.plan.price)} one-time), payment
+        schedule and refund terms in the final version.
       </p>
     </LegalPage>
   );

@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { formatINR } from "@/lib/format";
 
 /**
- * Counts up to `value` the first time it scrolls into view. Server-renders the final value,
+ * Counts a rupee amount up to `value` the first time it scrolls into view. Server-renders the final value,
  * writes frames straight to the DOM (no re-renders), and skips the animation for reduced motion.
  */
-export function CountUp({ value, format, duration = 1100 }: { value: number; format: (n: number) => string; duration?: number }) {
+export function CountUp({ value, duration = 1100 }: { value: number; duration?: number }) {
+  const format = formatINR;
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {

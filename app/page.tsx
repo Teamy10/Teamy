@@ -21,13 +21,12 @@ const jsonLd = {
   logo: `${siteConfig.url}/logo.svg`,
   email: siteConfig.contact.email,
   areaServed: "IN",
-  sameAs: [siteConfig.contact.instagram, siteConfig.contact.linkedin],
-  makesOffer: siteConfig.plans.map((p) => ({
+  makesOffer: {
     "@type": "Offer",
-    name: `${p.name} plan`,
-    price: p.price,
+    name: "Online store, designed, built and launched",
+    price: siteConfig.plan.price,
     priceCurrency: "INR",
-  })),
+  },
 };
 
 export default function Home() {

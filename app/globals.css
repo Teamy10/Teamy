@@ -13,6 +13,12 @@
   --accent: #c8f25a; /* electric lime — CTAs (navy text, 13.9:1) and highlights on dark */
   --accent-hover: #b8e63f;
   --support: #3b5bdb; /* indigo — links and focus on light, 5.7:1 on white */
+  --accent-ink: #0e1726; /* text on --accent */
+  --night-rgb: 14 23 38;
+  --accent-rgb: 200 242 90;
+  --violet-rgb: 124 92 255;
+  --sky-rgb: 56 189 248;
+  --shine: #9be7ff;
   --violet: #7c5cff; /* decorative glow / gradients */
   --sky: #38bdf8; /* decorative glow / gradients */
   --line: #e4e4dc;
@@ -32,16 +38,17 @@
   --color-on-night-soft: var(--on-night-soft);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
+  --color-accent-ink: var(--accent-ink);
   --color-support: var(--support);
   --color-violet: var(--violet);
   --color-sky: var(--sky);
   --color-line: var(--line);
   --color-line-night: var(--line-night);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-bricolage), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter-display), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
-  --shadow-soft: 0 1px 2px rgb(14 23 38 / 0.05), 0 8px 24px -10px rgb(14 23 38 / 0.14);
-  --shadow-lift: 0 2px 4px rgb(14 23 38 / 0.06), 0 22px 44px -16px rgb(14 23 38 / 0.28);
+  --shadow-soft: 0 1px 2px rgb(var(--night-rgb) / 0.05), 0 8px 24px -10px rgb(var(--night-rgb) / 0.14);
+  --shadow-lift: 0 2px 4px rgb(var(--night-rgb) / 0.06), 0 22px 44px -16px rgb(var(--night-rgb) / 0.28);
 }
 
 html {
@@ -55,7 +62,9 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
+  font-feature-settings: "cv11", "ss01";
+  text-rendering: optimizeLegibility;
   overflow-x: clip;
   -webkit-tap-highlight-color: transparent;
 }
@@ -64,8 +73,9 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: -0.03em;
-  line-height: 1.05;
+  line-height: 1.06;
   /* No text-wrap: balance: with negative letter-spacing it makes Chrome re-shape every
      heading several times and roughly doubles layout cost on load. */
 }
@@ -81,12 +91,13 @@ h3 {
 
 ::selection {
   background: var(--accent);
-  color: var(--ink);
+  color: var(--accent-ink);
 }
 
+/* 1240px max content width; sections lay out on a 12-column grid inside it. */
 @utility container-page {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1240px;
   margin-inline: auto;
   padding-inline: max(20px, env(safe-area-inset-left));
 }
@@ -102,21 +113,21 @@ h3 {
 }
 
 @utility h1-size {
-  font-size: clamp(2.5rem, 1.55rem + 4.6vw, 4.75rem);
-  /* Big display sizes need a touch more air than the shared -0.03em. */
-  letter-spacing: -0.02em;
+  font-size: clamp(2.5rem, 1.6rem + 4.4vw, 4.75rem);
+  letter-spacing: -0.04em;
+  line-height: 1.02;
 }
 
 @utility h2-size {
-  font-size: clamp(2rem, 1.45rem + 2.4vw, 3.25rem);
-  letter-spacing: -0.025em;
+  font-size: clamp(2rem, 1.5rem + 2.2vw, 3.25rem);
+  letter-spacing: -0.035em;
 }
 
 /* Dark band texture: a faint dot grid plus static glows (gradients only, no filters). */
 @utility night-texture {
   background-color: var(--night);
   background-image:
-    radial-gradient(60% 50% at 85% 10%, rgb(200 242 90 / 0.14), transparent 70%),
+    radial-gradient(60% 50% at 85% 10%, rgb(var(--accent-rgb) / 0.14), transparent 70%),
     radial-gradient(40% 40% at 0% 100%, rgb(59 91 219 / 0.22), transparent 70%),
     radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px);
   background-size:
@@ -155,6 +166,43 @@ h3 {
   transition: none;
 }
 
+/* ---------- Surfaces ---------- */
+
+@utility surface-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 1px 2px rgb(var(--night-rgb) / 0.04),
+    0 12px 32px -16px rgb(var(--night-rgb) / 0.16);
+}
+
+@utility surface-night {
+  background-color: var(--night);
+  border: 1px solid var(--line-night);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.07),
+    0 24px 48px -28px rgb(0 0 0 / 0.6);
+}
+
+/* Raised card on a dark section. */
+@utility surface-night-2 {
+  background-color: var(--night-2);
+  border: 1px solid var(--line-night);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+}
+
+/* Fine grain on dark bands: a 2KB pre-rendered tile (no SVG filters, which delay first paint). */
+@utility grain {
+  background-image: url("/grain-dark.png");
+  background-repeat: repeat;
+}
+
+@utility glow-blob {
+  border-radius: 999px;
+  background: radial-gradient(closest-side, rgb(var(--accent-rgb) / 0.28), transparent);
+}
+
 /* ---------- Effects ---------- */
 
 @property --angle {
@@ -180,19 +228,19 @@ h3 {
   animation: drift 24s ease-in-out infinite alternate;
 }
 .aurora > span:nth-child(1) {
-  --c: rgb(200 242 90 / 0.28);
+  --c: rgb(var(--accent-rgb) / 0.28);
   top: -38vmax;
   right: -22vmax;
 }
 .aurora > span:nth-child(2) {
-  --c: rgb(124 92 255 / 0.42);
+  --c: rgb(var(--violet-rgb) / 0.42);
   bottom: -42vmax;
   left: -28vmax;
   animation-duration: 30s;
   animation-delay: -8s;
 }
 .aurora > span:nth-child(3) {
-  --c: rgb(56 189 248 / 0.22);
+  --c: rgb(var(--sky-rgb) / 0.22);
   top: 15%;
   left: 25%;
   width: 45vmax;
@@ -214,7 +262,7 @@ h3 {
 
 /* Gradient text with a slow shimmer (lime → sky). */
 .text-shine {
-  background: linear-gradient(100deg, var(--accent) 15%, #9be7ff 40%, var(--accent) 65%) 0 0 / 250% 100%;
+  background: linear-gradient(100deg, var(--accent) 15%, var(--shine) 40%, var(--accent) 65%) 0 0 / 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -291,7 +339,7 @@ h3 {
   pointer-events: none;
   opacity: 0;
   transition: opacity 300ms var(--ease-brand);
-  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), var(--glow, rgb(124 92 255 / 0.12)), transparent 45%);
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), var(--glow, rgb(var(--violet-rgb) / 0.12)), transparent 45%);
 }
 .glow-card:hover::after {
   opacity: 1;
@@ -354,9 +402,11 @@ h3 {
   opacity: 0;
   transform: translateY(10px) scale(0.85);
 }
-[data-reveal="on"] .reveal:not([data-shown]) .fill-on-show {
-  background-color: var(--line-night);
-  color: var(--on-night-soft);
+.grow-on-show {
+  transition: transform 1.4s var(--ease-brand) 300ms;
+}
+[data-reveal="on"] .reveal:not([data-shown]) .grow-on-show {
+  transform: scaleX(0.04);
 }
 
 /* Pulsing status dot. */
@@ -414,6 +464,63 @@ h3 {
   }
 }
 
+/* Festive motifs: a very slow rangoli turn and a soft diya flicker. */
+.motif-spin {
+  animation: spin 160s linear infinite;
+}
+.diya-flame {
+  transform-origin: 60px 44px;
+  animation: flicker 3.2s ease-in-out infinite;
+}
+@keyframes flicker {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  40% {
+    transform: scale(0.94, 1.06);
+  }
+  70% {
+    transform: scale(1.04, 0.96);
+  }
+}
+
+/*
+ * Decorative motion starts only once the page is idle after load (RevealObserver sets
+ * data-fx="on"), so none of it competes with first paint on slower phones.
+ */
+:root:not([data-fx="on"]) :is(
+    .aurora > span,
+    .text-shine,
+    .float,
+    .float-slow,
+    .marquee-track,
+    .spin-border::before,
+    .sheen-idle::after,
+    .motif-spin,
+    .diya-flame,
+    .pulse-dot::after
+  ) {
+  animation-play-state: paused;
+}
+/* The big decorative layers aren't drawn during first paint; they fade in once idle. */
+.aurora,
+.motif-layer {
+  transition:
+    opacity 1.4s var(--ease-brand),
+    visibility 0s;
+}
+:root:not([data-fx="on"]) :is(.aurora, .motif-layer) {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Secondary auroras (testimonials, contact) stay still: fewer large GPU layers. */
+.aurora-static > span {
+  animation: none;
+  will-change: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -432,6 +539,8 @@ h3 {
   .spin-border::before,
   .sheen-idle::after,
   .pulse-dot::after,
+  .motif-spin,
+  .diya-flame,
   .scroll-progress {
     animation: none !important;
   }

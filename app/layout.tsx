@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { FESTIVALS } from "@/config/festive";
 import { InteractionFX } from "@/components/ui/InteractionFX";
+import { resolveThemeId, themeBootScript, themeCss } from "@/lib/festive";
 import { RevealObserver } from "@/components/ui/RevealObserver";
+import { formatINR } from "@/lib/format";
 import { siteConfig } from "@/site.config";
 import "./globals.css";
 
@@ -10,10 +13,11 @@ import "./globals.css";
  * Google's own "latin" files lack ₹, so every price would pull an extra 84KB latin-ext file
  * late in the load. Rebuild with scripts/build-fonts.py (see README → Fonts).
  */
-const bricolage = localFont({
-  src: "./fonts/bricolage.woff2",
-  weight: "400 800",
-  variable: "--font-bricolage",
+// Headlines: Inter Display (Inter at its display optical size). Body: Inter. Both preloaded.
+const interDisplay = localFont({
+  src: "./fonts/inter-display.woff2",
+  weight: "500 800",
+  variable: "--font-inter-display",
   display: "swap",
 });
 
@@ -24,9 +28,8 @@ const inter = localFont({
   display: "swap",
 });
 
-const title = `${siteConfig.brand} | Online stores for D2C brands that sell and scale`;
-const description =
-  "Teamy designs, builds and runs fast, high-converting online stores for D2C brands. UPI, cards and COD, WhatsApp order updates, live in days. You own everything.";
+const title = `${siteConfig.brand} | Online stores for D2C brands, designed, built and run for you`;
+const description = `Teamy designs, builds and runs fast, high-converting online stores for D2C brands: UPI, cards and COD, WhatsApp order updates, live in ${siteConfig.launchDays} days. ${formatINR(siteConfig.plan.price)} one-time, and you own everything.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -52,9 +55,26 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+// Re-render hourly so the server-picked festive theme follows the calendar (the boot script
+// below also corrects it on the visitor's device before first paint).
+export const revalidate = 3600;
+
+// `?theme=` previews are compiled in only for `next dev`, never for production builds.
+const allowThemePreview = process.env.NODE_ENV !== "production";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className={`${bricolage.variable} ${inter.variable}`}>
+    <html
+      lang="en-IN"
+      data-theme={resolveThemeId(new Date())}
+      // The boot script may change data-theme before React hydrates.
+      suppressHydrationWarning
+      className={`${interDisplay.variable} ${inter.variable}`}
+    >
+      <head>
+        <style id="theme-tokens" dangerouslySetInnerHTML={{ __html: themeCss(FESTIVALS) }} />
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript(FESTIVALS, allowThemePreview) }} />
+      </head>
       <body>
         <a
           href="#main"

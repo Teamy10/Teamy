@@ -28,23 +28,19 @@ export type Benefit = { icon: IconName; title: string; line: string };
 
 export type ServiceGroup = { icon: IconName; title: string; line: string; items: string[] };
 
+/** The single plan. Its price is the only price shown anywhere on the site. */
 export type Plan = {
-  id: "launch" | "growth";
   name: string;
   price: number;
   /** Who it's for, one line. */
   forWho: string;
   features: string[];
-  recommended?: boolean;
 };
 
 export type AddOn = {
   icon: IconName;
   name: string;
   line: string;
-  /** One-time or monthly price in ₹. Leave undefined to show "Quoted for you". */
-  price?: number;
-  per?: "one-time" | "month";
 };
 
 export type Step = { title: string; line: string };
@@ -77,8 +73,6 @@ export const siteConfig = {
     whatsappNumber: "919509612425",
     whatsappDisplay: "+91 95096 12425",
     email: "hello@teamy.in", // ⚠️ CONFIRM mailbox exists
-    instagram: "https://instagram.com/", // ⚠️ CONFIRM — add your handle
-    linkedin: "https://www.linkedin.com/", // ⚠️ CONFIRM — add your page
   },
 
   /** Prefilled WhatsApp messages. {brand} is replaced when we know the brand name. */
@@ -99,7 +93,6 @@ export const siteConfig = {
   audience: "D2C brands",
 
   hero: {
-    eyebrow: "Web studio for D2C brands",
     /** Cycles on a timer, pauses on hover/focus or with the pause button. */
     headlines: [
       { text: "Stores that sell while you sleep.", highlight: "sell" },
@@ -143,37 +136,25 @@ export const siteConfig = {
     },
   ] satisfies ServiceGroup[] as ServiceGroup[],
 
-  plans: [
-    {
-      id: "launch",
-      name: "Launch",
-      price: 8999,
-      forWho: "For brands that want to launch fast without managing developers.",
-      features: [
-        "We handle all the tech, start to finish",
-        "Custom-designed storefront on your domain",
-        "UPI, cards & COD checkout",
-        "WhatsApp order updates",
-        `Live in ${launchDays} days`,
-      ],
-    },
-    {
-      id: "growth",
-      name: "Growth",
-      price: 20999,
-      forWho: "For brands ready to scale.",
-      features: [
-        "Everything in Launch",
-        "COD confirmation & abandoned-cart nudges",
-        "Analytics & Meta Pixel set up",
-        "Drops, waitlists & reorder reminders",
-        "Priority WhatsApp support",
-      ],
-      recommended: true,
-    },
-  ] satisfies Plan[] as Plan[],
+  plan: {
+    name: "Everything you need to launch and grow",
+    price: 8999,
+    forWho: "One price, one team, every feature. For brands that want to sell without managing developers.",
+    // Every feature from the old Launch + Growth plans, de-duplicated, in the order a store comes together.
+    features: [
+      "We handle all the tech, end to end",
+      "Custom-designed storefront on your domain",
+      "UPI, cards & COD checkout",
+      "WhatsApp order updates",
+      "COD confirmation & abandoned-cart nudges",
+      "Analytics & Meta Pixel set up",
+      "Drops, waitlists & reorder reminders",
+      "Priority WhatsApp support",
+      `Live in ${launchDays} days`,
+    ],
+  } satisfies Plan as Plan,
 
-  /** Listed beneath the Growth plan. Add `price` once you've fixed them. */
+  /** Listed beneath the plan. Prices are intentionally not shown (the plan price is the only one). */
   addOns: [
     { icon: "boxes", name: "Catalogue upload", line: "We add and tidy your products, variants and photos." },
     { icon: "search", name: "SEO setup", line: "Search-friendly pages, titles and a sitemap that Google likes." },
@@ -210,7 +191,6 @@ export const siteConfig = {
    * Keep claims general and true. (Not: "they sell only from their website".)
    */
   sharkTank: {
-    eyebrow: "Seen on Shark Tank India?",
     title: "Most D2C brands on Shark Tank India sell from their own website.",
     highlight: "their own website.",
     sub: "Not just marketplace listings. Their own store tells them their margin, their repeat rate and who every customer is. You can have exactly that.",
