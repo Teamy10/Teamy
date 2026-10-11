@@ -1,103 +1,73 @@
-import { ArrowDown, Check, MessageCircle, Zap } from "lucide-react";
-import type { ReactNode } from "react";
+import { ArrowDown } from "lucide-react";
+import type { CSSProperties } from "react";
 import { FestiveHeroNote, HeroMotif } from "@/components/festive/Motifs";
+import { Storefront } from "@/components/mockup/Storefront";
 import { buttonClass } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/ui/Icons";
+import { MaskWords } from "@/components/ui/MaskWords";
 import { TrackedLink, WhatsAppLink } from "@/components/ui/TrackedLink";
 import { siteConfig } from "@/site.config";
-import { HeroHeadline } from "./HeroHeadline";
-import { PhoneMockup } from "./PhoneMockup";
 
-/** Small glassy card that floats beside the phone. Decorative only. */
-function FloatCard({ className, icon, title, body }: { className: string; icon: ReactNode; title: string; body: string }) {
-  return (
-    <div
-      aria-hidden="true"
-      className={`surface-night-2 absolute z-20 flex items-center gap-3 rounded-2xl px-4 py-3 text-on-night shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_20px_40px_-20px_rgb(0_0_0/0.8)] ${className}`}
-    >
-      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-accent text-accent-ink">{icon}</span>
-      <span>
-        <span className="block text-sm font-semibold leading-tight">{title}</span>
-        <span className="block text-[13px] text-on-night-soft">{body}</span>
-      </span>
-    </div>
-  );
-}
+const rise = (d: number) => ({ "--d": `${d}s` }) as CSSProperties;
 
 export function Hero() {
   const { hero } = siteConfig;
+  // Running word index so the stagger continues across both lines.
+  const offsets = hero.lines.map((_, i) => hero.lines.slice(0, i).reduce((n, l) => n + l.text.split(" ").length, 0));
   return (
-    <section
-      id="top"
-      aria-labelledby="hero-title"
-      className="on-night grain relative overflow-hidden bg-night pt-[calc(var(--header-h)+env(safe-area-inset-top)+28px)]"
-    >
-      {/* Drifting aurora (fades in once the page is idle). */}
-      <div className="aurora" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-      </div>
-
+    <section id="top" aria-labelledby="hero-title" className="relative overflow-hidden pt-[calc(var(--header-h)+env(safe-area-inset-top))]">
       <HeroMotif />
-
-      <div className="container-page relative grid grid-cols-1 items-center gap-16 pb-24 lg:grid-cols-12 lg:gap-8 lg:pb-32 lg:pt-12">
-        <div className="min-w-0 lg:col-span-7">
-          <div>
-            <HeroHeadline lines={hero.headlines} rotateMs={hero.rotateMs} srText={hero.srHeadline} />
+      <div className="container-page relative grid grid-cols-1 items-center gap-y-20 pb-24 pt-10 lg:min-h-[calc(100svh-var(--header-h))] lg:grid-cols-12 lg:gap-x-8 lg:pb-28 lg:pt-6">
+        <div className="relative z-10 lg:col-span-7">
+          {/* Kinetic headline: each word wipes up from a mask, on load, with CSS only. */}
+          <h1 id="hero-title" className="hero-mask display-xl">
+            {hero.lines.map((line, li) => (
+              <span key={li} className="block">
+                <MaskWords text={line.text} emphasis={line.emphasis} heroWord={line.heroWord} offset={offsets[li]} emphasisClass="font-light" />
+              </span>
+            ))}
+          </h1>
+          <p className="hero-rise mt-8 max-w-xl text-lg text-fg-2 md:text-xl" style={rise(0.45)}>
+            {hero.sub}
+          </p>
+          <div className="hero-rise" style={rise(0.5)}>
+            <FestiveHeroNote />
           </div>
-          <p className="mt-4 max-w-xl text-lg text-on-night-soft md:text-xl">{hero.sub}</p>
-          <FestiveHeroNote />
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <div className="hero-rise mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7" style={rise(0.6)}>
             <WhatsAppLink
               section="hero_book_call"
               message="bookCall"
-              className={buttonClass("primary", "sheen-idle w-full text-[17px] sm:w-auto")}
+              data-magnetic=""
+              className={buttonClass("primary", "w-full sm:w-auto", "lg")}
             >
               <WhatsAppIcon className="size-5" /> Book a free call
             </WhatsAppLink>
-            <TrackedLink
-              href="#pricing"
-              event="hero_cta_click"
-              params={{ location: "hero_pricing" }}
-              className={buttonClass("ghost-night", "w-full text-[17px] sm:w-auto")}
-            >
-              See pricing
-              <ArrowDown className="size-4 transition-transform group-hover/btn:translate-y-0.5" aria-hidden="true" />
+            <TrackedLink href="#story" event="hero_cta_click" params={{ location: "hero_story" }} className={buttonClass("ghost")}>
+              See the 7-day plan <ArrowDown className="size-4" aria-hidden="true" />
             </TrackedLink>
           </div>
-          <ul className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-[15px] text-on-night-soft">
+          <ul className="hero-rise label-mono mt-10 flex flex-wrap gap-x-6 gap-y-2 text-fg-3" style={rise(0.7)}>
             {hero.trust.map((t) => (
-              <li key={t} className="flex items-center gap-1.5">
-                <Check className="size-4 text-accent" aria-hidden="true" />
+              <li key={t} className="flex items-center gap-2">
+                <span aria-hidden="true" className="size-1 rounded-full bg-accent" />
                 {t}
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Phone tilts toward the cursor (desktop); cards float around it. */}
-        <div data-tilt-zone className="relative mx-auto w-full max-w-[460px] py-6 lg:col-span-5">
-          <div
-            aria-hidden="true"
-            className="absolute left-1/2 top-1/2 size-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/0.25),transparent)]"
-          />
-          <div data-tilt className="relative transition-transform duration-500 ease-out will-change-transform">
-            <PhoneMockup />
+        {/* Tilted storefront: cursor parallax on desktop (runtime), static tilt otherwise. */}
+        <figure className="hero-rise relative mx-auto w-full max-w-[560px] lg:col-span-5 lg:max-w-none" style={rise(0.35)}>
+          <div data-tilt-zone data-loop className="relative px-4 py-10 sm:px-8 lg:px-0 xl:-mr-10">
+            <div
+              data-tilt
+              className="relative [transform:perspective(1400px)_rotateY(-6deg)_rotateX(6deg)] lg:[transform:perspective(1400px)_rotateY(-14deg)_rotateX(7deg)]"
+            >
+              <Storefront variant="hero" />
+            </div>
           </div>
-          <FloatCard
-            className="float -left-1 top-[44%] sm:-left-6"
-            icon={<Zap className="size-4" />}
-            title="Fast checkout"
-            body="UPI · Cards · COD"
-          />
-          <FloatCard
-            className="float-slow -right-1 top-[68%] sm:-right-8"
-            icon={<MessageCircle className="size-4" />}
-            title="Order shipped"
-            body="Sent on WhatsApp"
-          />
-        </div>
+          <figcaption className="label-mono mt-6 text-center text-fg-3 lg:text-left">Illustrative storefront · invented brand</figcaption>
+        </figure>
       </div>
     </section>
   );

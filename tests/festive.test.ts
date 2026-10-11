@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { FESTIVALS, type Festival } from "../config/festive";
-import { istDate, resolveFestival, resolveThemeId, themeBootScript, themeCss } from "../lib/festive";
+import { DEFAULT_TOKENS, FESTIVALS, type Festival } from "../config/festive";
+import { contrast, istDate, resolveFestival, resolveThemeId, themeBootScript, themeCss } from "../lib/festive";
 
 /** A moment given as IST wall-clock time ("2026-10-11T00:00:00") → Date. IST is UTC+05:30, no DST. */
 const ist = (wall: string) => new Date(`${wall}+05:30`);
@@ -75,4 +75,21 @@ describe("generated CSS and boot script", () => {
     expect(themeBootScript(FESTIVALS, false)).not.toContain("URLSearchParams");
     expect(themeBootScript(FESTIVALS, true)).toContain("URLSearchParams");
   });
+});
+
+describe("theme tokens meet WCAG AA", () => {
+  const themes = [{ id: "default", tokens: DEFAULT_TOKENS }, ...FESTIVALS];
+  for (const { id, tokens: t } of themes) {
+    it(`${id}: every text colour on every surface ≥ 4.5:1`, () => {
+      for (const fg of [t.text, t.text2, t.text3]) {
+        for (const bg of [t.bg, t.surface, t.surface2]) {
+          expect(contrast(fg, bg), `${fg} on ${bg}`).toBeGreaterThanOrEqual(4.5);
+        }
+      }
+    });
+    it(`${id}: CTA text on accent ≥ 4.5:1`, () => {
+      expect(contrast(t.accentInk, t.accent)).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(t.accentInk, t.accentHover)).toBeGreaterThanOrEqual(4.5);
+    });
+  }
 });

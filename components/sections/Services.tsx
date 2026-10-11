@@ -1,83 +1,48 @@
 import { FestiveDivider } from "@/components/festive/Motifs";
-import { Check } from "lucide-react";
-import { icons } from "@/components/ui/IconMap";
+import { AnimatedIcon } from "@/components/icons/AnimatedIcons";
+import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { siteConfig } from "@/site.config";
 
-// Each card gets its own glow colour, so the stack reads as three distinct stages.
-const glows = ["rgb(var(--accent-rgb) / 0.35)", "rgb(var(--sky-rgb) / 0.35)", "rgb(var(--violet-rgb) / 0.45)"];
+// Bento rhythm on the 12-column grid: wide / narrow, narrow / wide, half / half.
+const spans = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-5", "lg:col-span-7", "lg:col-span-6", "lg:col-span-6"];
 
-/**
- * Sticky stacking cards: each stage pins under the header and the next one slides over it.
- * Pure CSS (position: sticky), so it costs no JS and works on phones too.
- */
 export function Services() {
-  const groups = siteConfig.services;
   return (
-    <section id="services" aria-labelledby="services-title" className="on-night grain section-pad relative bg-night [contain-intrinsic-size:auto_1800px]">
+    <section id="services" aria-labelledby="services-title" className="section-pad relative">
       <FestiveDivider />
       <div className="container-page">
         <SectionHeading
           id="services-title"
-          tone="night"
           title="What we build for D2C brands."
-          highlight="D2C brands."
-          sub="Three stages, one team. From the first product page to your thousandth repeat order."
+          emphasis="D2C brands."
+          sub="Everything from the first product page to your thousandth repeat order. Launch, sell and grow, handled by one team."
         />
-
-        <ol className="mt-14 space-y-6">
-          {groups.map((s, i) => {
-            const Icon = icons[s.icon];
-            return (
-              <li
-                key={s.title}
-                className="sticky"
-                style={{ top: `calc(var(--header-h) + 24px + ${i * 22}px)` }}
+        <ul className="mt-16 grid gap-4 md:grid-cols-2 lg:grid-cols-12 lg:gap-5">
+          {siteConfig.services.map((s, i) => (
+            <Reveal as="li" key={s.title} delay={(i % 2) * 0.08} className={`${spans[i]} h-full`}>
+              {/* Focusable so keyboard users get the same spotlight and icon motion as hover. */}
+              <article
+                tabIndex={0}
+                aria-labelledby={`svc-${i}`}
+                className="spotlight card group flex h-full min-h-56 flex-col rounded-[24px] p-7 sm:p-8 lg:min-h-64"
               >
-                <article
-                  className="glow-card surface-night-2 relative overflow-hidden rounded-[32px] p-7 shadow-[inset_0_1px_0_rgb(255_255_255/0.07),0_-20px_60px_-30px_rgb(0_0_0/0.8)] sm:p-10 lg:p-12"
-                  style={{ ["--glow" as string]: glows[i % glows.length] }}
-                >
-                  <span
-                    aria-hidden="true"
-                    className="absolute -right-24 -top-24 size-80 rounded-full"
-                    style={{ background: `radial-gradient(closest-side, ${glows[i % glows.length]}, transparent)` }}
-                  />
-                  <div className="relative grid gap-8 md:grid-cols-12 md:items-center">
-                    <div className="md:col-span-6">
-                      <div className="flex items-center gap-3">
-                        <span className="grid size-12 place-items-center rounded-2xl bg-accent text-accent-ink">
-                          <Icon className="size-6" aria-hidden="true" />
-                        </span>
-                        <span className="text-sm font-semibold uppercase tracking-[0.14em] text-on-night-soft">
-                          Stage {i + 1} of {groups.length}
-                        </span>
-                      </div>
-                      <h3 className="mt-6 font-display text-[52px] font-bold leading-none tracking-[-0.045em] text-on-night md:text-7xl">
-                        {s.title}
-                        <span className="text-accent">.</span>
-                      </h3>
-                      <p className="mt-4 max-w-md text-lg text-on-night-soft">{s.line}</p>
-                    </div>
-                    <ul className="grid gap-3 sm:grid-cols-2 md:col-span-6 md:grid-cols-1">
-                      {s.items.map((item) => (
-                        <li
-                          key={item}
-                          className="flex items-center gap-3 rounded-2xl bg-night px-4 py-3.5 text-on-night ring-1 ring-line-night transition-colors duration-300 hover:ring-accent/60"
-                        >
-                          <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent text-accent-ink">
-                            <Check className="size-3.5" strokeWidth={3} aria-hidden="true" />
-                          </span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </article>
-              </li>
-            );
-          })}
-        </ol>
+                <div className="flex items-start justify-between gap-4">
+                  <span className="text-fg-2 transition-colors duration-[var(--dur-fast)] group-hover:text-fg">
+                    <AnimatedIcon name={s.icon} />
+                  </span>
+                  <span className="label-mono text-fg-3">{s.stage}</span>
+                </div>
+                <div className="mt-auto pt-10">
+                  <h3 id={`svc-${i}`} className="text-[26px] font-semibold leading-tight tracking-[-0.03em]">
+                    {s.title}
+                  </h3>
+                  <p className="mt-2 max-w-md text-fg-2">{s.line}</p>
+                </div>
+              </article>
+            </Reveal>
+          ))}
+        </ul>
       </div>
     </section>
   );

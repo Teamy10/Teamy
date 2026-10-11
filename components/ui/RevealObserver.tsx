@@ -1,40 +1,51 @@
 "use client";
 
 import { useEffect } from "react";
+import { afterIdle } from "@/lib/idle";
 
-/** Marks `.reveal` elements as shown when ~20% visible. Uses a data attribute so React never resets it. */
+/**
+ * One shared observer layer for the whole page (no animation library needed):
+ *  - `.reveal` elements get [data-shown] once ~20% visible (CSS does the masked / fade-up reveal).
+ *  - `[data-loop]` elements get [data-inview] while on screen; CSS pauses their loops otherwise.
+ *  - Once the page is idle after load, <html data-fx="on"> lets decorative layers start.
+ * Uses data attributes so React never resets them.
+ */
 export function RevealObserver() {
   useEffect(() => {
-    const io = new IntersectionObserver(
+    const reveal = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
           (e.target as HTMLElement).dataset.shown = "";
-          io.unobserve(e.target);
+          reveal.unobserve(e.target);
         }
       },
       { threshold: 0.2 },
     );
-    const observe = (root: ParentNode) =>
-      root.querySelectorAll<HTMLElement>(".reveal:not([data-shown])").forEach((el) => io.observe(el));
+    const loops = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        const el = e.target as HTMLElement;
+        if (e.isIntersecting) el.dataset.inview = "";
+        else delete el.dataset.inview;
+      }
+    });
+    const observe = (root: ParentNode) => {
+      root.querySelectorAll<HTMLElement>(".reveal:not([data-shown])").forEach((el) => reveal.observe(el));
+      root.querySelectorAll<HTMLElement>("[data-loop]").forEach((el) => loops.observe(el));
+    };
     observe(document);
-    // Pick up reveals inside widgets that mount later.
+    // Pick up elements inside widgets that mount later (e.g. the contact success state).
     const mo = new MutationObserver((records) => {
       for (const r of records) r.addedNodes.forEach((n) => n instanceof HTMLElement && observe(n.parentNode ?? n));
     });
     mo.observe(document.body, { childList: true, subtree: true });
     document.documentElement.dataset.reveal = "on";
-    // Start decorative animations once the browser is idle after load.
-    const startFx = () => (document.documentElement.dataset.fx = "on");
-    const idle = (cb: () => void) => {
-      if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(cb, { timeout: 2500 });
-      else setTimeout(cb, 1200); // Safari
-    };
-    if (document.readyState === "complete") idle(startFx);
-    else window.addEventListener("load", () => idle(startFx), { once: true });
+    const cancel = afterIdle(() => (document.documentElement.dataset.fx = "on"));
     return () => {
-      io.disconnect();
+      reveal.disconnect();
+      loops.disconnect();
       mo.disconnect();
+      cancel();
     };
   }, []);
   return null;

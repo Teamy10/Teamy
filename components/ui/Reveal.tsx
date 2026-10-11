@@ -4,16 +4,17 @@ type Props = {
   children: ReactNode;
   className?: string;
   delay?: number;
-  as?: "div" | "li" | "header";
+  as?: "div" | "li" | "header" | "ul" | "ol" | "p" | "section";
+  id?: string;
 };
 
 /**
- * Fade + 16px rise, once, at ~20% visibility. Pure CSS + one shared observer
- * (RevealObserver), so it costs no animation library in the initial bundle.
+ * Reveal-on-scroll wrapper. Pure CSS driven by one shared observer (RevealObserver): fade-up by
+ * default, or masked word reveals for headings inside it (`.reveal-mask`). No JS animation library.
  */
-export function Reveal({ children, className = "", delay = 0, as: Tag = "div" }: Props) {
+export function Reveal({ children, className = "", delay = 0, as: Tag = "div", id }: Props) {
   return (
-    <Tag className={`reveal ${className}`} style={{ "--reveal-delay": `${delay}s` } as CSSProperties}>
+    <Tag id={id} className={`reveal ${className}`} style={{ "--reveal-delay": `${delay}s` } as CSSProperties}>
       {children}
     </Tag>
   );

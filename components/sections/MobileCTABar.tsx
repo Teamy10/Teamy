@@ -50,7 +50,7 @@ export function MobileCTABar() {
 
   return (
     <div
-      className={`on-night fixed inset-x-0 bottom-0 z-30 border-t border-line-night bg-night/95 px-4 pb-[calc(12px+env(safe-area-inset-bottom))] pt-3 transition-transform duration-300 ease-brand md:hidden ${
+      className={`fixed inset-x-0 bottom-0 z-30 border-t border-line bg-bg/90 px-4 pb-[calc(12px+env(safe-area-inset-bottom))] pt-3 transition-transform duration-[var(--dur-base)] ease-expo md:hidden ${
         show ? "translate-y-0 backdrop-blur-md" : "translate-y-full"
       }`}
       inert={!show}
@@ -60,7 +60,7 @@ export function MobileCTABar() {
           section="mobile_cta_bar"
           message="bookCall"
           aria-label="Book a free call on WhatsApp"
-          className="grid size-12 shrink-0 place-items-center rounded-full bg-night-2 text-accent ring-1 ring-line-night"
+          className="grid size-12 shrink-0 place-items-center rounded-full bg-surface-2 text-accent ring-1 ring-line-strong"
         >
           <WhatsAppIcon className="size-6" />
         </WhatsAppLink>

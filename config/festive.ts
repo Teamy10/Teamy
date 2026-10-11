@@ -8,33 +8,34 @@
  *  - Preview any theme locally with `?theme=navratri` / `?theme=diwali` / `?theme=default`
  *    (works in `npm run dev` only; the code is stripped from production builds).
  *
- * Contrast: every token pair used for text (on-night-soft on night, accent-ink on accent,
- * support on white) is checked to pass WCAG AA (≥ 4.5:1). Keep it that way when editing.
+ * Contrast: every text token (text, text2, text3) is checked against bg, surface and surface2,
+ * and accentInk against accent, to pass WCAG AA (≥ 4.5:1). Keep it that way when editing.
  */
 
 export type ThemeTokens = {
-  /** Dark section background. */
-  night: string;
-  /** Raised cards on dark. */
-  night2: string;
-  /** Borders on dark. */
-  lineNight: string;
-  /** Secondary text on dark. */
-  onNightSoft: string;
-  /** CTA background and highlights on dark. */
+  /** Page base (near-black). */
+  bg: string;
+  /** Raised surface, level 1 (cards). */
+  surface: string;
+  /** Raised surface, level 2 (cards on cards, inputs). */
+  surface2: string;
+  /** Primary text. */
+  text: string;
+  /** Secondary text. */
+  text2: string;
+  /** Tertiary text: small mono labels. */
+  text3: string;
+  /** The single signal colour: primary CTA, active states, tiny highlights. */
   accent: string;
   accentHover: string;
-  /** Text colour on top of `accent`. */
+  /** Text on top of `accent`. */
   accentInk: string;
-  /** Mid colour of the shimmering gradient text. */
-  shine: string;
-  /** Two decorative glow colours. */
+  /** Gradient stops for the one emphasised hero word (gold in festive themes). */
+  heroA: string;
+  heroB: string;
+  /** Soft light-pool colours (used at very low opacity). */
   glowA: string;
   glowB: string;
-  /** Links and highlights on light sections. */
-  support: string;
-  /** Light page background. */
-  bg: string;
 };
 
 export type Festival = {
@@ -45,9 +46,9 @@ export type Festival = {
   /** YYYY-MM-DD, last day (IST), inclusive. */
   end: string;
   tokens: ThemeTokens;
-  /** Decorative motif shown in the hero and as section dividers. */
+  /** Decorative motif: a soft hero accent and the ornamental section dividers. */
   motif: "rangoli" | "diya";
-  /** Optional one-line greeting shown under the hero sub-headline. */
+  /** Optional one-line greeting under the hero sub-headline (keep it about DEFAULT_HERO_NOTE's length). */
   heroNote?: string;
   /** Favicon file in /public used while the festival is active. */
   favicon?: string;
@@ -55,24 +56,25 @@ export type Festival = {
 
 /**
  * Hero note for the default theme. Every theme shows exactly one note in the same slot,
- * so switching themes never changes layout. Keep festive notes about this length.
+ * so switching themes never changes layout.
  */
 export const DEFAULT_HERO_NOTE = "Free call and a free store preview before you pay anything.";
 
-/** Premium base theme: Midnight & Lime. Used whenever no festival is active. */
+/** Premium base theme: near-black, cool neutrals, one electric lime signal. */
 export const DEFAULT_TOKENS: ThemeTokens = {
-  night: "#0e1726",
-  night2: "#16223a",
-  lineNight: "#26334d",
-  onNightSoft: "#a8b3c7",
+  bg: "#0a0b0f",
+  surface: "#0e1116",
+  surface2: "#151922",
+  text: "#f3f5f8",
+  text2: "#a7aebb", // 8.8:1 on bg
+  text3: "#7f8796", // 5.4:1 on bg, 4.8:1 on surface2
   accent: "#c8f25a",
-  accentHover: "#b8e63f",
-  accentInk: "#0e1726",
-  shine: "#9be7ff",
-  glowA: "#7c5cff",
-  glowB: "#38bdf8",
-  support: "#3b5bdb",
-  bg: "#f6f6f1",
+  accentHover: "#d6f77c",
+  accentInk: "#0a0b0f", // 14.6:1 on accent
+  heroA: "#c8f25a",
+  heroB: "#eefcc8",
+  glowA: "#7c8db8", // cool slate light
+  glowB: "#c8f25a",
 };
 
 export const FESTIVALS: Festival[] = [
@@ -86,18 +88,19 @@ export const FESTIVALS: Festival[] = [
     heroNote: "Navratri is here. Launch now and be ready for the festive rush.",
     favicon: "/favicon-navratri.svg",
     tokens: {
-      night: "#2a0a14", // deep maroon
-      night2: "#3d1020",
-      lineNight: "#5c2333",
-      onNightSoft: "#efcfc0", // 11.9:1 on night
+      bg: "#12060b", // deep maroon-black
+      surface: "#1a0a12",
+      surface2: "#241019",
+      text: "#fbf1ec",
+      text2: "#ddbfb4", // 11.5:1 on bg
+      text3: "#ad8f85", // 6.6:1 on bg
       accent: "#ff9f1c", // saffron
       accentHover: "#ffb347",
-      accentInk: "#2a0a14", // 8.9:1 on accent
-      shine: "#ffd36b", // gold
+      accentInk: "#12060b",
+      heroA: "#f5c451", // gold
+      heroB: "#ffe6a3",
       glowA: "#e0218a", // rani pink
       glowB: "#f5b82e", // gold
-      support: "#a0153e", // 7.8:1 on white
-      bg: "#fbf5ee",
     },
   },
   {
@@ -110,18 +113,19 @@ export const FESTIVALS: Festival[] = [
     heroNote: "Shubh Deepavali. Make this season's orders land on your own store.",
     favicon: "/favicon-diwali.svg",
     tokens: {
-      night: "#0b1026", // midnight navy
-      night2: "#151c3d",
-      lineNight: "#2a3360",
-      onNightSoft: "#d4ccb6", // 11.6:1 on night
+      bg: "#060918", // midnight navy
+      surface: "#0b1024",
+      surface2: "#121a35",
+      text: "#f6f3ea",
+      text2: "#cfc6ae", // 11.6:1 on bg
+      text3: "#a1998a", // 6.9:1 on bg
       accent: "#f4b942", // warm gold
       accentHover: "#f7c967",
-      accentInk: "#0b1026", // 10.6:1 on accent
-      shine: "#ffe2a1",
+      accentInk: "#060918",
+      heroA: "#f4b942",
+      heroB: "#ffe7a8",
       glowA: "#ff8a3d", // diya amber
       glowB: "#ffcf6e",
-      support: "#8a5a00", // 5.9:1 on white
-      bg: "#faf7f0",
     },
   },
 ];

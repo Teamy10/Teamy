@@ -38,34 +38,51 @@ export function resolveThemeId(now: Date, festivals?: readonly Festival[] | null
 }
 
 const TOKEN_VARS: Record<keyof ThemeTokens, string> = {
-  night: "--night",
-  night2: "--night-2",
-  lineNight: "--line-night",
-  onNightSoft: "--on-night-soft",
+  bg: "--bg",
+  surface: "--surface",
+  surface2: "--surface-2",
+  text: "--text",
+  text2: "--text-2",
+  text3: "--text-3",
   accent: "--accent",
   accentHover: "--accent-hover",
   accentInk: "--accent-ink",
-  shine: "--shine",
-  glowA: "--violet",
-  glowB: "--sky",
-  support: "--support",
-  bg: "--bg",
+  heroA: "--hero-a",
+  heroB: "--hero-b",
+  glowA: "--glow-a",
+  glowB: "--glow-b",
 };
 
-function hexToRgb(hex: string): string {
+export function hexToRgb(hex: string): [number, number, number] {
   const h = hex.replace("#", "");
   const n = parseInt(h.length === 3 ? h.replace(/./g, "$&$&") : h, 16);
-  return `${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255}`;
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 }
+
+/** WCAG 2.x contrast ratio between two hex colours. */
+export function contrast(a: string, b: string): number {
+  const lum = (hex: string) =>
+    hexToRgb(hex)
+      .map((v) => {
+        const c = v / 255;
+        return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+      })
+      .reduce((s, c, i) => s + c * [0.2126, 0.7152, 0.0722][i], 0);
+  const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+const channels = (hex: string) => hexToRgb(hex).join(" ");
 
 function declarations(t: ThemeTokens): string {
   const vars = (Object.keys(TOKEN_VARS) as (keyof ThemeTokens)[]).map((k) => `${TOKEN_VARS[k]}:${t[k]}`);
-  // RGB channel versions for translucent glows: rgb(var(--accent-rgb) / 0.3).
+  // RGB channel versions for translucent layers: rgb(var(--text-rgb) / 0.08) for hairlines, etc.
   vars.push(
-    `--night-rgb:${hexToRgb(t.night)}`,
-    `--accent-rgb:${hexToRgb(t.accent)}`,
-    `--violet-rgb:${hexToRgb(t.glowA)}`,
-    `--sky-rgb:${hexToRgb(t.glowB)}`,
+    `--bg-rgb:${channels(t.bg)}`,
+    `--text-rgb:${channels(t.text)}`,
+    `--accent-rgb:${channels(t.accent)}`,
+    `--glow-a-rgb:${channels(t.glowA)}`,
+    `--glow-b-rgb:${channels(t.glowB)}`,
   );
   return vars.join(";");
 }

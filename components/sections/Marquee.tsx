@@ -1,25 +1,28 @@
-import { Sparkle } from "lucide-react";
 import { siteConfig } from "@/site.config";
+import { MarqueeToggle } from "./MarqueeToggle";
 
-/** Lime capabilities strip. Words only. Pauses on hover; static with reduced motion. */
+/** Slow ticker of what Teamy handles. Text only. Pauses on hover, with the button, and offscreen. */
 export function Marquee() {
   const items = siteConfig.marquee;
   const row = (hidden: boolean) => (
     <ul className="flex shrink-0 items-center" aria-hidden={hidden || undefined}>
       {items.map((t) => (
-        <li key={t} className="flex items-center gap-6 pr-6 font-display text-2xl font-bold tracking-tight text-ink md:text-3xl">
+        <li key={t} className="flex items-center gap-8 pr-8 font-display text-[22px] font-light tracking-[-0.02em] text-fg-2 md:text-[28px]">
           {t}
-          <Sparkle className="size-5 fill-ink" aria-hidden="true" />
+          <span aria-hidden="true" className="size-1.5 rotate-45 bg-accent" />
         </li>
       ))}
     </ul>
   );
   return (
-    <section aria-label="What every Teamy store includes" className="marquee relative overflow-hidden border-y border-ink/10 bg-accent py-5">
-      <div className="marquee-track">
-        {row(false)}
-        {row(true)}
+    <section id="marquee" aria-label="What Teamy handles" data-loop className="marquee relative flex items-center border-y border-line">
+      <div className="min-w-0 flex-1 overflow-hidden py-6 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
+        <div className="marquee-track">
+          {row(false)}
+          {row(true)}
+        </div>
       </div>
+      <MarqueeToggle />
     </section>
   );
 }

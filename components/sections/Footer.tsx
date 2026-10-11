@@ -6,27 +6,27 @@ import { WhatsAppIcon } from "@/components/ui/Icons";
 import { WhatsAppLink } from "@/components/ui/TrackedLink";
 import { siteConfig } from "@/site.config";
 
-const link = "inline-flex min-h-12 items-center gap-2 text-on-night-soft transition-colors hover:text-on-night";
+const link = "underline-anim inline-flex min-h-12 items-center gap-2 text-fg-2 transition-colors hover:text-fg";
 
 export function Footer() {
   const { contact, tagline, brand } = siteConfig;
   return (
-    <footer className="on-night grain relative bg-night pb-[calc(96px+env(safe-area-inset-bottom))] pt-16 text-on-night md:pb-12">
+    <footer className="relative border-t border-line pb-[calc(96px+env(safe-area-inset-bottom))] pt-20 md:pb-12">
       <FestiveDivider />
       <div className="container-page">
-        <div className="grid gap-10 md:grid-cols-12 md:gap-8">
+        <div className="grid gap-12 md:grid-cols-12 md:gap-8">
           <div className="md:col-span-6">
-            <Logo tone="light" className="h-8 w-auto" />
-            <p className="mt-4 font-display text-xl font-semibold tracking-tight">{tagline}</p>
-            <p className="mt-1 text-on-night-soft">Online stores for D2C brands. Made in India.</p>
+            <Logo className="h-8 w-auto" />
+            <p className="mt-6 max-w-sm font-display text-[28px] font-light leading-tight tracking-[-0.03em]">{tagline}</p>
+            <p className="mt-2 text-fg-2">Online stores for D2C brands. Made in India.</p>
           </div>
 
           <nav aria-label="Contact" className="md:col-span-3">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-on-night-soft">Talk to us</p>
-            <ul className="mt-2">
+            <p className="label-mono text-fg-3">Talk to us</p>
+            <ul className="mt-3">
               <li>
                 <WhatsAppLink section="footer" className={link}>
-                  <WhatsAppIcon className="size-4 text-accent" /> WhatsApp {contact.whatsappDisplay}
+                  <WhatsAppIcon className="size-4 text-accent" /> {contact.whatsappDisplay}
                 </WhatsAppLink>
               </li>
               <li>
@@ -38,8 +38,8 @@ export function Footer() {
           </nav>
 
           <nav aria-label="Legal" className="md:col-span-3">
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-on-night-soft">Legal</p>
-            <ul className="mt-2">
+            <p className="label-mono text-fg-3">Legal</p>
+            <ul className="mt-3">
               <li>
                 <Link href="/privacy" className={link}>
                   Privacy Policy
@@ -54,9 +54,12 @@ export function Footer() {
           </nav>
         </div>
 
-        <p className="mt-12 border-t border-line-night pt-6 text-sm text-on-night-soft">
-          © {new Date().getFullYear()} {brand} · teamy.in
-        </p>
+        <div className="mt-16 flex flex-col gap-2 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="label-mono text-fg-3">
+            © {new Date().getFullYear()} {brand} · teamy.in
+          </p>
+          <p className="label-mono text-fg-3">Designed, built and run in India</p>
+        </div>
       </div>
     </footer>
   );

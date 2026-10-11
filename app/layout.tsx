@@ -1,31 +1,41 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { FESTIVALS } from "@/config/festive";
-import { InteractionFX } from "@/components/ui/InteractionFX";
-import { resolveThemeId, themeBootScript, themeCss } from "@/lib/festive";
+import { MotionRuntime } from "@/components/motion/MotionRuntime";
 import { RevealObserver } from "@/components/ui/RevealObserver";
+import { FESTIVALS } from "@/config/festive";
+import { resolveThemeId, themeBootScript, themeCss } from "@/lib/festive";
 import { formatINR } from "@/lib/format";
+import { motionCss } from "@/lib/motion";
 import { siteConfig } from "@/site.config";
 import "./globals.css";
 
 /*
- * Self-hosted, subset variable fonts (Latin + ₹), built from the OFL sources on Google Fonts.
- * Google's own "latin" files lack ₹, so every price would pull an extra 84KB latin-ext file
- * late in the load. Rebuild with scripts/build-fonts.py (see README → Fonts).
+ * Self-hosted, subset variable fonts (Latin + ₹), built from the OFL sources on Google Fonts with
+ * scripts/build-fonts.py. next/font generates size-matched fallbacks, so the swap doesn't shift layout.
  */
-// Headlines: Inter Display (Inter at its display optical size). Body: Inter. Both preloaded.
+// Display: Inter Display (Inter at opsz 32), 300–800. Preloaded: it's the hero / LCP font.
 const interDisplay = localFont({
   src: "./fonts/inter-display.woff2",
-  weight: "500 800",
+  weight: "300 800",
   variable: "--font-inter-display",
   display: "swap",
 });
 
+// Body: Inter. Preloaded.
 const inter = localFont({
   src: "./fonts/inter.woff2",
   weight: "400 700",
   variable: "--font-inter",
   display: "swap",
+});
+
+// Mono accent for small labels and numbers. Not preloaded (small, mostly below the fold).
+const mono = localFont({
+  src: "./fonts/mono.woff2",
+  weight: "400 500",
+  variable: "--font-mono-face",
+  display: "swap",
+  preload: false,
 });
 
 const title = `${siteConfig.brand} | Online stores for D2C brands, designed, built and run for you`;
@@ -49,7 +59,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0E1726",
+  themeColor: "#0A0B0F",
+  colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -69,22 +80,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       data-theme={resolveThemeId(new Date())}
       // The boot script may change data-theme before React hydrates.
       suppressHydrationWarning
-      className={`${interDisplay.variable} ${inter.variable}`}
+      className={`${interDisplay.variable} ${inter.variable} ${mono.variable}`}
     >
       <head>
-        <style id="theme-tokens" dangerouslySetInnerHTML={{ __html: themeCss(FESTIVALS) }} />
+        <style id="theme-tokens" dangerouslySetInnerHTML={{ __html: `${themeCss(FESTIVALS)}\n${motionCss()}` }} />
         <script dangerouslySetInnerHTML={{ __html: themeBootScript(FESTIVALS, allowThemePreview) }} />
       </head>
       <body>
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:text-bg"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-accent focus:px-5 focus:py-3 focus:font-semibold focus:text-accent-ink"
         >
           Skip to content
         </a>
-        {children}
+        {/* Ambient layers: light pools behind content, film grain and cursor on top. All decorative. */}
+        <div aria-hidden="true" className="light-pool light-pool--a" data-pool="a" />
+        <div aria-hidden="true" className="light-pool light-pool--b" data-pool="b" />
+        <div className="relative z-10">{children}</div>
+        <div aria-hidden="true" className="grain-overlay" />
+        <div aria-hidden="true" className="cursor-ring" data-cursor-ring />
+        <div aria-hidden="true" className="cursor-dot" data-cursor-dot />
         <RevealObserver />
-        <InteractionFX />
+        <MotionRuntime />
       </body>
     </html>
   );

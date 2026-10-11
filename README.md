@@ -27,18 +27,19 @@ All copy blocks, prices, numbers and links live in **`site.config.ts`** at the p
 | Prefilled WhatsApp messages | `whatsappMessages` |
 | "Live in X days" (used across the page) | `launchDays` constant at the top |
 | "We reply within X hours" | `responseHours` |
-| Hero rotating headlines (+ highlighted word), timing, sub line, trust ticks | `hero` |
+| Hero headline lines (`emphasis` = light-weight word, `heroWord` = gradient word), sub line, trust ticks | `hero` |
+| "Idea → live in 7 days" scroll story: one entry per day, each building a piece of the mockup | `story` |
 | "Why Teamy" benefit cards | `benefits` |
-| "What we build" groups (Launch / Sell / Grow) | `services` |
+| "What we build" bento tiles (icon, stage, title, line) | `services` |
 | The single plan: name, price in ₹ (the only price shown anywhere), features | `plan` |
 | Add-ons under the plan (no prices; "we'll quote them") | `addOns` |
 | Process steps | `process` |
-| Scrolling capabilities strip under the hero | `marquee` |
+| Ticker of what Teamy handles (text only) | `marquee` |
 | Shark Tank India block (words only; keep claims general and true) | `sharkTank` |
 | Testimonials (shown only with `permissionGiven: true`; section hides when empty) | `testimonials` |
 
-Icons are picked by name (`rocket`, `cart`, `store`…); the list is `IconName` in the config file and the
-mapping is in `components/ui/IconMap.tsx`.
+Bento icons are picked by name (`storefront`, `checkout`, `whatsapp`, `cart`, `analytics`, `drops`); they're
+custom animated SVGs in `components/icons/AnimatedIcons.tsx`.
 
 Festival dates, colours, motifs and greetings live in **`config/festive.ts`** (see "Festive themes").
 
@@ -93,7 +94,7 @@ The site switches theme automatically by date in India time (Asia/Kolkata):
 | --- | --- | --- |
 | Navratri | 2026-10-11 → 2026-10-20 | deep maroon, saffron CTA, rani pink + gold glows, rangoli motif |
 | Diwali | 2026-11-06 → 2026-11-11 | midnight navy, warm gold CTA, diya-amber glows, diya motif |
-| Default | any other day | Midnight & Lime |
+| Default | any other day | near-black, cool neutrals, electric lime |
 
 - **Edit dates/colours:** `config/festive.ts` is the only place. Each festival has `start`, `end`,
   `tokens`, `motif`, optional `heroNote` and `favicon`. CSS for every theme is generated from it.
@@ -109,53 +110,57 @@ The site switches theme automatically by date in India time (Asia/Kolkata):
 
 ## Design system
 
-Base theme (Midnight & Lime), defined as CSS variables (generated from `config/festive.ts`, with
-fallbacks in `app/globals.css`):
+Colour tokens are generated from `config/festive.ts` (`DEFAULT_TOKENS` for the base theme) and injected
+in `<head>`; `npm test` checks every text/surface pair is WCAG AA in every theme.
 
-| Token | Hex | Use |
+| Token | Default | Use |
 | --- | --- | --- |
-| `--bg` | `#F6F6F1` | page background |
-| `--ink` / `--night` | `#0E1726` | text, dark bands (hero, process, footer) |
-| `--ink-soft` | `#4A5568` | secondary text (6.8:1) |
-| `--on-night-soft` | `#A8B3C7` | secondary text on dark (7.7:1) |
-| `--accent` | `#C8F25A` | lime: CTAs (always navy text, 13.9:1) and highlights on dark |
-| `--support` | `#3B5BDB` | links and focus rings on light (5.7:1) |
+| `--bg` / `--surface` / `--surface-2` | `#0A0B0F` / `#0E1116` / `#151922` | page, cards, cards-on-cards |
+| `--text` / `--text-2` / `--text-3` | `#F3F5F8` / `#A7AEBB` / `#7F8796` | primary, secondary, mono labels |
+| `--accent` / `--accent-ink` | `#C8F25A` / `#0A0B0F` | the single signal: primary CTA, active states |
+| `--hero-a` / `--hero-b` | lime → pale lime | gradient on the one emphasised hero word (gold in festive themes) |
+| hairlines | `rgb(var(--text-rgb) / 0.08)` | 1px borders |
 
-Type: Inter Display (headlines) + Inter (body). Logo: `public/logo.svg` (dark) and
-`public/logo-light.svg`, generated as vector paths; favicons `app/icon.svg` and
-`public/favicon-{navratri,diwali}.svg` (swapped automatically).
+Type: Inter Display 300–800 (display, tracking −0.04em, fluid `clamp()` sizes), Inter (body),
+JetBrains Mono (labels and numbers). Layout: 1280px container, 12-column grid, 128px / 88px section padding.
 
 ## Motion
 
-- Hero: drifting aurora background, word-by-word rotating headlines with a shimmering highlight
-  (pause on hover/focus, plus a pause button for WCAG 2.2.2), floating cards, and a 3D tilt on the phone
-  that follows the cursor (desktop).
-- Lime marquee of capabilities (pauses on hover).
-- Section headings reveal word by word; benefit cards are a bento grid with mini visuals that pop in.
-- Services are sticky stacking cards (pure CSS `position: sticky`).
-- The pricing card and testimonial have a rotating gradient border; the price counts up when it appears.
-- Cards get a cursor spotlight; buttons have a light sheen; a gradient scroll-progress bar sits at the
-  top and the process line draws as you scroll (scroll-driven CSS, where supported).
-- Decorative motion and the big glow layers start only after the page has loaded and gone idle.
-- `prefers-reduced-motion` removes all movement; content still appears instantly.
-- No animation library: CSS transforms/opacity plus two tiny scripts (`components/ui/InteractionFX.tsx`
-  for spotlight + tilt, `CountUp.tsx`).
+- **Tokens:** `lib/motion.ts` holds durations (0.4–1.2s), expo/quart easings, staggers and distances.
+  They're shared by CSS (as custom properties) and GSAP.
+- **Runtime:** `lib/motion-runtime.ts` (GSAP + ScrollTrigger + Lenis). It loads lazily after the page is
+  idle, so first paint never waits for it. Until it loads, every section is already in its final state.
+- **Signature moments:**
+  - **Hero:** the headline wipes up word by word on load (pure CSS). The storefront mockup tilts toward the cursor.
+  - **7-day story:** pinned on desktop; each day lights up while its piece of the store builds in. Mobile is a
+    plain vertical stack.
+  - **Bento:** cursor-following spotlight borders, plus small animated icons on hover, focus and reveal.
+  - **Process:** an SVG connector that draws as you scroll.
+  - **Pricing:** the price counts up once when it comes into view.
+  - **Marquee:** a slow, pausable ticker.
+  - **Desktop extras:** cursor follower, magnetic primary buttons, light pools that drift with cursor and scroll.
+- **Smooth scroll:** Lenis drives smooth scrolling. In-page links use Lenis too, are header-aware, update
+  the URL hash and move focus to the target. The mobile menu pauses scrolling while it's open.
+- **Loops:** every looping animation pauses when it's offscreen (`[data-loop]` and an IntersectionObserver).
+- **Reduced motion:** with `prefers-reduced-motion` there's no smooth scroll, pinning, parallax, cursor,
+  marquee or count-up. Everything shows in its final state.
 
 ## Performance notes
 
-- Off-screen sections use `content-visibility: auto`.
-- Headings don't use `text-wrap: balance`; with tight letter-spacing it doubled text layout time.
-- Background textures are CSS gradients only (no SVG filters, which delay first paint).
+- GSAP and Lenis aren't in the initial bundle.
+- The grain, light pools and festive motifs fade in only after load and idle.
+- Headings don't use `text-wrap: balance`: with tight letter-spacing it doubled text layout time.
+- Background textures are CSS gradients or a 2KB PNG tile, never SVG filters.
 - Measure with PageSpeed Insights on the deployed URL. Local Lighthouse on a slow or busy laptop
-  under-reports (it warns about this), and localhost hides real network timing.
+  under-reports, and it warns when this happens.
 
 ## Fonts
 
 `app/fonts/*.woff2` are self-hosted, subset variable fonts (SIL Open Font License) built with
-fontTools: Inter (text, opsz 14) and Inter Display (opsz 32), Latin plus ₹, weight axis only. Google's own "latin" files don't include ₹, so every price
+fontTools: Inter (text, opsz 14), Inter Display (opsz 32, 300–800) and JetBrains Mono (400–500), Latin plus ₹. Google's own "latin" files don't include ₹, so every price
 would trigger an extra 84KB download. To rebuild (e.g. to add a character), see
 `scripts/build-fonts.py`: `pip install fonttools brotli`, then
-`python scripts/build-fonts.py <folder with inter.ttf>`.
+`python scripts/build-fonts.py <folder with inter.ttf and mono.ttf>`.
 
 `assets/fonts/*.woff` (static Bricolage) are only used to render the social share image.
 
@@ -165,13 +170,15 @@ would trigger an extra 84KB download. To rebuild (e.g. to add a character), see
 site.config.ts              ← edit me (content, price)
 config/festive.ts           ← edit me (festival dates, theme colours)
 app/                        layout (fonts, SEO), page, /api/lead, OG image, icons, legal pages
-components/sections/        Header, Hero (+ HeroHeadline, PhoneMockup), Marquee, Benefits, Services,
-                            SharkTank, Testimonials, Pricing, Process, Contact, Footer, MobileCTABar
-components/ui/              Button, Reveal, SectionHeading (+ SplitWords), IconMap, InteractionFX,
-                            CountUp, icons, confetti
+components/sections/        Header, Hero, Marquee, Story, Benefits, Services, Process, SharkTank,
+                            Testimonials, Pricing, Contact, Footer, MobileCTABar
+components/mockup/          Storefront (code-built illustrative store used by hero + story)
+components/icons/           AnimatedIcons (bento)
+components/motion/          MotionRuntime (lazy loader)
+components/ui/              Button, Reveal, MaskWords, SectionHeading, RevealObserver, icons
 components/brand/           Logo (+ generated glyph paths)
 components/festive/         motifs, festive hero note, ornamental dividers
-lib/                        festive resolver, formatting (₹), leads, analytics, WhatsApp links
+lib/                        motion tokens + runtime, festive resolver, formatting (₹), leads, analytics
 tests/                      Vitest unit tests
 scripts/build-fonts.py      font subsetting
 ```
