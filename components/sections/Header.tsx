@@ -8,14 +8,14 @@ import { WhatsAppIcon } from "@/components/ui/Icons";
 import { WhatsAppLink } from "@/components/ui/TrackedLink";
 
 const links = [
-  { href: "#why", label: "Why Teamy" },
+  { href: "#story", label: "7-day plan" },
   { href: "#services", label: "Services" },
-  { href: "#pricing", label: "Pricing" },
   { href: "#process", label: "Process" },
+  { href: "#pricing", label: "Pricing" },
   { href: "#contact", label: "Contact" },
 ];
 
-/** Dark header that sits on the night hero; gains a blurred backdrop after 40px of scroll. */
+/** Sticky header: transparent over the hero, then a blurred dark bar with a hairline once you scroll. */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -23,18 +23,19 @@ export function Header() {
   const sheet = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lock scroll, close on Escape, keep focus inside the sheet while open.
+  // Lock scroll (native + smooth-scroll runtime), close on Escape, trap focus while open.
   useEffect(() => {
     if (!open) return;
     const button = menuButton.current;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    window.dispatchEvent(new Event("teamy:scroll-lock"));
     sheet.current?.querySelector<HTMLElement>("a,button")?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -53,6 +54,7 @@ export function Header() {
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prev;
+      window.dispatchEvent(new Event("teamy:scroll-unlock"));
       window.removeEventListener("keydown", onKey);
       button?.focus();
     };
@@ -60,35 +62,25 @@ export function Header() {
 
   return (
     <>
-      <header className="on-night fixed inset-x-0 top-0 z-40 pt-[env(safe-area-inset-top)]">
-        {/* Always-on soft fade so nav text keeps AA contrast even when the hero glow drifts behind it. */}
-        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-night/80 to-night/0" />
+      <header className="fixed inset-x-0 top-0 z-40 pt-[env(safe-area-inset-top)]">
         <div
           aria-hidden="true"
-          className={`absolute inset-0 border-b border-line-night bg-night/92 transition-opacity duration-300 ${
-            scrolled ? "opacity-100 backdrop-blur-xl" : "opacity-0"
+          className={`absolute inset-0 border-b transition-[opacity,border-color] duration-[var(--dur-base)] ease-quart ${
+            scrolled ? "border-line bg-bg/75 opacity-100 backdrop-blur-xl" : "border-transparent opacity-0"
           }`}
         />
-        <div className="container-page relative flex h-16 items-center justify-between">
+        <div className="container-page relative flex h-[72px] items-center justify-between">
           <a href="#top" aria-label="Teamy, back to top" className="-ml-1 flex min-h-12 items-center px-1">
-            <Logo tone="light" className="h-7 w-auto" />
+            <Logo className="h-7 w-auto" />
           </a>
 
-          <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
+          <nav aria-label="Main" className="hidden items-center gap-7 lg:flex">
             {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="rounded-full px-4 py-3 text-[15px] font-medium text-on-night-soft transition-colors hover:text-on-night"
-              >
+              <a key={l.href} href={l.href} className="underline-anim inline-flex min-h-12 items-center text-[15px] text-fg-2 transition-colors hover:text-fg">
                 {l.label}
               </a>
             ))}
-            <WhatsAppLink
-              section="header"
-              message="bookCall"
-              className={buttonClass("primary", "ml-3 !min-h-11 !px-5 text-[15px]")}
-            >
+            <WhatsAppLink section="header" message="bookCall" data-magnetic="" className={buttonClass("primary", "ml-2 !min-h-11 !px-5")}>
               Book a free call
             </WhatsAppLink>
           </nav>
@@ -109,7 +101,7 @@ export function Header() {
               aria-label="Open menu"
               aria-expanded={open}
               aria-controls="mobile-menu"
-              className="-mr-2 grid size-12 place-items-center rounded-full text-on-night"
+              className="-mr-2 grid size-12 place-items-center rounded-full text-fg"
             >
               <Menu className="size-6" aria-hidden="true" />
             </button>
@@ -125,39 +117,35 @@ export function Header() {
         aria-label="Menu"
         inert={!open}
         // Visibility flips instantly on open (so focus can move in) and only waits for the slide on close.
-        className={`on-night night-texture fixed inset-0 z-50 flex flex-col pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] duration-400 ease-brand lg:hidden ${
-          open ? "visible translate-y-0 transition-[translate]" : "invisible -translate-y-full transition-[translate,visibility]"
+        className={`fixed inset-0 z-50 flex flex-col bg-bg pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] duration-[var(--dur-base)] ease-expo lg:hidden ${
+          open ? "visible translate-y-0 opacity-100 transition-[translate,opacity]" : "invisible -translate-y-4 opacity-0 transition-[translate,opacity,visibility]"
         }`}
       >
-        <div className="container-page flex h-16 items-center justify-between">
-          <Logo tone="light" className="h-7 w-auto" />
+        <div className="container-page flex h-[72px] items-center justify-between">
+          <Logo className="h-7 w-auto" />
           <button
             type="button"
             onClick={() => setOpen(false)}
             aria-label="Close menu"
-            className="-mr-2 grid size-12 place-items-center rounded-full text-on-night"
+            className="-mr-2 grid size-12 place-items-center rounded-full text-fg"
           >
             <X className="size-6" aria-hidden="true" />
           </button>
         </div>
-        <nav aria-label="Mobile" className="container-page flex flex-1 flex-col pt-6">
-          {links.map((l) => (
+        <nav aria-label="Mobile" className="container-page flex flex-1 flex-col pt-8">
+          {links.map((l, i) => (
             <a
               key={l.href}
               href={l.href}
               onClick={() => setOpen(false)}
-              className="flex min-h-16 items-center border-b border-line-night font-display text-[30px] font-bold tracking-tight text-on-night"
+              className="flex min-h-16 items-center justify-between border-b border-line font-display text-[32px] font-medium tracking-[-0.03em]"
             >
               {l.label}
+              <span className="label-mono text-fg-3">{String(i + 1).padStart(2, "0")}</span>
             </a>
           ))}
           <div className="mt-auto pb-6">
-            <WhatsAppLink
-              section="mobile_menu"
-              message="bookCall"
-              onClick={() => setOpen(false)}
-              className={buttonClass("primary", "w-full text-[17px]")}
-            >
+            <WhatsAppLink section="mobile_menu" message="bookCall" onClick={() => setOpen(false)} className={buttonClass("primary", "w-full", "lg")}>
               <WhatsAppIcon className="size-5" /> Book a free call
             </WhatsAppLink>
           </div>

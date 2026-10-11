@@ -1,13 +1,12 @@
 "use client";
 
-import { Clock, Mail, PartyPopper } from "lucide-react";
-import { FestiveDivider } from "@/components/festive/Motifs";
+import { Check, Clock, Mail } from "lucide-react";
 import { useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
+import { FestiveDivider } from "@/components/festive/Motifs";
 import { Button, buttonClass } from "@/components/ui/Button";
-import { confettiBurst } from "@/components/ui/confetti";
 import { WhatsAppIcon } from "@/components/ui/Icons";
+import { MaskWords } from "@/components/ui/MaskWords";
 import { Reveal } from "@/components/ui/Reveal";
-import { SplitWords } from "@/components/ui/SectionHeading";
 import { WhatsAppLink } from "@/components/ui/TrackedLink";
 import { track } from "@/lib/analytics";
 import { normaliseIndianMobile, normaliseInstagram, submitLead } from "@/lib/leads";
@@ -25,19 +24,20 @@ function validate(v: Values): Errors {
   return e;
 }
 
+// Error text #ff8f85 is 8:1 on the card surface.
 const inputClass =
-  "h-14 w-full rounded-2xl bg-bg px-4 text-base ring-1 ring-line outline-none transition-shadow focus:bg-surface focus:ring-2 focus:ring-support aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-[#C2410C]";
+  "h-14 w-full rounded-xl bg-surface-2 px-4 text-base text-fg ring-1 ring-inset ring-line-strong outline-none transition-shadow placeholder:text-fg-3 focus:ring-2 focus:ring-accent aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-[#ff8f85]";
 
 function Field({ id, label, hint, error, children }: { id: string; label: string; hint?: string; error?: string; children: ReactNode }) {
   return (
     <div>
-      <label htmlFor={id} className="flex items-baseline justify-between font-medium">
+      <label htmlFor={id} className="flex items-baseline justify-between text-[15px] font-medium text-fg">
         {label}
-        {hint && <span className="text-sm font-normal text-ink-soft">{hint}</span>}
+        {hint && <span className="label-mono text-fg-3">{hint}</span>}
       </label>
-      <div className="mt-1.5">{children}</div>
+      <div className="mt-2">{children}</div>
       {error && (
-        <p id={`${id}-error`} className="mt-1.5 text-sm font-medium text-[#C2410C]">
+        <p id={`${id}-error`} className="mt-2 text-sm font-medium text-[#ff8f85]">
           {error}
         </p>
       )}
@@ -52,7 +52,6 @@ export function Contact() {
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const successRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-
 
   const set = (k: keyof Values) => (e: ChangeEvent<HTMLInputElement>) => {
     setValues((v) => ({ ...v, [k]: e.target.value }));
@@ -80,10 +79,7 @@ export function Contact() {
       });
       track("form_submitted");
       setStatus("done");
-      requestAnimationFrame(() => {
-        successRef.current?.focus();
-        if (successRef.current) confettiBurst(successRef.current);
-      });
+      requestAnimationFrame(() => successRef.current?.focus());
     } catch {
       setStatus("error");
     }
@@ -92,68 +88,47 @@ export function Contact() {
   const describedBy = (k: keyof Values) => (errors[k] ? `contact-${k}-error` : undefined);
 
   return (
-    <section id="contact" aria-labelledby="contact-title" className="on-night grain section-pad relative overflow-hidden bg-night">
+    <section id="contact" aria-labelledby="contact-title" className="section-pad cv-auto relative">
       <FestiveDivider />
-      <div className="aurora aurora-static" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-      </div>
-      <div className="container-page relative grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-8">
-        <Reveal className="lg:col-span-5">
-          <h2 id="contact-title" className="h2-size font-bold text-on-night">
-            <span className="sr-only">Let&apos;s build your store.</span>
-            <span aria-hidden="true">
-              <SplitWords text="Let's build your store." highlight="your store." tone="night" />
-            </span>
-          </h2>
-          <p className="mt-4 max-w-md text-lg text-on-night-soft">
-            Tell us about your brand and we&apos;ll come back on WhatsApp with a free preview plan. No pitch decks, no
-            pressure.
-          </p>
-
-          <div className="mt-8 flex flex-col items-start gap-3">
-            <WhatsAppLink section="contact" message="bookCall" brand={values.brand} className={buttonClass("primary", "sheen-idle text-[17px]")}>
-              <WhatsAppIcon className="size-5" /> Book a free call on WhatsApp
-            </WhatsAppLink>
-            <a
-              href={`mailto:${contact.email}`}
-              className="inline-flex min-h-12 items-center gap-2 font-semibold text-on-night underline-offset-4 hover:text-accent hover:underline"
-            >
-              <Mail className="size-5" aria-hidden="true" /> {contact.email}
-            </a>
-          </div>
-
-          <p className="mt-8 flex items-center gap-2 text-on-night-soft">
-            <Clock className="size-5" aria-hidden="true" /> We reply within {responseHours} hours, Monday to Saturday.
-          </p>
-        </Reveal>
+      <div className="container-page grid gap-14 lg:grid-cols-12 lg:items-start lg:gap-8">
+        <div className="lg:col-span-5">
+          <Reveal className="reveal-mask">
+            <h2 id="contact-title" className="display-l">
+              <MaskWords text="Let's build your store." emphasis="your store." />
+            </h2>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <p className="mt-6 max-w-md text-lg text-fg-2">
+              Tell us about your brand and we&apos;ll come back on WhatsApp with a free preview plan. No pitch decks, no
+              pressure.
+            </p>
+            <div className="mt-9 flex flex-col items-start gap-4">
+              <WhatsAppLink section="contact" message="bookCall" brand={values.brand} className={buttonClass("secondary")}>
+                <WhatsAppIcon className="size-5 text-accent" /> Book a free call on WhatsApp
+              </WhatsAppLink>
+              <a href={`mailto:${contact.email}`} className={buttonClass("ghost")}>
+                <Mail className="size-4" aria-hidden="true" /> {contact.email}
+              </a>
+            </div>
+            <p className="mt-10 flex items-center gap-2 text-fg-2">
+              <Clock className="size-4 text-fg-3" aria-hidden="true" /> We reply within {responseHours} hours, Monday to Saturday.
+            </p>
+          </Reveal>
+        </div>
 
         <Reveal delay={0.08} className="lg:col-span-6 lg:col-start-7">
           {status === "done" ? (
-            <div
-              ref={successRef}
-              tabIndex={-1}
-              role="status"
-              className="rounded-[28px] bg-surface p-8 text-center text-ink shadow-lift ring-1 ring-line outline-none sm:p-10"
-            >
-              <span className="mx-auto grid size-14 place-items-center rounded-full bg-accent text-accent-ink">
-                <PartyPopper className="size-7" aria-hidden="true" />
+            <div ref={successRef} tabIndex={-1} role="status" className="card rounded-[28px] p-8 text-center outline-none sm:p-12">
+              <span className="mx-auto grid size-12 place-items-center rounded-full bg-accent text-accent-ink">
+                <Check className="size-6" strokeWidth={2.5} aria-hidden="true" />
               </span>
-              <p className="mt-5 font-display text-3xl font-bold tracking-tight">
-                Thanks, {values.name.trim().split(" ")[0]}!
-              </p>
-              <p className="mt-2 text-lg text-ink-soft">
+              <p className="mt-6 font-display text-3xl font-semibold tracking-[-0.03em]">Thanks, {values.name.trim().split(" ")[0]}.</p>
+              <p className="mt-2 text-lg text-fg-2">
                 {values.brand.trim()} is on our list. We&apos;ll WhatsApp you within {responseHours} hours.
               </p>
             </div>
           ) : (
-            <form
-              ref={formRef}
-              onSubmit={onSubmit}
-              noValidate
-              className="relative space-y-5 rounded-[28px] bg-surface p-6 text-ink shadow-[0_40px_80px_-30px_rgb(0_0_0/0.7)] ring-1 ring-white/10 sm:p-9 [&_:focus-visible]:outline-support"
-            >
+            <form ref={formRef} onSubmit={onSubmit} noValidate className="card relative space-y-6 rounded-[28px] p-6 sm:p-10">
               <Field id="contact-name" label="Your name" error={errors.name}>
                 <input
                   id="contact-name"
@@ -180,7 +155,7 @@ export function Contact() {
               </Field>
               <Field id="contact-whatsapp" label="WhatsApp number" error={errors.whatsapp}>
                 <div className="relative">
-                  <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-ink-soft">+91</span>
+                  <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center font-mono text-fg-2">+91</span>
                   <input
                     id="contact-whatsapp"
                     name="whatsapp"
@@ -198,7 +173,7 @@ export function Contact() {
               </Field>
               <Field id="contact-instagram" label="Instagram handle" hint="Optional" error={errors.instagram}>
                 <div className="relative">
-                  <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-ink-soft">@</span>
+                  <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-fg-2">@</span>
                   <input
                     id="contact-instagram"
                     name="instagram"
@@ -214,7 +189,6 @@ export function Contact() {
                 </div>
               </Field>
 
-
               {/* Honeypot: hidden from people, tempting to bots. */}
               <div className="absolute -left-[9999px]" aria-hidden="true">
                 <label htmlFor="contact-company">Company</label>
@@ -222,15 +196,15 @@ export function Contact() {
               </div>
 
               {status === "error" && (
-                <p role="alert" className="rounded-2xl bg-[#C2410C]/10 p-4 font-medium text-[#C2410C]">
+                <p role="alert" className="rounded-xl bg-[#ff8f85]/10 p-4 font-medium text-[#ff8f85]">
                   Couldn&apos;t send that, sorry. Please WhatsApp us instead, we reply fast.
                 </p>
               )}
 
-              <Button type="submit" disabled={status === "sending"} className="w-full text-[17px]">
+              <Button type="submit" size="lg" disabled={status === "sending"} className="w-full">
                 {status === "sending" ? "Sending…" : "Get my free preview plan"}
               </Button>
-              <p className="text-center text-sm text-ink-soft">No spam. We only message you about your store.</p>
+              <p className="text-center text-sm text-fg-3">No spam. We only message you about your store.</p>
             </form>
           )}
         </Reveal>

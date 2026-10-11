@@ -21,12 +21,22 @@ export type IconName =
   | "wrench"
   | "boxes";
 
-/** One rotating hero line. `highlight` is the word(s) painted in the accent colour. */
-export type HeroLine = { text: string; highlight?: string };
+/**
+ * One hero headline line. `emphasis` is the word set in the light contrast weight;
+ * `heroWord` marks the single word that gets the gradient (gold in festive themes).
+ */
+export type HeroLine = { text: string; emphasis?: string; heroWord?: boolean };
+
+/** Which piece of the storefront mockup a story day builds. */
+export type StoryPiece = "domain" | "storefront" | "checkout" | "whatsapp" | "analytics" | "drops" | "live";
+export type StoryDay = { title: string; line: string; piece: StoryPiece };
+
+/** Bento tile icons (custom animated SVGs in components/icons/AnimatedIcons.tsx). */
+export type ServiceIcon = "storefront" | "checkout" | "whatsapp" | "cart" | "analytics" | "drops";
+export type ServiceTile = { icon: ServiceIcon; stage: "Launch" | "Sell" | "Grow"; title: string; line: string };
 
 export type Benefit = { icon: IconName; title: string; line: string };
 
-export type ServiceGroup = { icon: IconName; title: string; line: string; items: string[] };
 
 /** The single plan. Its price is the only price shown anywhere on the site. */
 export type Plan = {
@@ -93,18 +103,29 @@ export const siteConfig = {
   audience: "D2C brands",
 
   hero: {
-    /** Cycles on a timer, pauses on hover/focus or with the pause button. */
-    headlines: [
-      { text: "Stores that sell while you sleep.", highlight: "sell" },
-      { text: `Your own store, live in ${launchDays} days.`, highlight: `${launchDays} days.` },
-      { text: "Fast pages. Fuller carts.", highlight: "Fuller carts." },
-      { text: "Built for your next 10,000 orders.", highlight: "10,000" },
+    /** Two lines, revealed word by word with a mask wipe on load. */
+    lines: [
+      { text: "Stores that sell", emphasis: "sell", heroWord: true },
+      { text: "while you sleep.", emphasis: "sleep." },
     ] satisfies HeroLine[] as HeroLine[],
-    rotateMs: 3800,
     sub: "We design, build and run your online store, so you can get back to making the product. You never manage a developer.",
     trust: [`Live in ${launchDays} days`, "UPI, cards & COD", "You own everything"],
-    /** Plain-text summary of what we do, read by screen readers and search engines. */
-    srHeadline: "Teamy designs, builds and runs fast online stores for D2C brands that sell and scale.",
+  },
+
+  /** "Idea → live in 7 days": the pinned scroll story. One entry per day, in order. */
+  story: {
+    title: `Idea → live in ${launchDays} days.`,
+    emphasis: "live",
+    sub: "A typical week with Teamy. Each day adds a piece of your store, until it's live and taking orders.",
+    days: [
+      { title: "Free call & domain", line: "We learn your brand, then connect a domain in your name.", piece: "domain" },
+      { title: "Storefront design", line: "Your colours, photos and vibe, laid out mobile-first.", piece: "storefront" },
+      { title: "Products & checkout", line: "Your catalogue goes in, with UPI, cards and COD at checkout.", piece: "checkout" },
+      { title: "WhatsApp updates", line: "Order updates and COD confirmation, sent on WhatsApp.", piece: "whatsapp" },
+      { title: "Analytics & Pixel", line: "Analytics and Meta Pixel set up, so you can see what sells.", piece: "analytics" },
+      { title: "Drops & reorders", line: "Waitlists, restock alerts and reorder reminders.", piece: "drops" },
+      { title: "Live", line: "We test every flow with you, then switch it on.", piece: "live" },
+    ] satisfies StoryDay[] as StoryDay[],
   },
 
   benefits: [
@@ -114,27 +135,15 @@ export const siteConfig = {
     { icon: "key", title: "You own everything", line: "Your domain, your code, your customer data. Always yours to take." },
   ] satisfies Benefit[] as Benefit[],
 
-  /** "What we build for D2C brands". */
+  /** "What we build for D2C brands": six bento tiles covering every Launch / Sell / Grow item. */
   services: [
-    {
-      icon: "store",
-      title: "Launch",
-      line: "A storefront that looks like your brand, not a template.",
-      items: ["Custom store design", "Your own domain", "UPI, cards & COD checkout", "Shipping & GST-ready invoices"],
-    },
-    {
-      icon: "message",
-      title: "Sell",
-      line: "Fewer DMs, more confirmed orders.",
-      items: ["WhatsApp order updates", "COD confirmation before dispatch", "Abandoned-cart nudges", "Fast, mobile-first product pages"],
-    },
-    {
-      icon: "trending",
-      title: "Grow",
-      line: "Everything you need when the orders pick up.",
-      items: ["Analytics & Meta Pixel", "Drops, waitlists & restock alerts", "Reorder reminders", "SEO basics that compound"],
-    },
-  ] satisfies ServiceGroup[] as ServiceGroup[],
+    { icon: "storefront", stage: "Launch", title: "Custom storefront design", line: "A store that looks like your brand, not a template, on your own domain." },
+    { icon: "checkout", stage: "Launch", title: "UPI, cards & COD checkout", line: "Plus shipping and GST-ready invoices, set up and tested for you." },
+    { icon: "whatsapp", stage: "Sell", title: "WhatsApp order updates", line: "Confirmed, shipped, delivered. COD confirmed before you dispatch." },
+    { icon: "cart", stage: "Sell", title: "Abandoned-cart nudges", line: "Gentle reminders and fast, mobile-first product pages that win carts back." },
+    { icon: "analytics", stage: "Grow", title: "Analytics & Meta Pixel", line: "See what sells, with SEO basics that compound over time." },
+    { icon: "drops", stage: "Grow", title: "Drops, waitlists & reorders", line: "Restock alerts and reorder reminders that bring customers back." },
+  ] satisfies ServiceTile[] as ServiceTile[],
 
   plan: {
     name: "Everything you need to launch and grow",
@@ -170,20 +179,18 @@ export const siteConfig = {
     { title: "Grow together", line: "We stay on for drops, festive sales and new features." },
   ] satisfies Step[] as Step[],
 
-  /** Scrolling capabilities strip under the hero (words only, no logos). */
+  /** Slow ticker of what Teamy handles (text only, no logos). */
   marquee: [
-    "UPI",
-    "Cards",
-    "Cash on delivery",
-    "WhatsApp order updates",
-    "COD confirmation",
-    "Abandoned-cart nudges",
+    "Storefront",
+    "UPI & COD",
+    "WhatsApp updates",
     "Meta Pixel",
+    "Abandoned-cart nudges",
     "Drops & waitlists",
-    "Reorder reminders",
-    "SEO",
-    "Mobile-first design",
     "Your own domain",
+    "Reorder reminders",
+    "Analytics",
+    "Hosting & fixes",
   ],
 
   /**

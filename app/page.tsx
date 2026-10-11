@@ -9,6 +9,7 @@ import { Pricing } from "@/components/sections/Pricing";
 import { Process } from "@/components/sections/Process";
 import { Services } from "@/components/sections/Services";
 import { SharkTank } from "@/components/sections/SharkTank";
+import { Story } from "@/components/sections/Story";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { siteConfig } from "@/site.config";
 
@@ -29,24 +30,24 @@ const jsonLd = {
   },
 };
 
+// Escape "<" so the JSON can never close the script tag.
+const jsonLdHtml = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
+
 export default function Home() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\u003c") }}
-      />
-      <div className="scroll-progress" aria-hidden="true" />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml }} />
       <Header />
       <main id="main">
         <Hero />
         <Marquee />
+        <Story />
         <Benefits />
         <Services />
+        <Process />
         <SharkTank />
         <Testimonials />
         <Pricing />
-        <Process />
         <Contact />
       </main>
       <Footer />

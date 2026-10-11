@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: `Privacy Policy | ${siteConfig.brand}
 export default function Privacy() {
   return (
     <LegalPage title="Privacy Policy">
-      <p className="rounded-2xl bg-accent p-4 font-semibold text-ink">
+      <p className="card-2 rounded-2xl p-4 font-semibold text-fg">
         [ADD REAL PRIVACY POLICY] This is a placeholder. Have a lawyer review the final text before launch.
       </p>
       <h2>What we collect</h2>
