@@ -1,0 +1,73 @@
+{
+  "zoff": {
+    "file": "/logos/clients/zoff.webp",
+    "width": 380,
+    "height": 150,
+    "tone": "dark",
+    "opaque": false
+  },
+  "bummer": {
+    "file": "/logos/clients/bummer.webp",
+    "width": 388,
+    "height": 79,
+    "tone": "dark",
+    "opaque": false
+  },
+  "marbleous": {
+    "file": "/logos/clients/marbleous.webp",
+    "width": 555,
+    "height": 147,
+    "tone": "dark",
+    "opaque": false
+  },
+  "truediamond": {
+    "file": "/logos/clients/truediamond.webp",
+    "width": 485,
+    "height": 108,
+    "tone": "light",
+    "opaque": false
+  },
+  "beyoung": {
+    "file": "/logos/clients/beyoung.webp",
+    "width": 300,
+    "height": 38,
+    "tone": "dark",
+    "opaque": false
+  },
+  "kimti": {
+    "file": "/logos/clients/kimti.webp",
+    "width": 290,
+    "height": 98,
+    "tone": "light",
+    "opaque": false
+  },
+  "ganges": {
+    "file": "/logos/clients/ganges.webp",
+    "width": 478,
+    "height": 144,
+    "tone": "dark",
+    "opaque": false
+  },
+  "gemsforluck": {
+    "file": "/logos/clients/gemsforluck.webp",
+    "width": 504,
+    "height": 60,
+    "tone": "dark",
+    "opaque": false
+  },
+  "haat": {
+    "file": "/logos/clients/haat.webp",
+    "width": 138,
+    "height": 58,
+    "tone": "dark",
+    "opaque": false
+  },
+  "tagz": {
+    "file": "/logos/clients/tagz.webp",
+    "width": 133,
+    "height": 57,
+    "tone": "light",
+    "opaque": false,
+    "source": "web.archive.org snapshot of tagzfoods.com (store offline)"
+  }
+}

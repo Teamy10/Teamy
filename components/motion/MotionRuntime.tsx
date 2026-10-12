@@ -16,14 +16,17 @@ export function MotionRuntime() {
     let stopped = false;
     let started = false;
 
-    const load = () => {
+    const load = (e?: Event) => {
       if (started) return;
       started = true;
       TRIGGERS.forEach((t) => window.removeEventListener(t, load));
       io?.disconnect();
+      // If that first interaction was a tap / keypress on an in-page link, the runtime finishes the jump.
+      const link = e && e.type !== "scroll" ? (e.target as Element | null)?.closest?.('a[href^="#"], a[href^="/#"]') : null;
+      const pendingAnchor = link?.getAttribute("href") ?? undefined;
       import("@/lib/motion-runtime")
         .then(({ initMotion }) => {
-          if (!stopped) dispose = initMotion();
+          if (!stopped) dispose = initMotion({ pendingAnchor });
         })
         .catch(() => {
           /* motion is an enhancement; the page works without it */

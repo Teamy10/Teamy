@@ -1,7 +1,7 @@
 import { Storefront } from "@/components/mockup/Storefront";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 
 /**
  * "Idea → live in 7 days".
@@ -12,7 +12,7 @@ import { siteConfig } from "@/site.config";
 export function Story() {
   const { story } = siteConfig;
   return (
-    <section id="story" aria-labelledby="story-title" className="section-pad relative">
+    <section id="story" aria-labelledby="story-title" className="section-pad relative max-lg:cv-auto max-lg:[--cv-h:2400px]">
       <div className="container-page">
         <SectionHeading id="story-title" title={story.title} emphasis={story.emphasis} sub={story.sub} />
       </div>

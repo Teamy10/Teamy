@@ -1,6 +1,6 @@
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 
 // Connector through the four step nodes (desktop). Drawn by scaling a clip rect (transform only).
 const PATH = "M24 24 C 120 2, 230 2, 336 24 S 552 46, 648 24 S 864 2, 960 24";
@@ -8,13 +8,13 @@ const PATH = "M24 24 C 120 2, 230 2, 336 24 S 552 46, 648 24 S 864 2, 960 24";
 export function Process() {
   const steps = siteConfig.process;
   return (
-    <section id="process" aria-labelledby="process-title" data-process className="section-pad relative">
+    <section id="process" aria-labelledby="process-title" data-process className="section-pad max-lg:cv-auto relative">
       <div className="container-page">
         <SectionHeading
           id="process-title"
-          title="From first call to first order."
-          emphasis="first order."
-          sub="Four clear steps, with the same people on WhatsApp from start to finish."
+          title="How we work."
+          emphasis="work."
+          sub="Discover, design, develop, launch: four clear steps, with the same people on WhatsApp from start to finish."
         />
 
         <div data-process-steps className="relative mt-16">

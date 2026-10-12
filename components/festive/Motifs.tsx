@@ -113,7 +113,7 @@ export function FestiveHeroNote() {
  */
 export function FestiveDivider() {
   return (
-    <div aria-hidden="true" className="festive-divider pointer-events-none absolute inset-x-0 top-0 z-10 items-center justify-center gap-3 px-6">
+    <div aria-hidden="true" className="festive-divider pointer-events-none absolute inset-x-0 top-1 z-10 items-center justify-center gap-3 px-6">
       <span className="h-px max-w-64 flex-1 bg-[linear-gradient(90deg,transparent,var(--hero-a))]" />
       <span className="flex -translate-y-px items-center gap-1.5">
         <span className="size-1 rotate-45 bg-[var(--hero-a)]" />

@@ -1,18 +1,20 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { buttonClass } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/ui/Icons";
-import { WhatsAppLink } from "@/components/ui/TrackedLink";
+import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 
+// "/#…" so the same links work from service pages (on the home page the motion runtime smooth-scrolls them).
 const links = [
-  { href: "#story", label: "7-day plan" },
-  { href: "#services", label: "Services" },
-  { href: "#process", label: "Process" },
-  { href: "#pricing", label: "Pricing" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#work", label: "Work" },
+  { href: "/#services", label: "Services" },
+  { href: "/#process", label: "Process" },
+  { href: "/#pricing", label: "Pricing" },
+  { href: "/#faq", label: "FAQ" },
 ];
 
 /** Sticky header: transparent over the hero, then a blurred dark bar with a hairline once you scroll. */
@@ -70,9 +72,9 @@ export function Header() {
           }`}
         />
         <div className="container-page relative flex h-[72px] items-center justify-between">
-          <a href="#top" aria-label="Teamy, back to top" className="-ml-1 flex min-h-12 items-center px-1">
+          <Link href="/#top" prefetch={false} aria-label="Teamy home" className="-ml-1 flex min-h-12 items-center px-1">
             <Logo className="h-7 w-auto" />
-          </a>
+          </Link>
 
           <nav aria-label="Main" className="hidden items-center gap-7 lg:flex">
             {links.map((l) => (
@@ -80,20 +82,19 @@ export function Header() {
                 {l.label}
               </a>
             ))}
-            <WhatsAppLink section="header" message="bookCall" data-magnetic="" className={buttonClass("primary", "ml-2 !min-h-11 !px-5")}>
-              Book a free call
-            </WhatsAppLink>
+            <WhatsAppCTA source="header" data-magnetic="" className={buttonClass("primary", "ml-2 !min-h-11 !px-5")}>
+              Get a free quote
+            </WhatsAppCTA>
           </nav>
 
           <div className="flex items-center gap-1 lg:hidden">
-            <WhatsAppLink
-              section="header"
-              message="bookCall"
-              aria-label="Book a free call on WhatsApp"
+            <WhatsAppCTA
+              source="header"
+              aria-label="Get a free quote on WhatsApp"
               className="grid size-12 place-items-center rounded-full text-accent"
             >
               <WhatsAppIcon className="size-6" />
-            </WhatsAppLink>
+            </WhatsAppCTA>
             <button
               ref={menuButton}
               type="button"
@@ -145,9 +146,9 @@ export function Header() {
             </a>
           ))}
           <div className="mt-auto pb-6">
-            <WhatsAppLink section="mobile_menu" message="bookCall" onClick={() => setOpen(false)} className={buttonClass("primary", "w-full", "lg")}>
-              <WhatsAppIcon className="size-5" /> Book a free call
-            </WhatsAppLink>
+            <WhatsAppCTA source="mobile_menu" onClick={() => setOpen(false)} className={buttonClass("primary", "w-full", "lg")}>
+              <WhatsAppIcon className="size-5" /> Get a free quote
+            </WhatsAppCTA>
           </div>
         </nav>
       </div>

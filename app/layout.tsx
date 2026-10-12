@@ -1,12 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { Analytics } from "@/components/analytics/Analytics";
 import { MotionRuntime } from "@/components/motion/MotionRuntime";
+import { FloatingWhatsApp } from "@/components/sections/FloatingWhatsApp";
+import { BackToTop } from "@/components/ui/BackToTop";
 import { RevealObserver } from "@/components/ui/RevealObserver";
 import { FESTIVALS } from "@/config/festive";
 import { resolveThemeId, themeBootScript, themeCss } from "@/lib/festive";
 import { formatINR } from "@/lib/format";
 import { motionCss } from "@/lib/motion";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/content/site";
 import "./globals.css";
 
 /*
@@ -38,8 +41,9 @@ const mono = localFont({
   preload: false,
 });
 
-const title = `${siteConfig.brand} | Online stores for D2C brands, designed, built and run for you`;
-const description = `Teamy designs, builds and runs fast, high-converting online stores for D2C brands: UPI, cards and COD, WhatsApp order updates, live in ${siteConfig.launchDays} days. ${formatINR(siteConfig.plan.price)} one-time, and you own everything.`;
+// Home page title (≤ 60 chars) and description (≤ 155 chars). Other pages set their own via lib/metadata.ts.
+const title = `${siteConfig.brand} | Custom Websites for India's D2C Brands`;
+const description = `Custom-coded websites for D2C brands, including Shark Tank India brands. ${siteConfig.facts.projects}+ projects, rated ${siteConfig.facts.rating}/5. Based in Delhi. Starter stores from ${formatINR(siteConfig.plan.price)}.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -100,8 +104,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div aria-hidden="true" className="grain-overlay" />
         <div aria-hidden="true" className="cursor-ring" data-cursor-ring />
         <div aria-hidden="true" className="cursor-dot" data-cursor-dot />
+        <FloatingWhatsApp />
+        <BackToTop />
         <RevealObserver />
         <MotionRuntime />
+        <Analytics />
       </body>
     </html>
   );

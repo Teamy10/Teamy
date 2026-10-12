@@ -2,9 +2,10 @@ import type { ReactNode } from "react";
 import { MaskWords } from "./MaskWords";
 import { Reveal } from "./Reveal";
 
-/** Section heading: masked word reveal for the title, fade-up for the sub line. No eyebrow labels. */
+/** Section heading: optional mono eyebrow, masked word reveal for the title, fade-up for the sub line. */
 export function SectionHeading({
   id,
+  eyebrow,
   title,
   emphasis,
   sub,
@@ -12,6 +13,7 @@ export function SectionHeading({
   size = "l",
 }: {
   id: string;
+  eyebrow?: string;
   title: string;
   emphasis?: string;
   sub?: ReactNode;
@@ -21,6 +23,11 @@ export function SectionHeading({
   const center = align === "center";
   return (
     <header className={center ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
+      {eyebrow && (
+        <Reveal>
+          <p className="label-mono mb-5 text-accent">{eyebrow}</p>
+        </Reveal>
+      )}
       <Reveal className="reveal-mask">
         <h2 id={id} className={size === "l" ? "display-l" : "display-m"}>
           <MaskWords text={title} emphasis={emphasis} />

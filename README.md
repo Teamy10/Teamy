@@ -1,90 +1,134 @@
 # Teamy: marketing site (teamy.in)
 
-One-page site for Teamy, a web studio that designs, builds and runs online stores for D2C brands.
-Next.js (App Router) + TypeScript + Tailwind CSS v4, mobile-first, static, deploys to Vercel.
+Site for Teamy, a web team in Patel Nagar, New Delhi, that designs and builds custom-coded websites for
+India's D2C brands (450+ projects in 5+ years, including brands featured on Shark Tank India).
+Next.js (App Router) + TypeScript + Tailwind CSS v4, mobile-first, fully static, deploys to Vercel.
 
 ## Run locally
 
 ```bash
 npm install
-npm run dev          # http://localhost:3000
-npm run build        # production build
+npm run dev          # http://localhost:3000 (shows dashed "Placeholder · dev only" boxes for unfilled content)
+npm run build        # production build (placeholders hidden)
 npm start            # serve the production build
 npm run typecheck
 npm run lint         # ESLint (next core-web-vitals + typescript)
-npm test             # Vitest: festive date resolution
+npm test             # Vitest: festive dates, landing-page SEO limits and word counts
 ```
 
 Requires Node 20+.
 
-## Edit content: `site.config.ts`
+## Edit content: `content/site.ts`
 
-All copy blocks, prices, numbers and links live in **`site.config.ts`** at the project root.
+All copy, prices, numbers, contact details and links live in **`content/site.ts`**. Clients (the logo
+wall, the Shark Tank India band, "Our work" and the videos) live in **`content/projects.ts`**,
+testimonials in **`content/testimonials.ts`**, and service and landing page copy in **`content/pages.ts`**.
 
 | What | Key |
 | --- | --- |
-| WhatsApp number (digits with country code), email | `contact` |
-| Prefilled WhatsApp messages | `whatsappMessages` |
-| "Live in X days" (used across the page) | `launchDays` constant at the top |
+| WhatsApp number (every contact button uses it) | `WHATSAPP_NUMBER` constant at the top |
+| The message every contact button pre-fills | `WHATSAPP_MESSAGE` constant at the top |
+| Email, address (Patel Nagar, New Delhi), hours | `contact` |
+| 450+ projects, 5+ years, 4.9/5 rating, 97% satisfaction, reviews link | `facts` |
+| Social links (empty = hidden) | `socials` |
+| "Live in X days" for starter stores | `launchDays` constant at the top |
 | "We reply within X hours" | `responseHours` |
-| Hero headline lines (`emphasis` = light-weight word, `heroWord` = gradient word), sub line, trust ticks | `hero` |
-| "Idea → live in 7 days" scroll story: one entry per day, each building a piece of the mockup | `story` |
-| "Why Teamy" benefit cards | `benefits` |
-| "What we build" bento tiles (icon, stage, title, line) | `services` |
-| The single plan: name, price in ₹ (the only price shown anywhere), features | `plan` |
-| Add-ons under the plan (no prices; "we'll quote them") | `addOns` |
-| Process steps | `process` |
-| Ticker of what Teamy handles (text only) | `marquee` |
-| Shark Tank India block (words only; keep claims general and true) | `sharkTank` |
-| Testimonials (shown only with `permissionGiven: true`; section hides when empty) | `testimonials` |
+| Hero headline, sub line, the two client sites shown | `hero` (`showcase` = project slugs) |
+| "Idea → live in 7 days" scroll story | `story` |
+| "What we build" bento tiles (each links to `/services/<slug>`) | `services` |
+| Pricing: starter store ("from ₹8,999"), custom website (quoted), add-ons | `plan`, `customPlan`, `addOns` |
+| "How we work" steps (Discover → Design → Develop → Launch) | `process` |
+| Trust numbers (count up on scroll) | `stats` |
+| "Works with" logos (`verified: false` = hidden) | `integrations` |
+| About Teamy: eyebrow, heading, body, four highlights | `about` |
+| Home FAQ (also emitted as FAQPage schema) | `faqs` |
+| Shark Tank India band (brands come from `projects.ts` → `sharkTankSeason`) | `sharkTank` |
 
-Bento icons are picked by name (`storefront`, `checkout`, `whatsapp`, `cart`, `analytics`, `drops`); they're
-custom animated SVGs in `components/icons/AnimatedIcons.tsx`.
+**Placeholders.** Any value starting with `TODO` (or empty) counts as unfilled: it's hidden on the live
+site, and in `npm run dev` it shows as a dashed placeholder box so you can see what's missing. On the
+legal pages, unfilled terms show as "[to be confirmed]" on the live site.
 
 Festival dates, colours, motifs and greetings live in **`config/festive.ts`** (see "Festive themes").
 
-**Founders and other businesses** are intentionally not on the site yet. When you're ready, the
-hero headlines and services are plain arrays in the config, so a second audience can be added there.
-
 ## Before you go live (checklist)
 
-Everything marked `⚠️ CONFIRM` in `site.config.ts` is a placeholder:
-
-- [ ] `hello@teamy.in` mailbox exists
-- [ ] `launchDays` (7) and `responseHours` (4)
+- [ ] Fill every `TODO` in `content/site.ts` (full address and PIN, socials, Google reviews link)
+- [ ] Add real, approved quotes in `content/testimonials.ts`, and any other clients in `content/projects.ts`
+- [ ] Make sure every client in `content/projects.ts` is happy to be shown (logo and site)
+- [ ] Confirm everything marked `⚠️ CONFIRM` (opening hours, `launchDays`, `responseHours`, Razorpay/Shiprocket)
+- [ ] Upload the assets listed below
+- [ ] Fill the `TODO` terms in `/privacy`, `/terms` and `/refund-policy`, then **have a lawyer review all three**
+- [ ] Connect `teamy.in` to Vercel, then set `PRIMARY_DOMAIN_LIVE=true` (see "Domain")
 - [ ] Festival dates in `config/festive.ts` for each new year
-- [ ] Jay Agrawal's testimonial: it was reworded (NeedHelpBuilding → Teamy). Get his OK on the new text, and confirm the 5-star rating and permission
-- [ ] Replace the placeholder **Privacy Policy** and **Terms** (`app/privacy`, `app/terms`), marked `[ADD REAL …]`
-- [ ] Set `LEAD_WEBHOOK_URL` in Vercel (below). Without it the form shows an error in production rather than silently losing leads.
 
-The hero phone shows an **invented demo brand** ("kesar threads"), labelled as such. Add only real
-testimonials, with the founder's permission. The Shark Tank block makes a general claim ("most D2C brands
-on the show sell from their own website") and carries a non-affiliation note; don't strengthen it to
-"only from their website" — that isn't true.
+### Optional assets
 
-## Lead capture
+| File | What |
+| --- | --- |
+| `public/testimonials/<name>.webp` | square client photos; set `photo` in `content/testimonials.ts` (initials show otherwise) |
+| `public/logos/clients/<slug>.webp` | an official logo file, to replace one taken from the client's site |
+| `public/logos/upi.svg`, `rupay.svg`, `shiprocket.svg` | official logos (these show as text wordmarks until added; then set `logo` in `integrations`) |
 
-The contact form POSTs to `/api/lead` (`app/api/lead/route.ts`). The route validates the data (Indian
-mobile, Instagram handle, honeypot for bots) and forwards JSON to `LEAD_WEBHOOK_URL`: a Google Apps
-Script web app, a Zapier/Make "catch hook", Formspree, a Slack incoming webhook, etc.
+Screenshots, logos and videos of client sites are generated (see "Client assets"). The 7-day story uses
+an **invented demo brand** ("kesar threads"), labelled as such. Add only real testimonials, with the
+founder's permission. The Shark Tank India band carries a "not affiliated with the show" line; keep it.
 
-Payload: `{ source, name, brand, whatsapp: "+91…", instagram, submittedAt }`.
+## Leads (WhatsApp)
 
-In local dev without the variable set, leads are logged to the terminal.
+There's no backend. Every contact button and link is a `wa.me` link to `WHATSAPP_NUMBER`, pre-filled with
+`WHATSAPP_MESSAGE` and opened in a new tab (`components/ui/WhatsAppCTA.tsx`). The contact form adds the
+visitor's name, project type and message below it and opens WhatsApp (same tab on phones, new tab on
+desktop). Nothing is stored on a server.
+
+## Client assets: screenshots, logos and videos
+
+Everything about a client comes from its live website, so adding a client is: add an entry to
+`content/projects.ts`, then run the capture scripts (needs Chromium for Playwright once:
+`npx playwright install chromium`).
+
+```bash
+npm run capture:all               # all three below, for every live client
+npm run capture:work -- zoff      # any script, for just the given slugs
+```
+
+| Script | Writes | Used by |
+| --- | --- | --- |
+| `capture:work` | `public/work/<slug>.webp` (full homepage), `-600`, `-top` (first desktop screen), `-mobile` (first phone screen), `manifest.json` | "Our work" cards (scroll on hover / on screen), hero frames |
+| `capture:logos` | `public/logos/clients/<slug>.webp` + `manifest.json` (size, light/dark tone) | logo wall, Shark Tank India band |
+| `capture:videos` | `public/videos/<slug>.mp4` + poster (540×960) and `media/social/<slug>.mp4` (720×1280, with a Teamy caption) | "Our websites, in motion"; the `media/social` clips are ready for Instagram Reels / YouTube Shorts |
+
+The scripts scroll each site so lazy content loads, and hide pop-ups, cookie bars and chat bubbles.
+Videos are rendered frame by frame, so the scroll is smooth on any machine. Check the results after a
+run: a pop-up the scripts didn't catch may need a re-run. Clients with `live: false` (an offline site)
+appear in the logo wall only; their logo is added by hand.
 
 ## Analytics
 
-`lib/analytics.ts` exposes `track(event, params)`. Events: `hero_cta_click`, `whatsapp_click` (with
-`section`), `pricing_viewed`, `pricing_cta_click`, `form_submitted`. They go to
-`window.dataLayer`, `gtag` and `fbq` when present, so adding a GA4 / GTM / Meta Pixel snippet to
-`app/layout.tsx` is enough.
+Set these in Vercel (Settings → Environment Variables) and redeploy:
+
+| Variable | Example | Effect |
+| --- | --- | --- |
+| `NEXT_PUBLIC_GA4_ID` | `G-XXXXXXXXXX` | loads GA4 after the page is idle |
+| `NEXT_PUBLIC_META_PIXEL_ID` | `123456789012345` | loads the Meta Pixel after the page is idle |
+
+Every WhatsApp click and form submit fires GA4 `generate_lead` (with `lead_source`) and Meta `Lead` (with
+`content_name`). Mark `generate_lead` as a key event in GA4. Other events: `hero_cta_click`,
+`pricing_viewed`, `pricing_cta_click`, `form_submitted`.
+
+## Domain and SEO
+
+- Canonical URLs, the sitemap and schema use `https://teamy.in` (override with `NEXT_PUBLIC_SITE_URL`).
+- **Once teamy.in points at Vercel**, set `PRIMARY_DOMAIN_LIVE=true`: `teamy-blush.vercel.app` and
+  `www.teamy.in` then redirect permanently to `https://teamy.in`, and preview `*.vercel.app` URLs send
+  `X-Robots-Tag: noindex`. Leave it unset until then, or the only working URL would redirect to a parked page.
+- JSON-LD: Organization, ProfessionalService/LocalBusiness, WebSite on the home page; Service or
+  LocalBusiness, BreadcrumbList and FAQPage on landing pages. No ratings or reviews markup.
 
 ## Deploy to Vercel
 
-1. Push this folder to a GitHub repo.
-2. Vercel → **Add New → Project → Import** the repo (framework is auto-detected).
-3. Add the environment variable `LEAD_WEBHOOK_URL`.
-4. Deploy, then add `teamy.in` under **Settings → Domains**.
+1. Vercel → **Add New → Project → Import** the GitHub repo (framework is auto-detected).
+2. Add the environment variables above (all optional).
+3. Deploy, then add `teamy.in` under **Settings → Domains** and set the DNS records Vercel shows at your registrar.
 
 ## Festive themes
 
@@ -137,7 +181,8 @@ JetBrains Mono (labels and numbers). Layout: 1280px container, 12-column grid, 1
   - **Bento:** cursor-following spotlight borders, plus small animated icons on hover, focus and reveal.
   - **Process:** an SVG connector that draws as you scroll.
   - **Pricing:** the price counts up once when it comes into view.
-  - **Marquee:** a slow, pausable ticker.
+  - **Stats:** numbers count up once (final values are in the HTML).
+  - **Works with:** a slow, pausable logo marquee.
   - **Desktop extras:** cursor follower, magnetic primary buttons, light pools that drift with cursor and scroll.
 - **Smooth scroll:** Lenis drives smooth scrolling. In-page links use Lenis too, are header-aware, update
   the URL hash and move focus to the target. The mobile menu pauses scrolling while it's open.
@@ -167,18 +212,27 @@ would trigger an extra 84KB download. To rebuild (e.g. to add a character), see
 ## Project map
 
 ```
-site.config.ts              ← edit me (content, price)
+content/site.ts             ← edit me (content, price, contact, WhatsApp, FAQ)
+content/projects.ts         ← edit me (clients: logo wall, Shark Tank band, Our work, videos)
+content/testimonials.ts     ← edit me (client quotes)
+content/pages.ts            ← edit me (service + landing page copy)
 config/festive.ts           ← edit me (festival dates, theme colours)
-app/                        layout (fonts, SEO), page, /api/lead, OG image, icons, legal pages
-components/sections/        Header, Hero, Marquee, Story, Benefits, Services, Process, SharkTank,
-                            Testimonials, Pricing, Contact, Footer, MobileCTABar
+app/                        layout (fonts, SEO), home, services/[slug], landing pages, legal pages,
+                            OG images, sitemap, robots, manifest, 404
+components/sections/        Header, Hero, ClientLogos, SharkTank, Stats, Work, Videos, Services, Story,
+                            Process, Testimonials, Pricing, WorksWith, About, Faq, Contact, Footer,
+                            FloatingWhatsApp
+components/pages/           LandingTemplate (service + landing pages)
+components/seo/             JsonLd
 components/mockup/          Storefront (code-built illustrative store used by hero + story)
 components/icons/           AnimatedIcons (bento)
 components/motion/          MotionRuntime (lazy loader)
-components/ui/              Button, Reveal, MaskWords, SectionHeading, RevealObserver, icons
-components/brand/           Logo (+ generated glyph paths)
-components/festive/         motifs, festive hero note, ornamental dividers
-lib/                        motion tokens + runtime, festive resolver, formatting (₹), leads, analytics
+components/ui/              Button, Reveal, MaskWords, WhatsAppCTA, Carousel, ClientLogo, PhoneFrame, TodoSlot, BackToTop, icons
+components/analytics/       GA4 + Meta Pixel loader
+lib/                        whatsapp links, schema, metadata, OG renderer, analytics, festive resolver, motion
+public/logos/               "Works with" logos (Simple Icons, CC0)
 tests/                      Vitest unit tests
 scripts/build-fonts.py      font subsetting
+scripts/capture-*.mjs       client screenshots, logos and videos (npm run capture:all)
+media/social/               client videos with a Teamy caption, for Reels / Shorts (not deployed)
 ```

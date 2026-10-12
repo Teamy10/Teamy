@@ -1,4 +1,4 @@
-import type { ServiceIcon } from "@/site.config";
+import type { ServiceIcon } from "@/content/site";
 
 /*
  * Small custom icons for the services bento. Each has one moving part (class ia-*), which plays
