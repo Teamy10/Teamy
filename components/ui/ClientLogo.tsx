@@ -28,7 +28,7 @@ export function ClientLogo({ project, mono = true, area = 4600 }: { project: Pro
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={logo.file}
-      alt={project.name}
+      alt={`${project.name} logo`}
       width={logo.width}
       height={logo.height}
       loading="lazy"

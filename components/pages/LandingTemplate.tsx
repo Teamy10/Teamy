@@ -1,6 +1,6 @@
 import { ArrowRight, Check, ChevronRight, Clock, Mail, MapPin } from "lucide-react";
 import Link from "next/link";
-import { Footer, addressLine } from "@/components/sections/Footer";
+import { Footer } from "@/components/sections/Footer";
 import { Faq } from "@/components/sections/Faq";
 import { Header } from "@/components/sections/Header";
 import { Process } from "@/components/sections/Process";
@@ -14,6 +14,7 @@ import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 import { pageBySlug, type LandingPage } from "@/content/pages";
 import { projects } from "@/content/projects";
 import { siteConfig } from "@/content/site";
+import { addressLine } from "@/lib/address";
 import { formatINR } from "@/lib/format";
 import { breadcrumbSchema, localBusinessSchema, serviceSchema } from "@/lib/schema";
 
@@ -179,7 +180,7 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
                   <h2 id="visit-title" className="display-m">
                     Teamy, New Delhi
                   </h2>
-                  <p className="mt-3 text-fg-2">Serving D2C brands across India, from Patel Nagar.</p>
+                  <p className="mt-3 text-fg-2">Serving D2C brands across India, from New Delhi.</p>
                 </div>
                 <address className="space-y-3 not-italic text-fg">
                   <p className="flex items-start gap-3">

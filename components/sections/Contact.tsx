@@ -8,8 +8,9 @@ import { WhatsAppIcon } from "@/components/ui/Icons";
 import { MaskWords } from "@/components/ui/MaskWords";
 import { Reveal } from "@/components/ui/Reveal";
 import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
-import { isFilled, siteConfig } from "@/content/site";
+import { siteConfig } from "@/content/site";
 import { track, trackLead } from "@/lib/analytics";
+import { addressLine } from "@/lib/address";
 import { buildWhatsAppLink, openWhatsApp, projectRequestMessage } from "@/lib/whatsapp";
 
 const PROJECT_TYPES = ["New online store", "Redesign or move my store", "Brand website", "Something else"];
@@ -47,7 +48,7 @@ function Field({ id, label, hint, error, children }: { id: string; label: string
 }
 
 export function Contact() {
-  const { contact, responseHours } = siteConfig;
+  const { responseHours } = siteConfig;
   const [values, setValues] = useState<Values>({ name: "", projectType: "", message: "", company: "" });
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "opening">("idle");
@@ -112,9 +113,7 @@ export function Contact() {
             </p>
             <p className="mt-3 flex items-center gap-2 text-fg-2">
               <MapPin className="size-4 text-fg-3" aria-hidden="true" />
-              {isFilled(contact.address.street)
-                ? `${contact.address.street}, ${contact.address.locality}, ${contact.address.region}, ${contact.address.countryName}`
-                : `${contact.address.locality}, ${contact.address.region}, ${contact.address.countryName}`}
+              {addressLine()}
             </p>
           </Reveal>
         </div>

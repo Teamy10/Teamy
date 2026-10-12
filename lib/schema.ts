@@ -2,6 +2,7 @@
  * schema.org builders (JSON-LD). Deliberately no aggregateRating / Review markup:
  * self-serving review schema isn't eligible for rich results and we don't publish ratings.
  */
+import { servicePages } from "@/content/pages";
 import { isFilled, siteConfig, type Faq } from "@/content/site";
 
 const base = () => siteConfig.url;
@@ -10,6 +11,28 @@ const ORG_ID = () => `${base()}/#organization`;
 const BIZ_ID = () => `${base()}/#business`;
 
 export const sameAs = () => Object.values(siteConfig.socials).filter((u) => isFilled(u));
+
+/** Topics the business is known for (helps search engines and AI answers place it). */
+const KNOWS_ABOUT = [
+  "Ecommerce website development",
+  "Website design",
+  "Custom website development",
+  "D2C brands",
+  "Online store development",
+  "UPI and cash-on-delivery checkout",
+  "WhatsApp order updates",
+  "Conversion rate optimisation",
+  "SEO",
+];
+
+/** A raster square logo (Google's logo guidelines prefer one at least 112×112). */
+const logo = () => ({ "@type": "ImageObject", url: abs("/icon-512.png"), width: 512, height: 512 });
+
+/** The provider, inline, so pages that mention it don't depend on another page's markup. */
+const provider = () => ({ "@type": "ProfessionalService", "@id": BIZ_ID(), name: siteConfig.brand, url: abs("/") });
+
+/** "From ₹8,999": a starting price, not a fixed one. */
+const fromPrice = () => ({ "@type": "PriceSpecification", minPrice: siteConfig.plan.price, priceCurrency: "INR" });
 
 function postalAddress() {
   const a = siteConfig.contact.address;
@@ -31,9 +54,22 @@ export function organizationSchema() {
     "@id": ORG_ID(),
     name: siteConfig.brand,
     url: abs("/"),
-    logo: abs("/logo.svg"),
+    logo: logo(),
+    description: `${siteConfig.brand} builds custom-coded ecommerce websites for D2C brands across India, from ${siteConfig.contact.address.locality}.`,
+    slogan: siteConfig.tagline,
     email: siteConfig.contact.email,
     telephone: siteConfig.contact.phone,
+    address: postalAddress(),
+    areaServed: { "@type": "Country", name: "India" },
+    knowsAbout: KNOWS_ABOUT,
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      telephone: siteConfig.contact.phone,
+      email: siteConfig.contact.email,
+      areaServed: "IN",
+      availableLanguage: ["en"],
+    },
     ...(links.length ? { sameAs: links } : {}),
   };
 }
@@ -44,21 +80,30 @@ export function localBusinessSchema() {
     "@type": ["ProfessionalService", "LocalBusiness"],
     "@id": BIZ_ID(),
     name: siteConfig.brand,
-    description: `${siteConfig.brand} is a web team in ${siteConfig.contact.area}, New Delhi, building custom-coded websites and online stores for D2C brands across India.`,
+    description: `${siteConfig.brand} is an ecommerce website development company in ${siteConfig.contact.address.locality}, building custom-coded websites and online stores for D2C brands across India.`,
     url: abs("/"),
     image: abs("/opengraph-image"),
-    logo: abs("/logo.svg"),
+    logo: logo(),
     telephone: siteConfig.contact.phone,
     email: siteConfig.contact.email,
     address: postalAddress(),
     openingHours: siteConfig.contact.openingHours,
     areaServed: { "@type": "Country", name: "India" },
     priceRange: "₹₹",
+    knowsAbout: KNOWS_ABOUT,
     parentOrganization: { "@id": ORG_ID() },
     makesOffer: {
       "@type": "Offer",
       name: "Starter online store, designed, built and launched",
-      priceSpecification: { "@type": "PriceSpecification", minPrice: siteConfig.plan.price, priceCurrency: "INR" },
+      priceSpecification: fromPrice(),
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Ecommerce website services",
+      itemListElement: servicePages.map((p) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: p.name, url: abs(p.path) },
+      })),
     },
   };
 }
@@ -82,9 +127,9 @@ export function serviceSchema(s: { name: string; description: string; path: stri
     description: s.description,
     url: abs(s.path),
     serviceType: s.name,
-    provider: { "@id": BIZ_ID() },
+    provider: provider(),
     areaServed: { "@type": "Country", name: "India" },
-    offers: { "@type": "Offer", price: siteConfig.plan.price, priceCurrency: "INR" },
+    offers: { "@type": "Offer", priceSpecification: fromPrice() },
   };
 }
 

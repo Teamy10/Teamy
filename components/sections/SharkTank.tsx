@@ -20,7 +20,7 @@ export function SharkTank() {
           <div className="relative grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-10">
             <div className="lg:col-span-5">
               {/* eslint-disable-next-line @next/next/no-img-element -- small static logo */}
-              <img src="/logos/shark-tank-india.webp" alt="Shark Tank India" width={370} height={480} loading="lazy" className="h-28 w-auto sm:h-32" />
+              <img src="/logos/shark-tank-india.webp" alt="Shark Tank India logo" width={370} height={480} loading="lazy" className="h-28 w-auto sm:h-32" />
               <Reveal className="reveal-mask mt-8">
                 <h2 id="shark-title" className="display-m">
                   <MaskWords text={t.title} emphasis={t.highlight} />

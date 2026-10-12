@@ -559,13 +559,13 @@ export const pages: LandingPage[] = [
     path: "/ecommerce-website-developer-delhi",
     kind: "landing",
     name: "Ecommerce website developer in Delhi",
-    title: "Ecommerce Website Developer in Delhi | Teamy",
+    title: "Website Design & Ecommerce Development in Delhi | Teamy",
     description:
-      "Teamy is an ecommerce website developer in Patel Nagar, New Delhi: custom-coded online stores for D2C brands across India. 450+ projects, from ₹8,999.",
+      "Teamy is an ecommerce website developer in New Delhi: custom-coded online stores for D2C brands across India. 450+ projects, from ₹8,999.",
     h1: "Ecommerce website developer in Delhi, for brands across India.",
     h1Emphasis: "for brands across India.",
     intro: [
-      "Teamy is a website development team in Patel Nagar, New Delhi, that designs and builds custom-coded online stores for D2C brands. In five years we've delivered 450+ websites and projects, for first-time founders and for brands featured on Shark Tank India.",
+      "Teamy is a website design and ecommerce development company in New Delhi that builds custom-coded online stores for D2C brands. In five years we've delivered 450+ websites and projects, for first-time founders and for brands featured on Shark Tank India.",
       "Founders across India work with us over WhatsApp and calls, and Delhi brands can meet us in person. You talk to the same people from your first message to launch day and long after it.",
     ],
     benefits: [
@@ -610,7 +610,7 @@ export const pages: LandingPage[] = [
       {
         heading: "Our address and hours",
         paragraphs: [
-          "Teamy is based in Patel Nagar, New Delhi, India. We work Monday to Saturday and reply to WhatsApp messages within 4 hours on working days. You can also email us at hello@teamy.in.",
+          "Teamy is based in New Delhi 110008, India. We work Monday to Saturday and reply to WhatsApp messages within 4 hours on working days. You can also email us at hello@teamy.in.",
         ],
       },
     ],
@@ -618,7 +618,7 @@ export const pages: LandingPage[] = [
     faqs: [
       {
         q: "Do you only work with brands in Delhi?",
-        a: "No. We're based in Patel Nagar, New Delhi, and work with brands across India. Everything can be done over WhatsApp and calls.",
+        a: "No. We're based in New Delhi and work with brands across India. Everything can be done over WhatsApp and calls.",
       },
       {
         q: "How quickly can my site go live?",

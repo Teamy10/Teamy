@@ -42,8 +42,8 @@ const mono = localFont({
 });
 
 // Home page title (≤ 60 chars) and description (≤ 155 chars). Other pages set their own via lib/metadata.ts.
-const title = `${siteConfig.brand} | Custom Websites for India's D2C Brands`;
-const description = `Custom-coded websites for D2C brands, including Shark Tank India brands. ${siteConfig.facts.projects}+ projects, rated ${siteConfig.facts.rating}/5. Based in Delhi. Starter stores from ${formatINR(siteConfig.plan.price)}.`;
+const title = `Ecommerce Website Development Company in India | ${siteConfig.brand}`;
+const description = `Custom-coded ecommerce websites for D2C brands, including Shark Tank India brands. ${siteConfig.facts.projects}+ projects, rated ${siteConfig.facts.rating}/5. New Delhi. From ${formatINR(siteConfig.plan.price)}.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -60,6 +60,15 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image", title, description },
   robots: { index: true, follow: true },
+  // Search Console / Bing Webmaster verification: set the codes in Vercel (see README → "Domain and SEO").
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+    ? {
+        verification: {
+          ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } : {}),
+          ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ? { other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } } : {}),
+        },
+      }
+    : {}),
 };
 
 export const viewport: Viewport = {
