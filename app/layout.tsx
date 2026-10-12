@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { Analytics } from "@/components/analytics/Analytics";
 import { MotionRuntime } from "@/components/motion/MotionRuntime";
+import { FloatingWhatsApp } from "@/components/sections/FloatingWhatsApp";
+import { BackToTop } from "@/components/ui/BackToTop";
 import { RevealObserver } from "@/components/ui/RevealObserver";
 import { FESTIVALS } from "@/config/festive";
 import { resolveThemeId, themeBootScript, themeCss } from "@/lib/festive";
@@ -38,8 +41,9 @@ const mono = localFont({
   preload: false,
 });
 
-const title = `${siteConfig.brand} | Online stores for D2C brands, designed, built and run for you`;
-const description = `Teamy designs, builds and runs fast, high-converting online stores for D2C brands: UPI, cards and COD, WhatsApp order updates, live in ${siteConfig.launchDays} days. ${formatINR(siteConfig.plan.price)} one-time, and you own everything.`;
+// Home page title (≤ 60 chars) and description (≤ 155 chars). Other pages set their own via lib/metadata.ts.
+const title = `${siteConfig.brand} | Online Store for D2C Brands, Built in ${siteConfig.launchDays} Days`;
+const description = `Teamy designs and builds online stores for Indian D2C brands: UPI, cards and COD, WhatsApp order updates. ${formatINR(siteConfig.plan.price)} one-time, live in ${siteConfig.launchDays} days.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -100,8 +104,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div aria-hidden="true" className="grain-overlay" />
         <div aria-hidden="true" className="cursor-ring" data-cursor-ring />
         <div aria-hidden="true" className="cursor-dot" data-cursor-dot />
+        <FloatingWhatsApp />
+        <BackToTop />
         <RevealObserver />
         <MotionRuntime />
+        <Analytics />
       </body>
     </html>
   );

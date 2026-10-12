@@ -40,7 +40,7 @@ export type StoryDay = { title: string; line: string; piece: StoryPiece };
 
 /** Bento tile icons (custom animated SVGs in components/icons/AnimatedIcons.tsx). */
 export type ServiceIcon = "storefront" | "checkout" | "whatsapp" | "cart" | "analytics" | "drops";
-export type ServiceTile = { icon: ServiceIcon; stage: "Launch" | "Sell" | "Grow"; title: string; line: string };
+export type ServiceTile = { icon: ServiceIcon; stage: "Launch" | "Sell" | "Grow"; title: string; line: string; slug: string };
 
 export type Benefit = { icon: IconName; title: string; line: string };
 
@@ -152,7 +152,7 @@ export const siteConfig = {
     youtube: "", // TODO: YouTube URL
     linkedin: "", // TODO: LinkedIn URL
     facebook: "", // TODO: Facebook URL
-  },
+  } as Record<"instagram" | "youtube" | "linkedin" | "facebook", string>,
 
   /** Pre-filled WhatsApp messages, one per call to action. */
   whatsappMessages: {
@@ -211,12 +211,12 @@ export const siteConfig = {
 
   /** "What we build for D2C brands": six bento tiles covering every Launch / Sell / Grow item. */
   services: [
-    { icon: "storefront", stage: "Launch", title: "Custom storefront design", line: "A store that looks like your brand, not a template, on your own domain." },
-    { icon: "checkout", stage: "Launch", title: "UPI, cards & COD checkout", line: "Plus shipping and GST-ready invoices, set up and tested for you." },
-    { icon: "whatsapp", stage: "Sell", title: "WhatsApp order updates", line: "Confirmed, shipped, delivered. COD confirmed before you dispatch." },
-    { icon: "cart", stage: "Sell", title: "Abandoned-cart nudges", line: "Gentle reminders and fast, mobile-first product pages that win carts back." },
-    { icon: "analytics", stage: "Grow", title: "Analytics & Meta Pixel", line: "See what sells, with SEO basics that compound over time." },
-    { icon: "drops", stage: "Grow", title: "Drops, waitlists & reorders", line: "Restock alerts and reorder reminders that bring customers back." },
+    { icon: "storefront", slug: "custom-storefront-design", stage: "Launch", title: "Custom storefront design", line: "A store that looks like your brand, not a template, on your own domain." },
+    { icon: "checkout", slug: "upi-cod-checkout", stage: "Launch", title: "UPI, cards & COD checkout", line: "Plus shipping and GST-ready invoices, set up and tested for you." },
+    { icon: "whatsapp", slug: "whatsapp-order-updates", stage: "Sell", title: "WhatsApp order updates", line: "Confirmed, shipped, delivered. COD confirmed before you dispatch." },
+    { icon: "cart", slug: "abandoned-cart-recovery", stage: "Sell", title: "Abandoned-cart nudges", line: "Gentle reminders and fast, mobile-first product pages that win carts back." },
+    { icon: "analytics", slug: "analytics-meta-pixel", stage: "Grow", title: "Analytics & Meta Pixel", line: "See what sells, with SEO basics that compound over time." },
+    { icon: "drops", slug: "drops-waitlists-reorders", stage: "Grow", title: "Drops, waitlists & reorders", line: "Restock alerts and reorder reminders that bring customers back." },
   ] satisfies ServiceTile[] as ServiceTile[],
 
   plan: {
@@ -362,19 +362,6 @@ export const siteConfig = {
     },
   ] satisfies Faq[] as Faq[],
 
-  /** Slow ticker of what Teamy handles (text only, no logos). */
-  marquee: [
-    "Storefront",
-    "UPI & COD",
-    "WhatsApp updates",
-    "Meta Pixel",
-    "Abandoned-cart nudges",
-    "Drops & waitlists",
-    "Your own domain",
-    "Reorder reminders",
-    "Analytics",
-    "Hosting & fixes",
-  ],
 
   /**
    * Shark Tank India block. Words only: no logo, clips or styling that implies endorsement.

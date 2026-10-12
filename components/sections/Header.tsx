@@ -1,18 +1,20 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { buttonClass } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 
+// "/#…" so the same links work from service pages (on the home page the motion runtime smooth-scrolls them).
 const links = [
-  { href: "#story", label: "7-day plan" },
-  { href: "#services", label: "Services" },
-  { href: "#process", label: "Process" },
-  { href: "#pricing", label: "Pricing" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#portfolio", label: "Work" },
+  { href: "/#services", label: "Services" },
+  { href: "/#story", label: "7-day plan" },
+  { href: "/#pricing", label: "Pricing" },
+  { href: "/#faq", label: "FAQ" },
 ];
 
 /** Sticky header: transparent over the hero, then a blurred dark bar with a hairline once you scroll. */
@@ -70,9 +72,9 @@ export function Header() {
           }`}
         />
         <div className="container-page relative flex h-[72px] items-center justify-between">
-          <a href="#top" aria-label="Teamy, back to top" className="-ml-1 flex min-h-12 items-center px-1">
+          <Link href="/#top" aria-label="Teamy home" className="-ml-1 flex min-h-12 items-center px-1">
             <Logo className="h-7 w-auto" />
-          </a>
+          </Link>
 
           <nav aria-label="Main" className="hidden items-center gap-7 lg:flex">
             {links.map((l) => (

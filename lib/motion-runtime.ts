@@ -56,9 +56,12 @@ export function initMotion(): () => void {
   const headerOffset = () => (q("header")?.getBoundingClientRect().height ?? 72) + 12;
   on(document, "click", (e: MouseEvent) => {
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href^="#"]');
+    const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href^="#"], a[href^="/#"]');
     if (!a) return;
-    const hash = a.getAttribute("href") ?? "";
+    const raw = a.getAttribute("href") ?? "";
+    // "/#x" links are in-page only when we're already on the home page.
+    if (raw.startsWith("/#") && location.pathname !== "/") return;
+    const hash = raw.startsWith("/") ? raw.slice(1) : raw;
     const id = hash.length > 1 ? decodeURIComponent(hash.slice(1)) : "top";
     const target = document.getElementById(id);
     if (!target) return;
@@ -106,27 +109,28 @@ export function initMotion(): () => void {
     }, { passive: true });
   }
 
-  /* ---------- Price count-up, once, when the price scrolls into view ---------- */
+  /* ---------- Count-ups (price, stats), once, when they scroll into view ---------- */
+  // The final value is server-rendered; we only animate numbers that haven't been seen yet.
   if (!reduce) {
     for (const el of qa("[data-countup]")) {
       const target = Number(el.dataset.countup);
       if (!Number.isFinite(target)) continue;
-      // Only animate if it hasn't been seen yet; otherwise leave the final value alone.
+      const fmt = el.dataset.format === "int" ? (n: number) => String(Math.round(n)) : formatINR;
       if (el.getBoundingClientRect().top < window.innerHeight) continue;
-      el.textContent = formatINR(0);
+      el.textContent = fmt(0);
       const io = new IntersectionObserver(
         ([entry]) => {
           if (!entry.isIntersecting) return;
           io.disconnect();
           const o = { v: 0 };
-          gsap.to(o, { v: target, duration: duration.slower, ease: ease.expoOut.gsap, onUpdate: () => (el.textContent = formatINR(o.v)) });
+          gsap.to(o, { v: target, duration: duration.slower, ease: ease.expoOut.gsap, onUpdate: () => (el.textContent = fmt(o.v)) });
         },
         { threshold: 0.6 },
       );
       io.observe(el);
       cleanups.push(() => {
         io.disconnect();
-        el.textContent = formatINR(target);
+        el.textContent = fmt(target);
       });
     }
   }

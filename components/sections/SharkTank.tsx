@@ -1,5 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { buttonClass } from "@/components/ui/Button";
+import { WhatsAppIcon } from "@/components/ui/Icons";
+import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 import { MaskWords } from "@/components/ui/MaskWords";
 import { Reveal } from "@/components/ui/Reveal";
 import { siteConfig } from "@/content/site";
@@ -18,9 +20,9 @@ export function SharkTank() {
           </Reveal>
           <Reveal delay={0.15}>
             <p className="mt-6 max-w-xl text-lg text-fg-2">{t.sub}</p>
-            <a href="#contact" className={buttonClass("secondary", "mt-9")}>
-              Get your own store <ArrowRight className="size-4" aria-hidden="true" />
-            </a>
+            <WhatsAppCTA source="shark_tank" message="ownStore" className={buttonClass("secondary", "mt-9")}>
+              <WhatsAppIcon className="size-5 text-accent" /> Get your own store <ArrowRight className="size-4" aria-hidden="true" />
+            </WhatsAppCTA>
           </Reveal>
         </header>
 

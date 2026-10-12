@@ -27,7 +27,7 @@ export function FloatingWhatsApp() {
       setBlocked(visible.size > 0);
     });
     if (hero) io.observe(hero);
-    else setPastHero(true); // subpages: show right away
+    else requestAnimationFrame(() => setPastHero(true)); // pages without a #top hero: show right away
     covers.forEach((c) => io.observe(c));
 
     const isField = (el: Element | null) => !!el && (el.tagName === "TEXTAREA" || el.tagName === "INPUT");
