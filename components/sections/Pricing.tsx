@@ -8,9 +8,13 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 import { ViewTracker } from "@/components/ui/ViewTracker";
 import { formatINR } from "@/lib/format";
+import { checkoutLinked } from "@/lib/razorpay";
 import { siteConfig } from "@/content/site";
 
-/** A starter store from ₹8,999, next to custom builds that are quoted after a free call. */
+/**
+ * A starter store from ₹8,999, next to custom builds that are quoted after a free call. Once
+ * Razorpay is set up, brands that approved their free preview can pay online from here.
+ */
 export function Pricing() {
   const { plan, customPlan, addOns } = siteConfig;
   const tick = (
@@ -61,6 +65,15 @@ export function Pricing() {
               <WhatsAppCTA source="pricing_starter" data-magnetic="" className={buttonClass("primary", "relative mt-10 w-full", "lg")}>
                 <WhatsAppIcon className="size-5" /> Get a free quote
               </WhatsAppCTA>
+              {checkoutLinked() && (
+                <Link
+                  href="/checkout"
+                  prefetch={false}
+                  className="underline-anim relative mt-5 inline-flex min-h-11 items-center gap-1.5 self-center font-semibold text-fg"
+                >
+                  Approved your preview? Pay online <ArrowRight className="size-4" aria-hidden="true" />
+                </Link>
+              )}
             </article>
           </Reveal>
 

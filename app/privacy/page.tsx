@@ -10,7 +10,7 @@ export const metadata = pageMetadata({
   sharedImage: true,
 });
 
-const UPDATED = "12 October 2026";
+const UPDATED = "13 October 2026";
 
 export default function Privacy() {
   const { contact, brand } = siteConfig;
@@ -40,6 +40,12 @@ export default function Privacy() {
       <p>
         We receive what you share with us, such as your name, phone number, WhatsApp profile name, email address, messages,
         and any files or links you send (for example product photos or your current store link).
+      </p>
+      <h3>When you pay online</h3>
+      <p>
+        At checkout you give us your name, brand name, email address and phone number, which we pass to Razorpay with your
+        order. Razorpay collects your card, UPI or bank details directly; we never see or store them. Razorpay tells us whether
+        the payment succeeded, with its amount and payment ID.
       </p>
       <h3>When you browse this website</h3>
       <p>
@@ -75,6 +81,7 @@ export default function Privacy() {
       <ul>
         <li>WhatsApp (Meta), for messages you send us, under WhatsApp&apos;s own privacy policy.</li>
         <li>Our website hosting provider.</li>
+        <li>Razorpay, which processes online payments, under Razorpay&apos;s own privacy policy.</li>
         <li>Google and Meta, if analytics or advertising measurement is enabled on this site.</li>
         <li>Our email provider, for emails you send us.</li>
         <li>Government authorities, where the law requires us to.</li>

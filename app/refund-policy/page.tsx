@@ -10,7 +10,7 @@ export const metadata = pageMetadata({
   sharedImage: true,
 });
 
-const UPDATED = "12 October 2026";
+const UPDATED = "13 October 2026";
 
 export default function RefundPolicy() {
   const { contact, brand, plan } = siteConfig;
@@ -30,7 +30,8 @@ export default function RefundPolicy() {
       <h2>2. Payment stages</h2>
       <p>
         The standard build is {formatINR(plan.price)}, one-time, paid in these stages: <Pending>list the payment stages and
-        amounts</Pending>. Each stage is confirmed in writing (WhatsApp or email) before you pay.
+        amounts</Pending>. Each stage is confirmed in writing (WhatsApp or email) before you pay. Online payments on this website
+        are processed by Razorpay.
       </p>
 
       <h2>3. Cancelling before work starts</h2>

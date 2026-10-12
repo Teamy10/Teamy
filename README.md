@@ -28,7 +28,7 @@ testimonials in **`content/testimonials.ts`**, and service and landing page copy
 | --- | --- |
 | WhatsApp number (every contact button uses it) | `WHATSAPP_NUMBER` constant at the top |
 | The message every contact button pre-fills | `WHATSAPP_MESSAGE` constant at the top |
-| Email, address (New Delhi 110008), hours | `contact` |
+| Email, address (Mehrauli, New Delhi 110030), hours | `contact` |
 | 450+ projects, 5+ years, 4.9/5 rating, 97% satisfaction, reviews link | `facts` |
 | Social links (empty = hidden) | `socials` |
 | "Live in X days" for starter stores | `launchDays` constant at the top |
@@ -53,12 +53,14 @@ Festival dates, colours, motifs and greetings live in **`config/festive.ts`** (s
 ## Before you go live (checklist)
 
 - [ ] Fill every `TODO` in `content/site.ts` (socials, Google reviews link)
-- [ ] Add real, approved quotes in `content/testimonials.ts`, and any other clients in `content/projects.ts`
+- [ ] Get the draft reviews in `content/testimonials.ts` approved: in `npm run dev`, open **"Get N reviews approved on WhatsApp"** under the testimonials and send each one; when a client replies OK, set `permissionGiven: true` with the name, role and rating they gave (6 approved = the review wall goes live)
+- [ ] Add any other clients in `content/projects.ts`
 - [ ] Make sure every client in `content/projects.ts` is happy to be shown (logo and site)
 - [ ] Confirm everything marked `⚠️ CONFIRM` (opening hours, `launchDays`, `responseHours`, Razorpay/Shiprocket)
 - [ ] Upload the assets listed below
 - [ ] Fill the `TODO` terms in `/privacy`, `/terms` and `/refund-policy`, then **have a lawyer review all three**
-- [ ] Connect `teamy.in` to Vercel, then set `PRIMARY_DOMAIN_LIVE=true` (see "Domain")
+- [ ] Set `PRIMARY_DOMAIN_LIVE=true` in Vercel, and check `NEXT_PUBLIC_SITE_URL` there is empty or `https://www.teamy.in` (see "Domain and SEO")
+- [ ] Payments: test keys in Vercel and one test payment, then live keys once the payment and refund terms are filled (see "Payments")
 - [ ] Festival dates in `config/festive.ts` for each new year
 
 ### Optional assets
@@ -70,8 +72,8 @@ Festival dates, colours, motifs and greetings live in **`config/festive.ts`** (s
 | `public/logos/upi.svg`, `rupay.svg`, `shiprocket.svg` | official logos (these show as text wordmarks until added; then set `logo` in `integrations`) |
 
 Screenshots, logos and videos of client sites are generated (see "Client assets"). The 7-day story uses
-an **invented demo brand** ("kesar threads"), labelled as such. Add only real testimonials, with the
-founder's permission. The Shark Tank India band carries a "not affiliated with the show" line; keep it.
+an **invented demo brand** ("kesar threads"), labelled as such. A testimonial goes live only once the
+client has approved its exact text in writing. The Shark Tank India band carries a "not affiliated with the show" line; keep it.
 
 ## Leads (WhatsApp)
 
@@ -117,10 +119,14 @@ Every WhatsApp click and form submit fires GA4 `generate_lead` (with `lead_sourc
 
 ## Domain and SEO
 
-- Canonical URLs, the sitemap and schema use `https://teamy.in` (override with `NEXT_PUBLIC_SITE_URL`).
-- **Once teamy.in points at Vercel**, set `PRIMARY_DOMAIN_LIVE=true`: `teamy-blush.vercel.app` and
-  `www.teamy.in` then redirect permanently to `https://teamy.in`, and preview `*.vercel.app` URLs send
-  `X-Robots-Tag: noindex`. Leave it unset until then, or the only working URL would redirect to a parked page.
+- Canonical URLs, the sitemap and schema use `https://www.teamy.in` (override with `NEXT_PUBLIC_SITE_URL`),
+  because that's the host Vercel serves: its domain settings 308-redirect `teamy.in` to `www.teamy.in`. A
+  canonical must never point at a redirect, so if you ever make the bare domain primary in Vercel, set
+  `NEXT_PUBLIC_SITE_URL=https://teamy.in` and change `primaryHost` in `next.config.ts` to match.
+- Set `PRIMARY_DOMAIN_LIVE=true` in Vercel: `teamy-blush.vercel.app` then redirects permanently to
+  `https://www.teamy.in`, and preview `*.vercel.app` URLs send `X-Robots-Tag: noindex`.
+- Every response carries basic security headers (`next.config.ts`): no MIME sniffing, no framing by
+  other sites, a strict referrer policy, and camera, microphone and location turned off.
 - JSON-LD: Organization (logo, address, contact point, topics), ProfessionalService/LocalBusiness
   (with the service catalogue) and WebSite on the home page; Service or LocalBusiness, BreadcrumbList and
   FAQPage on landing pages. Prices are "from ₹8,999". No ratings or reviews markup (Google ignores
@@ -129,20 +135,54 @@ Every WhatsApp click and form submit fires GA4 `generate_lead` (with `lead_sourc
   summary of Teamy for AI search (ChatGPT, Perplexity, Gemini), generated from the content files.
 - **Search Console / Bing:** add the verification codes as `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` and
   `NEXT_PUBLIC_BING_SITE_VERIFICATION` in Vercel, redeploy, verify, then submit
-  `https://teamy.in/sitemap.xml` in both.
+  `https://www.teamy.in/sitemap.xml` in both.
 
 ### Off-site SEO (the owner's to-do, biggest wins first)
 
-1. **Google Business Profile** for Teamy at New Delhi 110008, same name, phone and address as the site;
+1. **Google Business Profile** for Teamy at Mehrauli, New Delhi 110030, same name, phone and address as the site;
    ask clients for reviews there, then put the profile link in `facts.reviewsUrl` and `socials`.
 2. **"Website by Teamy" footer links** on client sites (with their OK): relevant backlinks from real brands.
 3. Listings with the same name, address and phone on Justdial, Sulekha, IndiaMART, Clutch and GoodFirms.
 4. Social profiles (Instagram, YouTube, LinkedIn) in `socials`, so they join `sameAs` in the schema.
 
+## Payments (Razorpay)
+
+Brands that have approved their free preview pay for the starter store at **`/checkout`** (send them the
+link on WhatsApp; the starter pricing card links to it too). The flow:
+
+1. The form checks their name, brand, email and WhatsApp number; `POST /api/checkout` creates a Razorpay
+   order on the server. The amount always comes from `siteConfig.checkout`, never from the browser.
+2. Razorpay's own payment window takes the payment (UPI, cards, netbanking). Card and UPI details go to
+   Razorpay only.
+3. `/checkout/success` checks the payment signature and asks Razorpay to confirm the payment for that
+   order and amount before it says "Payment received". It offers a WhatsApp message with the payment ID.
+4. The customer's name, brand, email and phone are saved as notes on the order: see them in the Razorpay
+   Dashboard → Transactions → Orders. GA4 and Meta get `begin_checkout`/`InitiateCheckout` and
+   `purchase`/`Purchase` events.
+
+**Set up (test mode first):**
+
+1. Razorpay Dashboard → switch to **Test Mode** → Account & Settings → API Keys → **Generate Test Key**.
+2. Put both in `.env.local` (local) and in Vercel → Settings → Environment Variables:
+   `RAZORPAY_KEY_ID=rzp_test_…` and `RAZORPAY_KEY_SECRET=…`. **Never** commit the secret or put it in
+   a `NEXT_PUBLIC_` variable. Redeploy after changing them.
+3. Pay at `/checkout` with the test card `4100 2800 0000 1007`, any future expiry, any CVV and any 4–10
+   digit OTP. With test keys, production hides the pricing-card link, so real visitors never meet a test
+   payment; previews and local builds show it.
+4. In Account & Settings → Payment Capture, keep **automatic capture** on.
+
+**Going live:** generate **live** keys (Live Mode → API Keys), replace both variables in Vercel, and
+redeploy. Before that, fill the `[to be confirmed]` terms in `/terms` and `/refund-policy` (payment
+stages, GST, refunds), set `checkout.gstPercent` if GST is added on top, and have a lawyer and your CA
+review them. Run `npm test` after any change to `lib/checkout.ts` or `lib/razorpay.ts`.
+
+To test the flow without Razorpay (CI, offline), point `RAZORPAY_API_BASE` at a mock of the Orders and
+Payments APIs. Never set it in Vercel.
+
 ## Deploy to Vercel
 
 1. Vercel → **Add New → Project → Import** the GitHub repo (framework is auto-detected).
-2. Add the environment variables above (all optional).
+2. Add the environment variables above (all optional; Razorpay's keys turn on payments).
 3. Deploy, then add `teamy.in` under **Settings → Domains** and set the DNS records Vercel shows at your registrar.
 
 ## Festive themes

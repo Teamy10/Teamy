@@ -479,17 +479,17 @@ main[tabindex="-1"]:focus {
   }
 }
 
-/* ---------- Client logos: light tiles, two rows drifting in opposite directions ---------- */
+/* ---------- Drifting rows (client logos, testimonials): two rows in opposite directions ---------- */
 
-.logo-track {
+.drift {
   display: flex;
   width: max-content;
-  animation: marquee 80s linear infinite;
+  animation: marquee var(--drift-dur, 80s) linear infinite;
 }
-.logo-track--reverse {
+.drift--reverse {
   animation-direction: reverse;
 }
-.logo-wall:hover .logo-track {
+.drift-wall:hover .drift {
   animation-play-state: paused;
 }
 .client-logo {
@@ -756,18 +756,18 @@ html.lenis body {
     animation: none !important;
     transform: none !important;
   }
-  /* Logo wall: a static, centred grid with each logo once. */
-  .logo-track {
+  /* Drifting rows: a static, centred grid with each item once. */
+  .drift {
     animation: none !important;
     width: auto;
     justify-content: center;
   }
-  .logo-track__half {
+  .drift__half {
     flex-wrap: wrap;
     justify-content: center;
     padding-inline: 20px;
   }
-  .logo-copy {
+  .drift-copy {
     display: none !important;
   }
   .cursor-ring,

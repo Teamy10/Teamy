@@ -27,7 +27,8 @@ export function About() {
             ))}
             <p className="flex items-center gap-2 text-base text-fg">
               <MapPin className="size-4 shrink-0 text-accent" aria-hidden="true" />
-              Based in {contact.address.locality}
+              Based in {contact.address.street ? `${contact.address.street}, ` : ""}
+              {contact.address.locality}
             </p>
             <Link href="/ecommerce-website-developer-delhi" className="underline-anim inline-flex min-h-11 items-center gap-1.5 text-base font-semibold text-fg">
               Ecommerce website developer in Delhi <ArrowRight className="size-4" aria-hidden="true" />
