@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { siteConfig } from "../content/site";
-import { draftFor } from "../content/testimonials";
+import { isFilled, siteConfig } from "../content/site";
+import { draftFor, testimonials } from "../content/testimonials";
 import { reviewLink, reviewMessage } from "../lib/whatsapp";
 
 describe("client reviews", () => {
@@ -31,5 +31,14 @@ describe("review drafts", () => {
     expect(draftFor("TODO: company")).toBeUndefined();
     expect(draftFor("Nobody")).toBeUndefined();
     expect(draftFor("")).toBeUndefined();
+  });
+  it("alternatives are only on drafts, filled in and different from the main text", () => {
+    for (const t of testimonials.filter((t) => t.alternatives)) {
+      expect(t.permissionGiven, t.company).toBe(false);
+      for (const a of t.alternatives!) {
+        expect(isFilled(a), t.company).toBe(true);
+        expect(a, t.company).not.toBe(t.quote);
+      }
+    }
   });
 });

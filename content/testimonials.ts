@@ -18,6 +18,8 @@ export type Testimonial = {
   rating?: 1 | 2 | 3 | 4 | 5;
   /** Square photo under /public (e.g. /testimonials/jay.webp). Initials are shown when missing. */
   photo?: string;
+  /** Drafts only: more starting texts the client can pick from on their /review link. */
+  alternatives?: string[];
   /** Link to the project Teamy built for them (optional). */
   link?: string;
   /** Must be true (you have their written OK on this exact text) or the entry is hidden. */
@@ -46,14 +48,18 @@ export const testimonials: Testimonial[] = [
     link: "https://ganges.world/",
     permissionGiven: true, // ⚠️ CONFIRM written permission
   },
-  // Drafts below: the starting text of each client's /review link. Hidden on the live site until that
-  // client sends their review through it, or OKs it in writing (then fill in name, role, rating).
+  // Drafts below: the starting texts of each client's /review link (a second one shows as Option 2).
+  // Hidden on the live site until that client sends their review through it, or OKs it in writing
+  // (then fill in name, role, rating, and keep only the text they sent).
   {
     name: "TODO: name",
     role: "TODO: role",
     company: "Zoff",
     quote:
       "Pehle humara website basic sa tha, ab ekdum premium lagta hai. Teamy ne har masala ki story itne pyaar se design ki ki customers khud bolte hain, 'site dekh ke hi khushboo aa gayi!'",
+    alternatives: [
+      "Diwali se pehle naya store chahiye tha, aur Teamy ne time pe deliver kiya. Mobile pe fast, checkout simple, aur design bilkul hamare brand jaisa.",
+    ],
     link: "https://zofffoods.com/",
     permissionGiven: false,
   },
@@ -63,6 +69,9 @@ export const testimonials: Testimonial[] = [
     company: "Bummer",
     quote:
       "Shark Tank ke baad hume aisi website chahiye thi jo brand ki energy match kare. Teamy ne fun bhi rakha aur clean bhi, bilkul vaisa jaisa humne socha tha.",
+    alternatives: [
+      "Size charts, product pages, colours, sab kuch Teamy ne itna smoothly design kiya ki koi bhi pehli baar mein samajh jaaye. Super easy team to work with.",
+    ],
     link: "https://bummer.in/",
     permissionGiven: false,
   },
@@ -72,6 +81,9 @@ export const testimonials: Testimonial[] = [
     company: "Marbleous",
     quote:
       "Jaipur ki handcrafted marble ko screen pe dikhana aasaan nahi hai. Teamy ne har piece ko itni khoobsurti se present kiya ki website khud ek showroom lagti hai.",
+    alternatives: [
+      "Design ke har chhote detail pe Teamy ne dhyan diya, fonts se lekar photos tak. Hamare kaam ki asli feel online aa gayi.",
+    ],
     link: "https://www.themarbleous.com/",
     permissionGiven: false,
   },
@@ -90,6 +102,9 @@ export const testimonials: Testimonial[] = [
     company: "Kimti",
     quote:
       "Shaadi season aur festive drops ke liye hume ek stylish website chahiye thi. Teamy ne aisi design banayi ki har collection apne aap special lagta hai.",
+    alternatives: [
+      "Humne bas apna vision bataya aur Teamy ne use ek sundar website mein badal diya. WhatsApp pe hamesha available, koi tension hi nahi.",
+    ],
     link: "https://kimti.in/",
     permissionGiven: false,
   },
@@ -117,6 +132,9 @@ export const testimonials: Testimonial[] = [
     company: "haat",
     quote:
       "Duniya bhar ke customers ko Indian products dikhane ke liye ek world-class website chahiye thi. Teamy ne global look diya, par desi soul bilkul nahi khoya.",
+    alternatives: [
+      "Bahut saare sellers aur categories, phir bhi website kabhi bhaari nahi lagti. Teamy ki design sense kamaal ki hai.",
+    ],
     link: "https://haatglobal.com/",
     permissionGiven: false,
   },
@@ -126,6 +144,9 @@ export const testimonials: Testimonial[] = [
     company: "TagZ",
     quote:
       "Snack brand ki website bhi snack jaisi fun aur crunchy honi chahiye! Teamy ne bilkul wahi vibe pakdi, colourful aur fast.",
+    alternatives: [
+      "Brief se launch tak sab kuch time pe hua, bina kisi jhanjhat ke. Agar aapko apne brand ke liye solid website chahiye, toh Teamy ko ek baar zaroor try kijiye.",
+    ],
     permissionGiven: false,
   },
   // No draft: we don't know Arun's company yet. The dev button asks him for his own words.
