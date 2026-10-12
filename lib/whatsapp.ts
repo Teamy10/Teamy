@@ -12,6 +12,30 @@ export function projectRequestMessage(v: { name: string; projectType: string; me
   );
 }
 
+/**
+ * A client's review, as the WhatsApp message they send from /review: their own words, with their
+ * consent written into the message itself.
+ */
+export function reviewMessage(v: { rating: number; name: string; role: string; brand: string; review: string }): string {
+  return [
+    `Review for the ${siteConfig.brand} website`,
+    "",
+    `Rating: ${v.rating}/5 ${"★".repeat(v.rating)}`,
+    `Name: ${v.name}`,
+    `Role: ${v.role}`,
+    `Brand: ${v.brand}`,
+    `Review: "${v.review}"`,
+    "",
+    `I agree that ${siteConfig.brand} can show this review, with my name, role and brand, on its website.`,
+  ].join("\n");
+}
+
+/** The /review link for one client, with their brand (and name) already filled in. */
+export function reviewLink(p: { brand?: string; name?: string } = {}): string {
+  const query = new URLSearchParams(Object.entries(p).filter((e): e is [string, string] => !!e[1])).toString();
+  return `${siteConfig.url}/review${query ? `?${query}` : ""}`;
+}
+
 /** Opens WhatsApp: same tab on phones (hands off to the app), new tab on desktop (keeps the site open). */
 export function openWhatsApp(url: string) {
   const phone = window.matchMedia("(pointer: coarse)").matches || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);

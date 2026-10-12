@@ -53,7 +53,7 @@ Festival dates, colours, motifs and greetings live in **`config/festive.ts`** (s
 ## Before you go live (checklist)
 
 - [ ] Fill every `TODO` in `content/site.ts` (socials, Google reviews link)
-- [ ] Get the draft reviews in `content/testimonials.ts` approved: in `npm run dev`, open **"Get N reviews approved on WhatsApp"** under the testimonials and send each one; when a client replies OK, set `permissionGiven: true` with the name, role and rating they gave (6 approved = the review wall goes live)
+- [ ] Collect reviews: send clients **https://www.teamy.in/review** (one link for everyone, or the per-client links in the dev panel under the testimonials). Each review arrives on WhatsApp in their own words, with their consent; add it to `content/testimonials.ts` with `permissionGiven: true`. From 6 reviews, the section becomes the two-row wall
 - [ ] Add any other clients in `content/projects.ts`
 - [ ] Make sure every client in `content/projects.ts` is happy to be shown (logo and site)
 - [ ] Confirm everything marked `⚠️ CONFIRM` (opening hours, `launchDays`, `responseHours`, Razorpay/Shiprocket)

@@ -2,7 +2,7 @@
  * Tiny analytics shim. GA4 and Meta Pixel load only when NEXT_PUBLIC_GA4_ID / NEXT_PUBLIC_META_PIXEL_ID
  * are set (components/analytics/Analytics.tsx); every call below is a safe no-op otherwise.
  */
-export type AnalyticsEvent = "hero_cta_click" | "pricing_viewed" | "pricing_cta_click" | "form_submitted";
+export type AnalyticsEvent = "hero_cta_click" | "pricing_viewed" | "pricing_cta_click" | "form_submitted" | "review_submitted";
 
 type Params = Record<string, string | number | boolean | undefined>;
 

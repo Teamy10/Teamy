@@ -1,5 +1,6 @@
-import { ArrowUpRight, Star } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Star } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { FestiveDivider } from "@/components/festive/Motifs";
 import { buttonClass } from "@/components/ui/Button";
 import { Carousel } from "@/components/ui/Carousel";
@@ -9,6 +10,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { isFilled, siteConfig } from "@/content/site";
 import { testimonials, type Testimonial } from "@/content/testimonials";
 import { publicFileExists, showPlaceholders } from "@/lib/assets";
+import { reviewLink } from "@/lib/whatsapp";
 
 const initials = (name: string) =>
   name
@@ -171,18 +173,20 @@ function approvalMessage(t: Testimonial) {
   const hi = isFilled(t.name) ? `Hi ${t.name.split(" ")[0]}!` : "Hi!";
   const at = isFilled(t.company) ? ` at ${t.company}` : "";
   const brand = isFilled(t.company) ? t.company : "company";
-  const ask = isFilled(t.quote)
-    ? [
-        `We're adding client reviews to the new ${siteConfig.brand} website, and drafted a short one from our work together:`,
-        `"${t.quote}"`,
-        "If it sounds right, just reply OK. Feel free to change anything, or send your own words instead.",
-      ]
-    : [`We're adding client reviews to the new ${siteConfig.brand} website. Would you write two or three lines about working with us?`];
+  const link = reviewLink({ brand: isFilled(t.company) ? t.company : undefined, name: isFilled(t.name) ? t.name : undefined });
+  if (!isFilled(t.quote)) {
+    return [
+      `${hi} Hope all's well${at}.`,
+      `We're adding client reviews to the new ${siteConfig.brand} website. Would you leave us a short one? It takes 30 seconds: ${link}`,
+      "Thank you!",
+    ].join("\n\n");
+  }
   return [
     `${hi} Hope all's well${at}.`,
-    ...ask,
-    ["Could you also send:", "• your name and role, as you'd like them shown", "• a photo (optional)", "• a rating out of 5"].join("\n"),
-    `Your OK means we can show this review on ${new URL(siteConfig.url).host.replace(/^www\./, "")} with your name, role and ${brand}. Thank you!`,
+    `We're adding client reviews to the new ${siteConfig.brand} website, and drafted a short one from our work together:`,
+    `"${t.quote}"`,
+    `If it sounds right, just reply OK with your role and a rating out of 5 (and a photo, if you'd like one shown). Or write your own in 30 seconds: ${link}`,
+    `Your OK means we can show this review on our website with your name, role and ${brand}. Thank you!`,
   ].join("\n\n");
 }
 
@@ -284,6 +288,11 @@ export function Testimonials() {
           </Reveal>
         </div>
       ) : null}
+      <div className="container-page">
+        <Link href="/review" prefetch={false} className="underline-anim mt-8 inline-flex min-h-11 items-center gap-1.5 font-semibold text-fg">
+          Worked with us? Leave a review <ArrowRight className="size-4" aria-hidden="true" />
+        </Link>
+      </div>
       {pending.length > 0 && <ApprovalKit pending={pending} />}
     </section>
   );
