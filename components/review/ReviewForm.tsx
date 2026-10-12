@@ -27,10 +27,11 @@ function validate(v: Values, rating: number): Errors {
 
 /**
  * A client writes their own review and sends it to Teamy on WhatsApp, with their consent in the
- * message. Nothing is stored here: Teamy adds it to content/testimonials.ts from the chat.
+ * message. Nothing is stored here: Teamy adds it to content/testimonials.ts from the chat. A
+ * personal link can start the review from Teamy's draft; the client changes it, rates and sends it.
  */
-export function ReviewForm({ brand = "", name = "" }: { brand?: string; name?: string }) {
-  const [values, setValues] = useState<Values>({ name, role: "", brand, review: "", agree: false });
+export function ReviewForm({ brand = "", name = "", role = "", review = "" }: { brand?: string; name?: string; role?: string; review?: string }) {
+  const [values, setValues] = useState<Values>({ name, role, brand, review, agree: false });
   const [rating, setRating] = useState(0);
   const [errors, setErrors] = useState<Errors>({});
   const [sent, setSent] = useState(false);

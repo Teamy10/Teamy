@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { siteConfig } from "../content/site";
+import { draftFor } from "../content/testimonials";
 import { reviewLink, reviewMessage } from "../lib/whatsapp";
 
 describe("client reviews", () => {
@@ -17,5 +18,18 @@ describe("client reviews", () => {
     expect(reviewLink()).toBe(`${siteConfig.url}/review`);
     expect(reviewLink({ brand: "Gems for Luck", name: "Anuj Agarwal" })).toBe(`${siteConfig.url}/review?brand=Gems+for+Luck&name=Anuj+Agarwal`);
     expect(reviewLink({ brand: "Zoff", name: undefined })).toBe(`${siteConfig.url}/review?brand=Zoff`);
+  });
+});
+
+describe("review drafts", () => {
+  it("a brand's personal link starts from its draft, whatever the case", () => {
+    expect(draftFor("zoff")?.company).toBe("Zoff");
+    expect(draftFor("Gems for Luck")?.name).toBe("Anuj Agarwal");
+  });
+  it("never for approved reviews, missing quotes or unknown brands", () => {
+    expect(draftFor("Ganges")).toBeUndefined();
+    expect(draftFor("TODO: company")).toBeUndefined();
+    expect(draftFor("Nobody")).toBeUndefined();
+    expect(draftFor("")).toBeUndefined();
   });
 });

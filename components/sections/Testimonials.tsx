@@ -172,21 +172,12 @@ function Wall({ items }: { items: Testimonial[] }) {
 function approvalMessage(t: Testimonial) {
   const hi = isFilled(t.name) ? `Hi ${t.name.split(" ")[0]}!` : "Hi!";
   const at = isFilled(t.company) ? ` at ${t.company}` : "";
-  const brand = isFilled(t.company) ? t.company : "company";
   const link = reviewLink({ brand: isFilled(t.company) ? t.company : undefined, name: isFilled(t.name) ? t.name : undefined });
-  if (!isFilled(t.quote)) {
-    return [
-      `${hi} Hope all's well${at}.`,
-      `We're adding client reviews to the new ${siteConfig.brand} website. Would you leave us a short one? It takes 30 seconds: ${link}`,
-      "Thank you!",
-    ].join("\n\n");
-  }
+  const started = isFilled(t.quote) ? " We've started one from our work together: change anything you like, pick your stars and send." : "";
   return [
     `${hi} Hope all's well${at}.`,
-    `We're adding client reviews to the new ${siteConfig.brand} website, and drafted a short one from our work together:`,
-    `"${t.quote}"`,
-    `If it sounds right, just reply OK with your role and a rating out of 5 (and a photo, if you'd like one shown). Or write your own in 30 seconds: ${link}`,
-    `Your OK means we can show this review on our website with your name, role and ${brand}. Thank you!`,
+    `Would you leave ${siteConfig.brand} a quick review for our new website?${started} It takes 30 seconds: ${link}`,
+    "Thank you!",
   ].join("\n\n");
 }
 
