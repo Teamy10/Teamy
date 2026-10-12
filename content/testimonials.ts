@@ -46,14 +46,14 @@ export const testimonials: Testimonial[] = [
     link: "https://ganges.world/",
     permissionGiven: true, // ⚠️ CONFIRM written permission
   },
-  // Drafts below: written by Teamy for each client to approve or rewrite. Hidden on the live site
-  // until that client says OK.
+  // Drafts below: the starting text of each client's /review link. Hidden on the live site until that
+  // client sends their review through it, or OKs it in writing (then fill in name, role, rating).
   {
     name: "TODO: name",
     role: "TODO: role",
     company: "Zoff",
     quote:
-      "Teamy understood our brand from the very first call. The store looks as good as our spices taste, works smoothly on every phone and is easy for our team to run.",
+      "Pehle humara website basic sa tha, ab ekdum premium lagta hai. Teamy ne har masala ki story itne pyaar se design ki ki customers khud bolte hain, 'site dekh ke hi khushboo aa gayi!'",
     link: "https://zofffoods.com/",
     permissionGiven: false,
   },
@@ -62,7 +62,7 @@ export const testimonials: Testimonial[] = [
     role: "Founder", // ⚠️ CONFIRM in his reply (Founder or Co-founder)
     company: "Bummer",
     quote:
-      "We wanted a website as comfortable as our products, and Teamy delivered: clean design, a quick checkout and a team that replies fast whenever we need anything.",
+      "Shark Tank ke baad hume aisi website chahiye thi jo brand ki energy match kare. Teamy ne fun bhi rakha aur clean bhi, bilkul vaisa jaisa humne socha tha.",
     link: "https://bummer.in/",
     permissionGiven: false,
   },
@@ -71,7 +71,7 @@ export const testimonials: Testimonial[] = [
     role: "TODO: role",
     company: "Marbleous",
     quote:
-      "Every piece we make is handcrafted, and Teamy made sure our website shows that detail. They were patient with our feedback, and the final site is exactly what we imagined.",
+      "Jaipur ki handcrafted marble ko screen pe dikhana aasaan nahi hai. Teamy ne har piece ko itni khoobsurti se present kiya ki website khud ek showroom lagti hai.",
     link: "https://www.themarbleous.com/",
     permissionGiven: false,
   },
@@ -80,7 +80,7 @@ export const testimonials: Testimonial[] = [
     role: "Founder & CEO",
     company: "Beyoung",
     quote:
-      "With a catalogue as big as ours, speed matters. Teamy kept the site fast and easy to browse, and turned around every change we asked for without slowing us down.",
+      "Itne bade catalogue ko simple dikhana mushkil tha, par Teamy ne kar dikhaya. Filters, layout, speed, sab kuch ek number. Asli Delhi wali efficiency!",
     link: "https://www.beyoung.in/",
     permissionGiven: false,
   },
@@ -89,7 +89,7 @@ export const testimonials: Testimonial[] = [
     role: "TODO: role",
     company: "Kimti",
     quote:
-      "Teamy gave us a store that looks elegant and stays simple to shop. Our customers find what they want quickly, and the team is always one WhatsApp message away.",
+      "Shaadi season aur festive drops ke liye hume ek stylish website chahiye thi. Teamy ne aisi design banayi ki har collection apne aap special lagta hai.",
     link: "https://kimti.in/",
     permissionGiven: false,
   },
@@ -98,7 +98,7 @@ export const testimonials: Testimonial[] = [
     role: "TODO: role",
     company: "True Diamond",
     quote:
-      "Buying a diamond online takes trust, and that was our brief. Teamy gave us a website that feels premium and clear at every step, and they stayed with us after launch.",
+      "Jewellery online bechne ke liye trust sabse zaroori hai. Teamy ne ek elegant, premium website banayi jo pehli nazar mein hi bharosa jeet leti hai.",
     link: "https://truediamond.in/",
     permissionGiven: false,
   },
@@ -107,7 +107,7 @@ export const testimonials: Testimonial[] = [
     role: "Founder & CEO",
     company: "Gems for Luck",
     quote:
-      "Our customers need to trust what they buy. Teamy built a website that presents our gemstones with real care, and they understood our business from day one.",
+      "Gemstones aur rudraksha ke liye bharosa aur detail dono chahiye. Teamy ne website ko itna saaf aur sacha design kiya ki customers ko har jaankari aaram se mil jaati hai.",
     link: "https://www.gemsforluck.com/",
     permissionGiven: false,
   },
@@ -116,7 +116,7 @@ export const testimonials: Testimonial[] = [
     role: "TODO: role",
     company: "haat",
     quote:
-      "A marketplace for buyers around the world is not simple to build. Teamy thought through every detail with us and delivered a platform we are proud to put our name on.",
+      "Duniya bhar ke customers ko Indian products dikhane ke liye ek world-class website chahiye thi. Teamy ne global look diya, par desi soul bilkul nahi khoya.",
     link: "https://haatglobal.com/",
     permissionGiven: false,
   },
@@ -125,7 +125,7 @@ export const testimonials: Testimonial[] = [
     role: "TODO: role",
     company: "TagZ",
     quote:
-      "Teamy matched our playful brand perfectly. The website was fun, fast and easy to shop, and working with them felt like having our own in-house team.",
+      "Snack brand ki website bhi snack jaisi fun aur crunchy honi chahiye! Teamy ne bilkul wahi vibe pakdi, colourful aur fast.",
     permissionGiven: false,
   },
   // No draft: we don't know Arun's company yet. The dev button asks him for his own words.
