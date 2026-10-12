@@ -2,7 +2,7 @@ import { isFilled, siteConfig } from "@/content/site";
 
 /**
  * The one-line address used everywhere (footer, contact, local page, legal pages), so the NAP stays
- * identical, e.g. "New Delhi 110008, India". The region is skipped when the city already names it.
+ * identical, e.g. "Mehrauli, New Delhi 110030, India". The region is skipped when the city already names it.
  */
 export function addressLine() {
   const a = siteConfig.contact.address;

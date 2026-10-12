@@ -12,7 +12,7 @@ export const metadata = pageMetadata({
   sharedImage: true,
 });
 
-const UPDATED = "12 October 2026";
+const UPDATED = "13 October 2026";
 
 export default function Terms() {
   const { contact, brand, plan, launchDays } = siteConfig;
@@ -43,6 +43,10 @@ export default function Terms() {
         The standard build costs {formatINR(plan.price)}, one-time, unless a different price is agreed in writing. Payment is
         made in these stages: <Pending>payment stages, e.g. advance on approval and balance before launch</Pending>. Prices
         exclude any taxes that apply, which are shown on your invoice. <Pending>confirm GST treatment</Pending>.
+      </p>
+      <p>
+        Online payments on this website are processed by Razorpay. We never see or store your card, UPI or bank details. Our
+        Refund &amp; Cancellation Policy applies to payments made online in the same way as to any other payment.
       </p>
       <p>
         You pay third parties directly for services in your own name, including your domain, payment gateway fees and any

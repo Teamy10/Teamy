@@ -97,14 +97,17 @@ export const WHATSAPP_MESSAGE = "Hi Teamy! I'd like to discuss a website project
 /** "Live in X days" for starter stores — used in the story, plans and process. */
 const launchDays = 7; // ⚠️ CONFIRM
 
+/** The starter store's price in rupees: shown on the site and charged at checkout. */
+const starterPrice = 8999;
+
 export const siteConfig = {
   brand: "Teamy",
   tagline: "Your brand's web team.",
   /**
-   * Canonical domain. Override with NEXT_PUBLIC_SITE_URL (e.g. while teamy.in isn't connected yet).
-   * See README → "Domain".
+   * Canonical domain: www, because Vercel serves www.teamy.in and 308-redirects teamy.in to it, and a
+   * canonical must never point at a redirect. Override with NEXT_PUBLIC_SITE_URL. See README → "Domain".
    */
-  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://teamy.in").replace(/\/$/, ""),
+  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://www.teamy.in").replace(/\/$/, ""),
   /** Studio location, used in copy and the local page. */
   city: "New Delhi",
 
@@ -115,11 +118,11 @@ export const siteConfig = {
     phone: "+91-9509612425",
     email: "hello@teamy.in", // ⚠️ CONFIRM mailbox exists
     address: {
-      /** Optional building and road. Leave empty to show just the city and PIN. */
-      street: "",
+      /** Area (or building and road). Shown before the city: "Mehrauli, New Delhi 110030". */
+      street: "Mehrauli",
       locality: "New Delhi",
       region: "Delhi",
-      postalCode: "110008",
+      postalCode: "110030",
       country: "IN",
       countryName: "India",
     },
@@ -191,7 +194,7 @@ export const siteConfig = {
 
   plan: {
     name: "Starter store",
-    price: 8999,
+    price: starterPrice,
     forWho: `For brands launching their first online store. Live in about ${launchDays} days.`,
     // Every feature from the old Launch + Growth plans, de-duplicated, in the order a store comes together.
     features: [
@@ -206,6 +209,20 @@ export const siteConfig = {
       `Live in ${launchDays} days`,
     ],
   } satisfies Plan as Plan,
+
+  /**
+   * Paying online for the starter store, with Razorpay (README → "Payments"). Off until the Razorpay
+   * keys are set. With test keys the pay button shows only outside production (previews, local);
+   * /checkout itself always works, with a test-mode banner.
+   */
+  checkout: {
+    /** Paid at checkout, in rupees: the full price (or set an advance, and say so in the terms). */
+    amount: starterPrice,
+    /** GST added on top at checkout, in percent: 0 if the price already includes it. ⚠️ CONFIRM with your CA */
+    gstPercent: 0,
+    /** Shown in the Razorpay payment window and on the customer's receipt. */
+    description: "Starter store: design and build",
+  },
 
   /** The second pricing card: bigger builds, quoted after a free call. */
   customPlan: {

@@ -26,6 +26,27 @@ export function track(event: AnalyticsEvent, params: Params = {}) {
 }
 
 /**
+ * The checkout funnel: GA4's recommended `begin_checkout` / `purchase` events and Meta's standard
+ * `InitiateCheckout` / `Purchase`, with the amount in rupees.
+ */
+export function trackCheckout(step: "begin" | "purchase", value: number, transactionId?: string) {
+  if (typeof window === "undefined") return;
+  const items = [{ item_id: "starter", item_name: "Starter store", price: value, quantity: 1 }];
+  try {
+    if (step === "begin") {
+      window.gtag?.("event", "begin_checkout", { currency: "INR", value, items });
+      window.fbq?.("track", "InitiateCheckout", { currency: "INR", value });
+    } else {
+      window.gtag?.("event", "purchase", { currency: "INR", value, transaction_id: transactionId, items });
+      window.fbq?.("track", "Purchase", { currency: "INR", value });
+    }
+  } catch {
+    /* never let analytics break the page */
+  }
+  if (process.env.NODE_ENV !== "production") console.debug("[checkout]", step, value, transactionId);
+}
+
+/**
  * A lead: someone opened WhatsApp to talk to Teamy. Sent as GA4's recommended `generate_lead`
  * event and Meta's standard `Lead` event, with where on the site it happened.
  */

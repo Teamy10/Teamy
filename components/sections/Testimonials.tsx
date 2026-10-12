@@ -1,10 +1,11 @@
 import { ArrowUpRight, Star } from "lucide-react";
 import Image from "next/image";
 import { FestiveDivider } from "@/components/festive/Motifs";
+import { buttonClass } from "@/components/ui/Button";
 import { Carousel } from "@/components/ui/Carousel";
+import { WhatsAppIcon } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { TodoSlot } from "@/components/ui/TodoSlot";
 import { isFilled, siteConfig } from "@/content/site";
 import { testimonials, type Testimonial } from "@/content/testimonials";
 import { publicFileExists, showPlaceholders } from "@/lib/assets";
@@ -18,6 +19,8 @@ const initials = (name: string) =>
     .join("");
 
 const ready = (t: Testimonial) => t.permissionGiven && isFilled(t.quote) && isFilled(t.name);
+/** A quote waiting for the client's OK. It never shows on the site, only in the dev approval panel. */
+const draft = (t: Testimonial) => !ready(t) && isFilled(t.quote);
 
 function Avatar({ t, size }: { t: Testimonial; size: number }) {
   return t.photo && publicFileExists(t.photo) ? (
@@ -107,16 +110,133 @@ function Card({ t }: { t: Testimonial }) {
 
 const slide = "w-[86%] shrink-0 snap-start sm:w-[calc(70%-12px)] lg:w-[calc(50%-12px)]";
 
+/** From this many real testimonials, they show as a drifting wall instead of a carousel. */
+const WALL_FROM = 6;
+
+/** A compact review card for the wall: photo or initials, name, stars, role and the quote. */
+function WallCard({ t, copy }: { t: Testimonial; copy: boolean }) {
+  const role = [t.role, t.company].filter(isFilled).join(", ");
+  return (
+    <li className={`flex w-[320px] shrink-0 gap-4 rounded-[28px] bg-surface p-5 ring-1 ring-inset ring-line sm:w-[420px] ${copy ? "drift-copy" : ""}`}>
+      <Avatar t={t} size={56} />
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <span className="font-semibold">{t.name}</span>
+          {t.rating && <Stars rating={t.rating} />}
+        </div>
+        {role && <p className="label-mono mt-1 text-fg-3">{role}</p>}
+        <p className="mt-2 line-clamp-8 text-[15px] leading-relaxed text-fg-2">&ldquo;{t.quote}&rdquo;</p>
+      </div>
+    </li>
+  );
+}
+
 /**
- * Client testimonials from content/testimonials.ts, real words only. One testimonial shows as a
- * single large card; two or more become a swipeable, keyboard-friendly carousel. Unfilled entries
- * show as placeholders in dev only.
+ * Two rows drifting in opposite directions (paused on hover, offscreen and with reduced motion,
+ * when it becomes a static grid). The moving rows are decorative copies; screen readers get one
+ * plain list with every quote in full.
+ */
+function Wall({ items }: { items: Testimonial[] }) {
+  const rows = [items.filter((_, i) => i % 2 === 0), items.filter((_, i) => i % 2 === 1)];
+  const card = (t: Testimonial, key: string, copy: boolean) => <WallCard key={key} t={t} copy={copy} />;
+  return (
+    <>
+      <ul className="sr-only">
+        {items.map((t) => (
+          <li key={t.name}>
+            <blockquote>{t.quote}</blockquote> {t.name}, {[t.role, t.company].filter(isFilled).join(", ")}
+          </li>
+        ))}
+      </ul>
+      <div aria-hidden="true" data-loop className="drift-wall mt-12 space-y-5 [--drift-dur:140s] [mask-image:linear-gradient(90deg,transparent,#000_5%,#000_95%,transparent)]">
+        {rows.map((row, r) => (
+          <div key={r} className="overflow-hidden">
+            <div className={`drift ${r % 2 ? "drift--reverse" : ""}`}>
+              {/* Each half holds the row twice, so it's wider than any screen and the loop never shows a gap. */}
+              {[0, 1].map((copy) => (
+                <ul key={copy} className="drift__half flex shrink-0 gap-5 pr-5">
+                  {[...row, ...row].map((t, i) => card(t, `${copy}-${i}`, copy === 1 || i >= row.length))}
+                </ul>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+/** The WhatsApp message that sends a client their draft review to approve (or asks for their own words). */
+function approvalMessage(t: Testimonial) {
+  const hi = isFilled(t.name) ? `Hi ${t.name.split(" ")[0]}!` : "Hi!";
+  const at = isFilled(t.company) ? ` at ${t.company}` : "";
+  const brand = isFilled(t.company) ? t.company : "company";
+  const ask = isFilled(t.quote)
+    ? [
+        `We're adding client reviews to the new ${siteConfig.brand} website, and drafted a short one from our work together:`,
+        `"${t.quote}"`,
+        "If it sounds right, just reply OK. Feel free to change anything, or send your own words instead.",
+      ]
+    : [`We're adding client reviews to the new ${siteConfig.brand} website. Would you write two or three lines about working with us?`];
+  return [
+    `${hi} Hope all's well${at}.`,
+    ...ask,
+    ["Could you also send:", "• your name and role, as you'd like them shown", "• a photo (optional)", "• a rating out of 5"].join("\n"),
+    `Your OK means we can show this review on ${new URL(siteConfig.url).host.replace(/^www\./, "")} with your name, role and ${brand}. Thank you!`,
+  ].join("\n\n");
+}
+
+/**
+ * In dev only: the reviews waiting for a client's OK, each with a WhatsApp button that opens the
+ * chat picker with the approval request written. None of it is on the site, here or live.
+ */
+function ApprovalKit({ pending }: { pending: Testimonial[] }) {
+  return (
+    <div className="container-page">
+      <details className="mt-10 rounded-[28px] border border-dashed border-accent/50 p-5 text-[15px] text-fg-2 sm:p-7">
+        <summary className="cursor-pointer font-semibold text-fg">
+          <span className="label-mono mr-3 text-accent">Dev only</span>
+          Get {pending.length} reviews approved on WhatsApp
+        </summary>
+        <p className="mt-4 max-w-3xl">
+          These aren&apos;t on the site. Each button opens WhatsApp with the message written: pick the client&apos;s chat and send.
+          When they reply OK, set <code>permissionGiven: true</code> with the name, role and rating they gave in{" "}
+          <code>content/testimonials.ts</code>. From {WALL_FROM} approved reviews, the section becomes the two-row wall.
+        </p>
+        <ul className="mt-5 divide-y divide-line">
+          {pending.map((t, i) => (
+            <li key={i} className="flex flex-wrap items-center gap-x-6 gap-y-3 py-4">
+              <span className="min-w-0 flex-1 basis-56">
+                <strong className="block text-fg">{[t.name, t.company].filter(isFilled).join(", ")}</strong>
+                {draft(t) ? <q className="mt-1 block text-fg-3">{t.quote}</q> : "Needs their own words"}
+              </span>
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(approvalMessage(t))}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={buttonClass("secondary")}
+              >
+                <WhatsAppIcon className="size-5" /> {draft(t) ? "Send for approval" : "Ask for a review"}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    </div>
+  );
+}
+
+/**
+ * Client testimonials from content/testimonials.ts: clients' own words, or drafts they approved.
+ * One testimonial shows as a single large card, two to five as a swipeable, keyboard-friendly
+ * carousel, and six or more as a drifting wall. Dev shows exactly what's live, plus the approval
+ * panel for everything still waiting.
  */
 export function Testimonials() {
   const items = testimonials.filter(ready);
-  const todo = showPlaceholders ? testimonials.filter((t) => !ready(t)) : [];
-  if (items.length === 0 && todo.length === 0) return null;
-  const single = items.length === 1 && todo.length === 0;
+  const pending = showPlaceholders ? testimonials.filter((t) => !ready(t)) : [];
+  if (items.length === 0 && pending.length === 0) return null;
+  const wall = items.length >= WALL_FROM;
 
   return (
     <section id="testimonials" aria-labelledby="testimonials-title" className="section-pad cv-auto relative">
@@ -144,29 +264,27 @@ export function Testimonials() {
             </span>
           }
         />
-        <Reveal className="mt-12">
-          {single ? (
-            <FeaturedCard t={items[0]!} />
-          ) : (
-            <Carousel label="Client testimonials" item="testimonial">
-              {items.map((t) => (
-                <li key={t.name} className={slide}>
-                  <Card t={t} />
-                </li>
-              ))}
-              {todo.map((t, i) => (
-                <li key={`todo-${i}`} className={slide}>
-                  <TodoSlot className="h-full min-h-64">
-                    Testimonial from <strong>{isFilled(t.name) ? t.name : t.company}</strong>: paste their exact words (and any
-                    missing name, role or company) in <code>content/testimonials.ts</code>, then set{" "}
-                    <code>permissionGiven: true</code>.
-                  </TodoSlot>
-                </li>
-              ))}
-            </Carousel>
-          )}
-        </Reveal>
       </div>
+      {wall ? (
+        <Wall items={items} />
+      ) : items.length > 0 ? (
+        <div className="container-page">
+          <Reveal className="mt-12">
+            {items.length === 1 ? (
+              <FeaturedCard t={items[0]!} />
+            ) : (
+              <Carousel label="Client testimonials" item="testimonial">
+                {items.map((t) => (
+                  <li key={t.name} className={slide}>
+                    <Card t={t} />
+                  </li>
+                ))}
+              </Carousel>
+            )}
+          </Reveal>
+        </div>
+      ) : null}
+      {pending.length > 0 && <ApprovalKit pending={pending} />}
     </section>
   );
 }
