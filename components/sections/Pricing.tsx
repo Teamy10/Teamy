@@ -1,4 +1,5 @@
-import { Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
+import Link from "next/link";
 import { FestiveDivider } from "@/components/festive/Motifs";
 import { buttonClass } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/ui/Icons";
@@ -90,6 +91,11 @@ export function Pricing() {
           <p className="mx-auto mt-10 max-w-2xl text-center text-fg-2">
             <span className="label-mono mr-2 text-fg-3">Add-ons, quoted for your brand</span>
             {addOns.map((a) => a.name).join(" · ")}
+          </p>
+          <p className="mt-4 text-center">
+            <Link href="/shopify-alternative-india" className="underline-anim inline-flex min-h-11 items-center gap-1.5 font-semibold text-fg">
+              Comparing with Shopify? See the Shopify alternative for India <ArrowRight className="size-4" aria-hidden="true" />
+            </Link>
           </p>
         </Reveal>
       </div>

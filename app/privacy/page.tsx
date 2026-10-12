@@ -1,5 +1,5 @@
 import { LegalPage, Pending } from "@/components/LegalPage";
-import { addressLine } from "@/components/sections/Footer";
+import { addressLine } from "@/lib/address";
 import { siteConfig } from "@/content/site";
 import { pageMetadata } from "@/lib/metadata";
 

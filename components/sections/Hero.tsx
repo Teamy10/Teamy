@@ -40,7 +40,7 @@ function Showcase() {
             src={assets(desk.slug).topSmall}
             srcSet={`${assets(desk.slug).topSmall} 600w, ${deskImg} 1200w`}
             sizes="(min-width: 1024px) 480px, 80vw"
-            alt={`The ${desk.name} homepage`}
+            alt={`${desk.name} ecommerce website homepage`}
             width={1200}
             height={750}
             decoding="async"
@@ -55,7 +55,7 @@ function Showcase() {
                 src={assets(phone.slug).mobileSmall}
                 srcSet={`${assets(phone.slug).mobileSmall} 390w, ${phoneImg} 780w`}
                 sizes="(min-width: 1024px) 160px, 30vw"
-                alt={`The ${phone.name} homepage on a phone`}
+                alt={`${phone.name} ecommerce website on a phone`}
                 width={780}
                 height={1688}
                 decoding="async"
@@ -96,6 +96,8 @@ export function Hero() {
           <h1 id="hero-title" className="hero-mask display-xl mt-6 lg:text-[clamp(3.5rem,1.2rem+3.6vw,4.4rem)]">
             {hero.lines.map((line, li) => (
               <span key={li} className="block">
+                {/* The space keeps the lines apart in the page text ("behind India's", not "behindIndia's"). */}
+                {li > 0 && " "}
                 <MaskWords text={line.text} emphasis={line.emphasis} heroWord={line.heroWord} offset={offsets[li]} emphasisClass="font-light" />
               </span>
             ))}

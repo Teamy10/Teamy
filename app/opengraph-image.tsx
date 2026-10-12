@@ -1,7 +1,7 @@
 import { siteConfig } from "@/content/site";
 import { ogSize, renderOg } from "@/lib/og";
 
-export const alt = `${siteConfig.brand}: online stores for D2C brands`;
+export const alt = `${siteConfig.brand}: ecommerce website development for India's D2C brands`;
 export const size = ogSize;
 export const contentType = "image/png";
 

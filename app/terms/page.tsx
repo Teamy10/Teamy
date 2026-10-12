@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { LegalPage, Pending } from "@/components/LegalPage";
-import { addressLine } from "@/components/sections/Footer";
+import { addressLine } from "@/lib/address";
 import { siteConfig } from "@/content/site";
 import { formatINR } from "@/lib/format";
 import { pageMetadata } from "@/lib/metadata";

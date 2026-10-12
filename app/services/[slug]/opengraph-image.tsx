@@ -3,7 +3,7 @@ import { ogSize, renderOg } from "@/lib/og";
 
 export const size = ogSize;
 export const contentType = "image/png";
-export const alt = "Teamy service";
+export const alt = "Teamy: ecommerce website services for D2C brands";
 
 export function generateStaticParams() {
   return servicePages.map((p) => ({ slug: p.slug }));

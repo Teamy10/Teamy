@@ -114,13 +114,12 @@ export const siteConfig = {
     whatsappDisplay: WHATSAPP_NUMBER,
     phone: "+91-9509612425",
     email: "hello@teamy.in", // ⚠️ CONFIRM mailbox exists
-    /** Short location for copy ("Based in Patel Nagar, New Delhi"). */
-    area: "Patel Nagar",
     address: {
-      street: "Patel Nagar", // TODO: full street address (building, road), then keep "area" short
+      /** Optional building and road. Leave empty to show just the city and PIN. */
+      street: "",
       locality: "New Delhi",
       region: "Delhi",
-      postalCode: "TODO: PIN code",
+      postalCode: "110008",
       country: "IN",
       countryName: "India",
     },
@@ -159,7 +158,7 @@ export const siteConfig = {
       { text: "The web team behind", emphasis: "behind" },
       { text: "India's D2C brands.", emphasis: "D2C", heroWord: true },
     ] satisfies HeroLine[] as HeroLine[],
-    sub: "Custom-coded websites that make brands look as big as their ambition, from first launches to brands seen on Shark Tank India.",
+    sub: "We design and build custom-coded ecommerce websites that make D2C brands look as big as their ambition, from first launches to brands seen on Shark Tank India.",
     /** The two client sites shown in the hero (slugs from content/projects.ts): desktop frame, then phone. */
     showcase: ["zoff", "truediamond"],
   },
@@ -274,7 +273,7 @@ export const siteConfig = {
     title: "Five years of building for India's D2C brands.",
     emphasis: "D2C brands.",
     body: [
-      "Teamy is a team of designers and developers in Patel Nagar, New Delhi. We've delivered 450+ websites and projects, for first-time founders and for brands featured on Shark Tank India.",
+      "Teamy is a team of designers and developers in New Delhi. We've delivered 450+ websites and projects, for first-time founders and for brands featured on Shark Tank India.",
       "Every site is designed and coded around the brand it's for: mobile-first, fast and built to sell. And you talk to the same people on WhatsApp from the first call to launch day, and long after it.",
     ],
     highlights: [
@@ -294,6 +293,14 @@ export const siteConfig = {
     {
       q: "Have you worked with brands like mine?",
       a: "Probably. We've delivered 450+ websites and projects across fashion, jewellery, food, home décor, wellness and more, including brands featured on Shark Tank India. See our work above, or ask us on WhatsApp for examples in your category.",
+    },
+    {
+      q: "How long does it take to build an ecommerce website?",
+      a: `Starter stores usually go live in about ${launchDays} days once you approve the design. Bigger custom builds get a timeline with the quote, depending on your catalogue, integrations and how quickly your content is ready.`,
+    },
+    {
+      q: "Do you work with brands outside Delhi?",
+      a: "Yes. We're based in New Delhi and work with D2C brands across India. Everything can be done over WhatsApp and calls, and Delhi brands are welcome to meet us in person.",
     },
     {
       q: "What happens after launch?",

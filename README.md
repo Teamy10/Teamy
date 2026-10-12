@@ -1,6 +1,6 @@
 # Teamy: marketing site (teamy.in)
 
-Site for Teamy, a web team in Patel Nagar, New Delhi, that designs and builds custom-coded websites for
+Site for Teamy, a web team in New Delhi that designs and builds custom-coded websites for
 India's D2C brands (450+ projects in 5+ years, including brands featured on Shark Tank India).
 Next.js (App Router) + TypeScript + Tailwind CSS v4, mobile-first, fully static, deploys to Vercel.
 
@@ -28,7 +28,7 @@ testimonials in **`content/testimonials.ts`**, and service and landing page copy
 | --- | --- |
 | WhatsApp number (every contact button uses it) | `WHATSAPP_NUMBER` constant at the top |
 | The message every contact button pre-fills | `WHATSAPP_MESSAGE` constant at the top |
-| Email, address (Patel Nagar, New Delhi), hours | `contact` |
+| Email, address (New Delhi 110008), hours | `contact` |
 | 450+ projects, 5+ years, 4.9/5 rating, 97% satisfaction, reviews link | `facts` |
 | Social links (empty = hidden) | `socials` |
 | "Live in X days" for starter stores | `launchDays` constant at the top |
@@ -52,7 +52,7 @@ Festival dates, colours, motifs and greetings live in **`config/festive.ts`** (s
 
 ## Before you go live (checklist)
 
-- [ ] Fill every `TODO` in `content/site.ts` (full address and PIN, socials, Google reviews link)
+- [ ] Fill every `TODO` in `content/site.ts` (socials, Google reviews link)
 - [ ] Add real, approved quotes in `content/testimonials.ts`, and any other clients in `content/projects.ts`
 - [ ] Make sure every client in `content/projects.ts` is happy to be shown (logo and site)
 - [ ] Confirm everything marked `⚠️ CONFIRM` (opening hours, `launchDays`, `responseHours`, Razorpay/Shiprocket)
@@ -121,8 +121,23 @@ Every WhatsApp click and form submit fires GA4 `generate_lead` (with `lead_sourc
 - **Once teamy.in points at Vercel**, set `PRIMARY_DOMAIN_LIVE=true`: `teamy-blush.vercel.app` and
   `www.teamy.in` then redirect permanently to `https://teamy.in`, and preview `*.vercel.app` URLs send
   `X-Robots-Tag: noindex`. Leave it unset until then, or the only working URL would redirect to a parked page.
-- JSON-LD: Organization, ProfessionalService/LocalBusiness, WebSite on the home page; Service or
-  LocalBusiness, BreadcrumbList and FAQPage on landing pages. No ratings or reviews markup.
+- JSON-LD: Organization (logo, address, contact point, topics), ProfessionalService/LocalBusiness
+  (with the service catalogue) and WebSite on the home page; Service or LocalBusiness, BreadcrumbList and
+  FAQPage on landing pages. Prices are "from ₹8,999". No ratings or reviews markup (Google ignores
+  self-published ratings and can treat them as spam).
+- `sitemap.xml` (with lastmod, refreshed on every deploy), `robots.txt`, and `/llms.txt`: a plain
+  summary of Teamy for AI search (ChatGPT, Perplexity, Gemini), generated from the content files.
+- **Search Console / Bing:** add the verification codes as `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` and
+  `NEXT_PUBLIC_BING_SITE_VERIFICATION` in Vercel, redeploy, verify, then submit
+  `https://teamy.in/sitemap.xml` in both.
+
+### Off-site SEO (the owner's to-do, biggest wins first)
+
+1. **Google Business Profile** for Teamy at New Delhi 110008, same name, phone and address as the site;
+   ask clients for reviews there, then put the profile link in `facts.reviewsUrl` and `socials`.
+2. **"Website by Teamy" footer links** on client sites (with their OK): relevant backlinks from real brands.
+3. Listings with the same name, address and phone on Justdial, Sulekha, IndiaMART, Clutch and GoodFirms.
+4. Social profiles (Instagram, YouTube, LinkedIn) in `socials`, so they join `sameAs` in the schema.
 
 ## Deploy to Vercel
 

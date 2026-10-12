@@ -7,6 +7,7 @@ import { FacebookIcon, InstagramIcon, LinkedInIcon, WhatsAppIcon, YouTubeIcon } 
 import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 import { servicePages } from "@/content/pages";
 import { isFilled, siteConfig } from "@/content/site";
+import { addressLine } from "@/lib/address";
 import { formatINR } from "@/lib/format";
 
 const link = "underline-anim inline-flex min-h-11 items-center gap-2 text-fg-2 transition-colors hover:text-fg";
@@ -32,14 +33,6 @@ const legal = [
   { href: "/terms", label: "Terms & Conditions" },
   { href: "/refund-policy", label: "Refund & Cancellation Policy" },
 ];
-
-/** Address line shared by the footer, contact section and local page (NAP stays identical everywhere). */
-export function addressLine() {
-  const a = siteConfig.contact.address;
-  // "New Delhi, Delhi" reads twice: skip the region when the city already names it.
-  const region = a.locality.includes(a.region) ? null : a.region;
-  return [isFilled(a.street) ? a.street : null, a.locality, region, a.countryName].filter(Boolean).join(", ");
-}
 
 export function Footer() {
   const { contact, brand, socials } = siteConfig;
