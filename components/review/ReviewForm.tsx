@@ -28,10 +28,11 @@ function validate(v: Values, rating: number): Errors {
 /**
  * A client writes their own review and sends it to Teamy on WhatsApp, with their consent in the
  * message. Nothing is stored here: Teamy adds it to content/testimonials.ts from the chat. A
- * personal link can start the review from Teamy's draft; the client changes it, rates and sends it.
+ * personal link can start the review from Teamy's draft (or let the client pick one of several);
+ * the client changes it, rates and sends it.
  */
-export function ReviewForm({ brand = "", name = "", role = "", review = "" }: { brand?: string; name?: string; role?: string; review?: string }) {
-  const [values, setValues] = useState<Values>({ name, role, brand, review, agree: false });
+export function ReviewForm({ brand = "", name = "", role = "", drafts = [] }: { brand?: string; name?: string; role?: string; drafts?: string[] }) {
+  const [values, setValues] = useState<Values>({ name, role, brand, review: drafts[0] ?? "", agree: false });
   const [rating, setRating] = useState(0);
   const [errors, setErrors] = useState<Errors>({});
   const [sent, setSent] = useState(false);
@@ -97,6 +98,24 @@ export function ReviewForm({ brand = "", name = "", role = "", review = "" }: { 
         )}
       </fieldset>
       <Field id="review-review" label="Your review" hint={`${values.review.length}/${MAX}`} error={errors.review}>
+        {drafts.length > 1 && (
+          <div role="group" aria-label="Start from" className="mb-3 flex flex-wrap gap-2">
+            {drafts.map((d, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-pressed={values.review === d}
+                onClick={() => {
+                  setValues((v) => ({ ...v, review: d }));
+                  setErrors((er) => ({ ...er, review: undefined }));
+                }}
+                className="min-h-11 rounded-full px-5 text-[15px] font-medium text-fg-2 ring-1 ring-inset ring-line-strong transition-colors hover:text-fg aria-pressed:bg-accent aria-pressed:text-accent-ink aria-pressed:ring-accent"
+              >
+                Option {i + 1}
+              </button>
+            ))}
+          </div>
+        )}
         <textarea
           id="review-review"
           name="review"

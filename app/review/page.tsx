@@ -17,8 +17,8 @@ type Search = Promise<Record<string, string | string[] | undefined>>;
 
 /**
  * /review: the link Teamy sends its clients (?brand=…&name=… fills those in, and starts from that
- * brand's draft if it has one). Reviews arrive on WhatsApp, as the client sent them and with their
- * consent. Out of search results.
+ * brand's draft if it has one, with any alternatives to pick from). Reviews arrive on WhatsApp, as
+ * the client sent them and with their consent. Out of search results.
  */
 export default async function ReviewPage({ searchParams }: { searchParams: Search }) {
   const sp = await searchParams;
@@ -59,7 +59,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: Searc
               brand={param("brand")}
               name={name}
               role={draft && isFilled(draft.role) ? draft.role : ""}
-              review={draft?.quote ?? ""}
+              drafts={draft ? [draft.quote, ...(draft.alternatives ?? [])] : []}
             />
           </div>
         </section>

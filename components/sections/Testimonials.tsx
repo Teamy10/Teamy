@@ -203,7 +203,13 @@ function ApprovalKit({ pending }: { pending: Testimonial[] }) {
             <li key={i} className="flex flex-wrap items-center gap-x-6 gap-y-3 py-4">
               <span className="min-w-0 flex-1 basis-56">
                 <strong className="block text-fg">{[t.name, t.company].filter(isFilled).join(", ")}</strong>
-                {draft(t) ? <q className="mt-1 block text-fg-3">{t.quote}</q> : "Needs their own words"}
+                {draft(t)
+                  ? [t.quote, ...(t.alternatives ?? [])].map((q) => (
+                      <q key={q} className="mt-1 block text-fg-3">
+                        {q}
+                      </q>
+                    ))
+                  : "Needs their own words"}
               </span>
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(approvalMessage(t))}`}
