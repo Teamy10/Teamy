@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { pages, pageBySlug, wordCount } from "../content/pages";
+import { projects } from "../content/projects";
 import { siteConfig } from "../content/site";
 
 describe("service & landing pages", () => {
@@ -16,7 +17,7 @@ describe("service & landing pages", () => {
       });
       it("links only to pages that exist, and shows a real portfolio store", () => {
         for (const r of p.related) expect(pageBySlug(r), r).toBeDefined();
-        expect(siteConfig.portfolio.some((s) => s.name === p.portfolio)).toBe(true);
+        expect(projects.some((s) => s.name === p.portfolio)).toBe(true);
       });
       it("contains no placeholders", () => {
         expect(JSON.stringify(p)).not.toContain("TODO");

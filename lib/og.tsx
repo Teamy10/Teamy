@@ -15,7 +15,7 @@ function Rupee() {
 export const ogSize = { width: 1200, height: 630 };
 
 /** Shared 1200×630 share card: near-black, lime signal, wordmark, page title and a mono kicker. */
-export async function renderOg({ title, kicker, footer = "₹8,999 one-time · Live in 7 days · teamy.in" }: { title: string; kicker: string; footer?: string }) {
+export async function renderOg({ title, kicker, footer = "450+ projects · 4.9/5 client rating · teamy.in" }: { title: string; kicker: string; footer?: string }) {
   const dir = join(process.cwd(), "assets/fonts");
   const [regular, black] = await Promise.all([
     readFile(join(dir, "bricolage-grotesque-latin-400-normal.woff")),

@@ -5,3 +5,6 @@ out
 .vercel
 *.tsbuildinfo
 next-env.d.ts
+
+# Client videos for social media (regenerate with `npm run capture:videos`)
+/media/

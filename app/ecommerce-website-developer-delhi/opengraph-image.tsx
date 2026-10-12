@@ -1,7 +1,7 @@
 import { pageBySlug } from "@/content/pages";
 import { ogSize, renderOg } from "@/lib/og";
 
-const page = pageBySlug("ecommerce-website-developer-jaipur")!;
+const page = pageBySlug("ecommerce-website-developer-delhi")!;
 export const size = ogSize;
 export const contentType = "image/png";
 export const alt = page.name;

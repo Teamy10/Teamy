@@ -52,7 +52,6 @@ export function FloatingWhatsApp() {
     >
       <WhatsAppCTA
         source="floating_button"
-        message="talk"
         aria-label="Chat with Teamy on WhatsApp"
         className="grid size-14 place-items-center rounded-full bg-accent text-accent-ink shadow-[0_12px_40px_-10px_rgb(var(--accent-rgb)/0.6)] transition-[scale] duration-[var(--dur-fast)] hover:scale-105 active:scale-95"
       >

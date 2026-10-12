@@ -1,6 +1,7 @@
 # Teamy: marketing site (teamy.in)
 
-Site for Teamy, a Jaipur web studio that designs, builds and runs online stores for Indian D2C brands.
+Site for Teamy, a web team in Patel Nagar, New Delhi, that designs and builds custom-coded websites for
+India's D2C brands (450+ projects in 5+ years, including brands featured on Shark Tank India).
 Next.js (App Router) + TypeScript + Tailwind CSS v4, mobile-first, fully static, deploys to Vercel.
 
 ## Run locally
@@ -19,29 +20,29 @@ Requires Node 20+.
 
 ## Edit content: `content/site.ts`
 
-All copy, prices, numbers, contact details and links live in **`content/site.ts`**. Service and landing
-page copy lives in **`content/pages.ts`**.
+All copy, prices, numbers, contact details and links live in **`content/site.ts`**. Clients (the logo
+wall, the Shark Tank India band, "Our work" and the videos) live in **`content/projects.ts`**,
+testimonials in **`content/testimonials.ts`**, and service and landing page copy in **`content/pages.ts`**.
 
 | What | Key |
 | --- | --- |
-| WhatsApp number, email, address, hours | `contact` |
+| WhatsApp number (every contact button uses it) | `WHATSAPP_NUMBER` constant at the top |
+| The message every contact button pre-fills | `WHATSAPP_MESSAGE` constant at the top |
+| Email, address (Patel Nagar, New Delhi), hours | `contact` |
+| 450+ projects, 5+ years, 4.9/5 rating, 97% satisfaction, reviews link | `facts` |
 | Social links (empty = hidden) | `socials` |
-| Prefilled WhatsApp messages | `whatsappMessages` |
-| "Live in X days" (used across the site) | `launchDays` constant at the top |
+| "Live in X days" for starter stores | `launchDays` constant at the top |
 | "We reply within X hours" | `responseHours` |
-| Hero headline, sub line, trust ticks | `hero` |
+| Hero headline, sub line, the two client sites shown | `hero` (`showcase` = project slugs) |
 | "Idea → live in 7 days" scroll story | `story` |
-| "Why Teamy" benefit cards | `benefits` |
 | "What we build" bento tiles (each links to `/services/<slug>`) | `services` |
-| The single plan and add-ons | `plan`, `addOns` |
-| Process steps | `process` |
-| "Stores we've built" (screenshots + videos) | `portfolio` |
+| Pricing: starter store ("from ₹8,999"), custom website (quoted), add-ons | `plan`, `customPlan`, `addOns` |
+| "How we work" steps (Discover → Design → Develop → Launch) | `process` |
 | Trust numbers (count up on scroll) | `stats` |
 | "Works with" logos (`verified: false` = hidden) | `integrations` |
-| About story and team cards | `about` |
+| About Teamy: eyebrow, heading, body, four highlights | `about` |
 | Home FAQ (also emitted as FAQPage schema) | `faqs` |
-| Shark Tank India block | `sharkTank` |
-| Testimonials (shown only with `permissionGiven: true`) | `testimonials` |
+| Shark Tank India band (brands come from `projects.ts` → `sharkTankSeason`) | `sharkTank` |
 
 **Placeholders.** Any value starting with `TODO` (or empty) counts as unfilled: it's hidden on the live
 site, and in `npm run dev` it shows as a dashed placeholder box so you can see what's missing. On the
@@ -51,34 +52,55 @@ Festival dates, colours, motifs and greetings live in **`config/festive.ts`** (s
 
 ## Before you go live (checklist)
 
-- [ ] Fill every `TODO` in `content/site.ts` (address, PIN, socials, team, stores launched, haat testimonial)
+- [ ] Fill every `TODO` in `content/site.ts` (full address and PIN, socials, Google reviews link)
+- [ ] Add real, approved quotes in `content/testimonials.ts`, and any other clients in `content/projects.ts`
+- [ ] Make sure every client in `content/projects.ts` is happy to be shown (logo and site)
 - [ ] Confirm everything marked `⚠️ CONFIRM` (opening hours, `launchDays`, `responseHours`, Razorpay/Shiprocket)
 - [ ] Upload the assets listed below
 - [ ] Fill the `TODO` terms in `/privacy`, `/terms` and `/refund-policy`, then **have a lawyer review all three**
 - [ ] Connect `teamy.in` to Vercel, then set `PRIMARY_DOMAIN_LIVE=true` (see "Domain")
 - [ ] Festival dates in `config/festive.ts` for each new year
 
-### Assets to upload
+### Optional assets
 
 | File | What |
 | --- | --- |
-| `public/portfolio/ganges-mobile.webp`, `haat-mobile.webp` | phone screenshots, portrait ~9:19.5 (e.g. 780×1688) |
-| `public/videos/ganges.mp4`, `haat.mp4` | 9:16 screen recordings, homepage → product → checkout, ≤ 3 MB each, no audio |
-| `public/videos/ganges.webp`, `haat.webp` | poster frames for the videos (same 9:16 size) |
-| `public/team/member-1.webp`, `member-2.webp` | square team photos (≥ 400×400) |
+| `public/testimonials/<name>.webp` | square client photos; set `photo` in `content/testimonials.ts` (initials show otherwise) |
+| `public/logos/clients/<slug>.webp` | an official logo file, to replace one taken from the client's site |
 | `public/logos/upi.svg`, `rupay.svg`, `shiprocket.svg` | official logos (these show as text wordmarks until added; then set `logo` in `integrations`) |
 
-Missing images show a skeleton; the videos section stays hidden until the files exist.
-
-The hero phone shows an **invented demo brand** ("kesar threads"), labelled as such. Add only real
-testimonials, with the founder's permission. The Shark Tank block makes a general claim and carries a
-non-affiliation note; don't strengthen it.
+Screenshots, logos and videos of client sites are generated (see "Client assets"). The 7-day story uses
+an **invented demo brand** ("kesar threads"), labelled as such. Add only real testimonials, with the
+founder's permission. The Shark Tank India band carries a "not affiliated with the show" line; keep it.
 
 ## Leads (WhatsApp)
 
-There's no backend. Every CTA is a `wa.me` link built by `buildWhatsAppLink()` in `lib/whatsapp.ts`. The
-contact form formats the visitor's details into a WhatsApp message and opens WhatsApp (same tab on
-phones, new tab on desktop). Nothing is stored on a server.
+There's no backend. Every contact button and link is a `wa.me` link to `WHATSAPP_NUMBER`, pre-filled with
+`WHATSAPP_MESSAGE` and opened in a new tab (`components/ui/WhatsAppCTA.tsx`). The contact form adds the
+visitor's name, project type and message below it and opens WhatsApp (same tab on phones, new tab on
+desktop). Nothing is stored on a server.
+
+## Client assets: screenshots, logos and videos
+
+Everything about a client comes from its live website, so adding a client is: add an entry to
+`content/projects.ts`, then run the capture scripts (needs Chromium for Playwright once:
+`npx playwright install chromium`).
+
+```bash
+npm run capture:all               # all three below, for every live client
+npm run capture:work -- zoff      # any script, for just the given slugs
+```
+
+| Script | Writes | Used by |
+| --- | --- | --- |
+| `capture:work` | `public/work/<slug>.webp` (full homepage), `-600`, `-top` (first desktop screen), `-mobile` (first phone screen), `manifest.json` | "Our work" cards (scroll on hover / on screen), hero frames |
+| `capture:logos` | `public/logos/clients/<slug>.webp` + `manifest.json` (size, light/dark tone) | logo wall, Shark Tank India band |
+| `capture:videos` | `public/videos/<slug>.mp4` + poster (540×960) and `media/social/<slug>.mp4` (720×1280, with a Teamy caption) | "Our websites, in motion"; the `media/social` clips are ready for Instagram Reels / YouTube Shorts |
+
+The scripts scroll each site so lazy content loads, and hide pop-ups, cookie bars and chat bubbles.
+Videos are rendered frame by frame, so the scroll is smooth on any machine. Check the results after a
+run: a pop-up the scripts didn't catch may need a re-run. Clients with `live: false` (an offline site)
+appear in the logo wall only; their logo is added by hand.
 
 ## Analytics
 
@@ -190,23 +212,27 @@ would trigger an extra 84KB download. To rebuild (e.g. to add a character), see
 ## Project map
 
 ```
-content/site.ts             ← edit me (content, price, contact, portfolio, FAQ)
+content/site.ts             ← edit me (content, price, contact, WhatsApp, FAQ)
+content/projects.ts         ← edit me (clients: logo wall, Shark Tank band, Our work, videos)
+content/testimonials.ts     ← edit me (client quotes)
 content/pages.ts            ← edit me (service + landing page copy)
 config/festive.ts           ← edit me (festival dates, theme colours)
 app/                        layout (fonts, SEO), home, services/[slug], landing pages, legal pages,
                             OG images, sitemap, robots, manifest, 404
-components/sections/        Header, Hero, WorksWith, Stats, Story, Portfolio, Videos, Benefits, Services,
-                            Process, SharkTank, Testimonials, Pricing, About, Faq, Contact, Footer,
+components/sections/        Header, Hero, ClientLogos, SharkTank, Stats, Work, Videos, Services, Story,
+                            Process, Testimonials, Pricing, WorksWith, About, Faq, Contact, Footer,
                             FloatingWhatsApp
 components/pages/           LandingTemplate (service + landing pages)
 components/seo/             JsonLd
 components/mockup/          Storefront (code-built illustrative store used by hero + story)
 components/icons/           AnimatedIcons (bento)
 components/motion/          MotionRuntime (lazy loader)
-components/ui/              Button, Reveal, MaskWords, WhatsAppCTA, PhoneFrame, TodoSlot, BackToTop, icons
+components/ui/              Button, Reveal, MaskWords, WhatsAppCTA, Carousel, ClientLogo, PhoneFrame, TodoSlot, BackToTop, icons
 components/analytics/       GA4 + Meta Pixel loader
 lib/                        whatsapp links, schema, metadata, OG renderer, analytics, festive resolver, motion
 public/logos/               "Works with" logos (Simple Icons, CC0)
 tests/                      Vitest unit tests
 scripts/build-fonts.py      font subsetting
+scripts/capture-*.mjs       client screenshots, logos and videos (npm run capture:all)
+media/social/               client videos with a Teamy caption, for Reels / Shorts (not deployed)
 ```

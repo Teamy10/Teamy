@@ -40,7 +40,7 @@ export function WorksWith() {
   );
 
   return (
-    <section aria-labelledby="works-with-title" data-loop className="marquee relative border-y border-line">
+    <section aria-labelledby="works-with-title" data-loop className="marquee relative border-y border-line max-lg:cv-auto max-lg:[--cv-h:160px]">
       <div className="flex items-center">
         <h2 id="works-with-title" className="label-mono shrink-0 pl-5 pr-2 text-fg-3 md:pl-8">
           Works with

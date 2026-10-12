@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Footer, addressLine } from "@/components/sections/Footer";
 import { Faq } from "@/components/sections/Faq";
 import { Header } from "@/components/sections/Header";
-import { PortfolioCard } from "@/components/sections/Portfolio";
 import { Process } from "@/components/sections/Process";
+import { WorkCard } from "@/components/sections/Work";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buttonClass } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/ui/Icons";
@@ -12,6 +12,7 @@ import { MaskWords } from "@/components/ui/MaskWords";
 import { Reveal } from "@/components/ui/Reveal";
 import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 import { pageBySlug, type LandingPage } from "@/content/pages";
+import { projects } from "@/content/projects";
 import { siteConfig } from "@/content/site";
 import { formatINR } from "@/lib/format";
 import { breadcrumbSchema, localBusinessSchema, serviceSchema } from "@/lib/schema";
@@ -23,9 +24,9 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
     ...(page.kind === "service" ? [{ name: "Services", path: "/#services" }] : []),
     { name: page.name, path: page.path },
   ];
-  const portfolio = siteConfig.portfolio.find((p) => p.name === page.portfolio);
+  const portfolio = projects.find((p) => p.name === page.portfolio);
   const related = page.related.map(pageBySlug).filter((p): p is LandingPage => !!p);
-  const isLocal = page.slug === "ecommerce-website-developer-jaipur";
+  const isLocal = page.slug === "ecommerce-website-developer-delhi";
   const { contact } = siteConfig;
 
   return (
@@ -46,7 +47,7 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
                   <li key={c.path} className="flex items-center gap-1.5">
                     {i < crumbs.length - 1 ? (
                       <>
-                        <Link href={c.path} className="inline-flex min-h-11 items-center hover:text-fg">
+                        <Link href={c.path} prefetch={c.path === "/" ? false : undefined} className="inline-flex min-h-11 items-center hover:text-fg">
                           {c.name}
                         </Link>
                         <ChevronRight className="size-3.5" aria-hidden="true" />
@@ -73,15 +74,13 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
                 <div className="hero-rise mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7" style={{ ["--d" as string]: "0.5s" }}>
                   <WhatsAppCTA
                     source={`page_${page.slug}`}
-                    message="service"
-                    vars={{ service: page.name.toLowerCase() }}
                     data-magnetic=""
                     className={buttonClass("primary", "w-full sm:w-auto", "lg")}
                   >
                     <WhatsAppIcon className="size-5" /> Talk to us on WhatsApp
                   </WhatsAppCTA>
-                  <Link href="/#pricing" className={buttonClass("ghost")}>
-                    {formatINR(siteConfig.plan.price)} one-time, see what&apos;s included <ArrowRight className="size-4" aria-hidden="true" />
+                  <Link href="/#pricing" prefetch={false} className={buttonClass("ghost")}>
+                    From {formatINR(siteConfig.plan.price)}, see what&apos;s included <ArrowRight className="size-4" aria-hidden="true" />
                   </Link>
                 </div>
               </div>
@@ -90,7 +89,7 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
         </section>
 
         {/* Benefits */}
-        <section aria-labelledby="benefits-title" className="pb-8">
+        <section aria-labelledby="benefits-title" className="cv-auto pb-8 [--cv-h:400px]">
           <div className="container-page">
             <h2 id="benefits-title" className="sr-only">
               What you get
@@ -114,7 +113,7 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
 
         {/* Comparison (Shopify page) */}
         {page.comparison && (
-          <section aria-labelledby="compare-title" className="section-pad">
+          <section aria-labelledby="compare-title" className="section-pad cv-auto">
             <div className="container-page">
               <h2 id="compare-title" className="display-m max-w-3xl">
                 {page.comparison.caption}
@@ -152,7 +151,7 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
         )}
 
         {/* Body copy */}
-        <section aria-label={`More about ${page.name.toLowerCase()}`} className="section-pad">
+        <section aria-label={`More about ${page.name.toLowerCase()}`} className="section-pad cv-auto">
           <div className="container-page grid gap-x-8 gap-y-16 lg:grid-cols-12">
             {page.sections.map((sec, i) => (
               <Reveal key={sec.heading} delay={(i % 2) * 0.06} className="lg:col-span-6 [&:nth-child(odd)]:lg:col-start-1">
@@ -171,16 +170,16 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
 
         <Process />
 
-        {/* Local details (Jaipur page): NAP identical to the footer */}
+        {/* Local details (Delhi page): NAP identical to the footer */}
         {isLocal && (
-          <section aria-labelledby="visit-title" className="section-pad">
+          <section aria-labelledby="visit-title" className="section-pad cv-auto">
             <div className="container-page">
               <Reveal className="card grid gap-8 rounded-[28px] p-7 sm:p-10 md:grid-cols-2">
                 <div>
                   <h2 id="visit-title" className="display-m">
-                    Teamy, Jaipur
+                    Teamy, New Delhi
                   </h2>
-                  <p className="mt-3 text-fg-2">Serving D2C brands across India, from Jaipur.</p>
+                  <p className="mt-3 text-fg-2">Serving D2C brands across India, from Patel Nagar.</p>
                 </div>
                 <address className="space-y-3 not-italic text-fg">
                   <p className="flex items-start gap-3">
@@ -206,13 +205,13 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
 
         {/* A real store we've built */}
         {portfolio && (
-          <section aria-labelledby="example-title" className="section-pad">
+          <section aria-labelledby="example-title" className="section-pad cv-auto">
             <div className="container-page">
               <h2 id="example-title" className="display-m">
                 A store we&apos;ve built
               </h2>
-              <Reveal className="mt-10">
-                <PortfolioCard item={portfolio} />
+              <Reveal className="mt-10 max-w-3xl">
+                <WorkCard project={portfolio} />
               </Reveal>
             </div>
           </section>
@@ -221,7 +220,7 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
         <Faq faqs={page.faqs} id="page-faq" title={`${page.name}: questions`} emphasis="questions" />
 
         {/* Related pages + final CTA */}
-        <section aria-labelledby="related-title" className="section-pad">
+        <section aria-labelledby="related-title" className="section-pad cv-auto">
           <div className="container-page grid gap-12 lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-5">
               <h2 id="related-title" className="display-m">
@@ -239,9 +238,9 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
               </ul>
             </div>
             <Reveal className="card rounded-[28px] p-7 sm:p-10 lg:col-span-6 lg:col-start-7">
-              <h2 className="display-m">Get your own store, live in about {siteConfig.launchDays} days.</h2>
+              <h2 className="display-m">Let&apos;s build your brand&apos;s website.</h2>
               <ul className="mt-6 space-y-2.5 text-fg-2">
-                {["A free preview before you pay", `${formatINR(siteConfig.plan.price)} one-time, everything included`, "You own the domain, code and data"].map((t) => (
+                {[`${siteConfig.facts.projects}+ projects, including Shark Tank India brands`, `Starter stores from ${formatINR(siteConfig.plan.price)}, one-time`, "You own the domain, code and data"].map((t) => (
                   <li key={t} className="flex gap-3">
                     <Check className="mt-1 size-4 shrink-0 text-accent" strokeWidth={3} aria-hidden="true" /> {t}
                   </li>
@@ -249,11 +248,10 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
               </ul>
               <WhatsAppCTA
                 source={`page_${page.slug}_footer`}
-                message="preview"
                 data-magnetic=""
                 className={buttonClass("primary", "mt-8 w-full sm:w-auto", "lg")}
               >
-                <WhatsAppIcon className="size-5" /> Get a free preview
+                <WhatsAppIcon className="size-5" /> Get a free quote
               </WhatsAppCTA>
             </Reveal>
           </div>

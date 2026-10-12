@@ -42,8 +42,8 @@ const mono = localFont({
 });
 
 // Home page title (≤ 60 chars) and description (≤ 155 chars). Other pages set their own via lib/metadata.ts.
-const title = `${siteConfig.brand} | Online Store for D2C Brands, Built in ${siteConfig.launchDays} Days`;
-const description = `Teamy designs and builds online stores for Indian D2C brands: UPI, cards and COD, WhatsApp order updates. ${formatINR(siteConfig.plan.price)} one-time, live in ${siteConfig.launchDays} days.`;
+const title = `${siteConfig.brand} | Custom Websites for India's D2C Brands`;
+const description = `Custom-coded websites for D2C brands, including Shark Tank India brands. ${siteConfig.facts.projects}+ projects, rated ${siteConfig.facts.rating}/5. Based in Delhi. Starter stores from ${formatINR(siteConfig.plan.price)}.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),

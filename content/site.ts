@@ -1,6 +1,6 @@
 /**
- * Teamy site content — the ONE file to edit for copy, prices, contact details, portfolio,
- * testimonials, stats, team, FAQs and socials. Components only read from here.
+ * Teamy site content: copy, prices, contact details, stats, FAQs and socials. Components only
+ * read from here. Projects live in content/projects.ts, testimonials in content/testimonials.ts.
  *
  * Placeholders: any string starting with "TODO" (and any empty URL) is treated as "not filled in".
  * Components hide unfilled items in production and show a dashed placeholder in `npm run dev`,
@@ -42,8 +42,6 @@ export type StoryDay = { title: string; line: string; piece: StoryPiece };
 export type ServiceIcon = "storefront" | "checkout" | "whatsapp" | "cart" | "analytics" | "drops";
 export type ServiceTile = { icon: ServiceIcon; stage: "Launch" | "Sell" | "Grow"; title: string; line: string; slug: string };
 
-export type Benefit = { icon: IconName; title: string; line: string };
-
 
 /** The single plan. Its price is the only price shown anywhere on the site. */
 export type Plan = {
@@ -62,18 +60,6 @@ export type AddOn = {
 
 export type Step = { title: string; line: string };
 
-export type PortfolioItem = {
-  name: string;
-  category: string;
-  url: string;
-  description: string;
-  tags: string[];
-  /** Phone-size screenshot under /public (portrait ~9:19.5). A skeleton shows until the file exists. */
-  image: string;
-  /** Optional 9:16 clip for the "See our stores in action" section. */
-  video?: { src: string; poster: string };
-};
-
 export type Stat = {
   /** Number to count up to. A "TODO…" string hides the stat. */
   value: number | string;
@@ -81,6 +67,8 @@ export type Stat = {
   suffix?: string;
   /** Format the number as Indian rupees (₹8,999). */
   inr?: boolean;
+  /** Decimal places to show (e.g. 1 for a 4.9 rating). */
+  decimals?: number;
   label: string;
 };
 
@@ -92,28 +80,21 @@ export type Integration = {
   verified: boolean;
 };
 
-export type TeamMember = { name: string; role: string; line: string; photo?: string };
+/** About Us highlight icons (lucide). */
+export type HighlightIcon = "responsive" | "code" | "clock" | "key";
+export type AboutHighlight = { icon: HighlightIcon; label: string; line: string };
 
 export type Faq = { q: string; a: string };
 
-export type Testimonial = {
-  name: string;
-  role: string;
-  brand: string;
-  /** The founder's words. If you edit them, get the founder's OK on the new wording. */
-  quote: string;
-  /** Only if the founder actually gave a rating (1–5). */
-  rating?: 1 | 2 | 3 | 4 | 5;
-  /** Path under /public. Initials are shown when missing. */
-  photo?: string;
-  link?: string;
-  /** Must be true (written permission) or the entry is hidden. */
-  permissionGiven: boolean;
-  /** Show as the large featured card (the first featured entry wins). */
-  featured?: boolean;
-};
+/**
+ * Teamy's WhatsApp number. Every contact button and link on the site opens a chat with this
+ * number (wa.me), pre-filled with WHATSAPP_MESSAGE.
+ */
+export const WHATSAPP_NUMBER = "+91 95096 12425";
+/** The message every contact button pre-fills. The contact form adds the visitor's details below it. */
+export const WHATSAPP_MESSAGE = "Hi Teamy! I'd like to discuss a website project.";
 
-/** "Live in X days" — used in the hero, benefits, plans and process. */
+/** "Live in X days" for starter stores — used in the story, plans and process. */
 const launchDays = 7; // ⚠️ CONFIRM
 
 export const siteConfig = {
@@ -125,18 +106,20 @@ export const siteConfig = {
    */
   url: (process.env.NEXT_PUBLIC_SITE_URL || "https://teamy.in").replace(/\/$/, ""),
   /** Studio location, used in copy and the local page. */
-  city: "Jaipur",
+  city: "New Delhi",
 
   contact: {
-    /** Country code + number, digits only (used for wa.me links). */
-    whatsappNumber: "919509612425",
-    whatsappDisplay: "+91 95096 12425",
+    /** Digits only, for wa.me links. Edit WHATSAPP_NUMBER above, not this. */
+    whatsappNumber: WHATSAPP_NUMBER.replace(/\D/g, ""),
+    whatsappDisplay: WHATSAPP_NUMBER,
     phone: "+91-9509612425",
     email: "hello@teamy.in", // ⚠️ CONFIRM mailbox exists
+    /** Short location for copy ("Based in Patel Nagar, New Delhi"). */
+    area: "Patel Nagar",
     address: {
-      street: "TODO: street address",
-      locality: "Jaipur",
-      region: "Rajasthan",
+      street: "Patel Nagar", // TODO: full street address (building, road), then keep "area" short
+      locality: "New Delhi",
+      region: "Delhi",
       postalCode: "TODO: PIN code",
       country: "IN",
       countryName: "India",
@@ -154,43 +137,38 @@ export const siteConfig = {
     facebook: "", // TODO: Facebook URL
   } as Record<"instagram" | "youtube" | "linkedin" | "facebook", string>,
 
-  /** Pre-filled WhatsApp messages, one per call to action. */
-  whatsappMessages: {
-    default: "Hi Teamy! I'd like to talk about a store for my brand.",
-    bookCall: "Hi Teamy! I'd like to book a free call about an online store for my brand.",
-    preview: "Hi Teamy! I'd like a free store preview for my brand.",
-    ownStore: "Hi Teamy! I'd like to get my own store for my D2C brand.",
-    talk: "Hi Teamy! I have a question about building my online store.",
-    pricing: "Hi Teamy! I'm interested in the ₹8,999 store. Can we book a free call?",
-    /** Used on service pages: {service} is replaced with the page name. */
-    service: "Hi Teamy! I'm interested in {service} for my online store.",
-  },
-
   launchDays,
+  /** Business facts, used in the hero, stats, about and meta tags. */
+  facts: {
+    projects: 450,
+    years: 5,
+    rating: 4.9,
+    satisfaction: 97,
+    /** Link to the public reviews behind the rating (e.g. your Google Business Profile). Shown when filled. */
+    reviewsUrl: "", // TODO: Google reviews link
+  },
   /** "We reply within X hours." */
   responseHours: 4, // ⚠️ CONFIRM
 
-  /**
-   * Audience the site speaks to. D2C only for now; founders and other businesses
-   * can get their own headline set and services later.
-   */
+  /** Audience the site speaks to. */
   audience: "D2C brands",
 
   hero: {
     /** Two lines, revealed word by word with a mask wipe on load. */
     lines: [
-      { text: "Stores that sell", emphasis: "sell", heroWord: true },
-      { text: "while you sleep.", emphasis: "sleep." },
+      { text: "The web team behind", emphasis: "behind" },
+      { text: "India's D2C brands.", emphasis: "D2C", heroWord: true },
     ] satisfies HeroLine[] as HeroLine[],
-    sub: "We design, build and run your online store, so you can get back to making the product. You never manage a developer.",
-    trust: [`Live in ${launchDays} days`, "UPI, cards & COD", "You own everything"],
+    sub: "Custom-coded websites that make brands look as big as their ambition, from first launches to brands seen on Shark Tank India.",
+    /** The two client sites shown in the hero (slugs from content/projects.ts): desktop frame, then phone. */
+    showcase: ["zoff", "truediamond"],
   },
 
   /** "Idea → live in 7 days": the pinned scroll story. One entry per day, in order. */
   story: {
     title: `Idea → live in ${launchDays} days.`,
     emphasis: "live",
-    sub: "A typical week with Teamy. Each day adds a piece of your store, until it's live and taking orders.",
+    sub: "How a starter store comes together with Teamy. Each day adds a piece, until it's live and taking orders.",
     days: [
       { title: "Free call & domain", line: "We learn your brand, then connect a domain in your name.", piece: "domain" },
       { title: "Storefront design", line: "Your colours, photos and vibe, laid out mobile-first.", piece: "storefront" },
@@ -201,13 +179,6 @@ export const siteConfig = {
       { title: "Live", line: "We test every flow with you, then switch it on.", piece: "live" },
     ] satisfies StoryDay[] as StoryDay[],
   },
-
-  benefits: [
-    { icon: "rocket", title: `Live in ${launchDays} days`, line: "From first call to first order in about a week. No hunting for developers." },
-    { icon: "cart", title: "Built to convert", line: "Fast, mobile-first pages and a checkout with UPI, cards and COD." },
-    { icon: "shield", title: "We own the tech", line: "Hosting, updates, fixes and integrations. Your web team, one WhatsApp away." },
-    { icon: "key", title: "You own everything", line: "Your domain, your code, your customer data. Always yours to take." },
-  ] satisfies Benefit[] as Benefit[],
 
   /** "What we build for D2C brands": six bento tiles covering every Launch / Sell / Grow item. */
   services: [
@@ -220,9 +191,9 @@ export const siteConfig = {
   ] satisfies ServiceTile[] as ServiceTile[],
 
   plan: {
-    name: "Everything you need to launch and grow",
+    name: "Starter store",
     price: 8999,
-    forWho: "One price, one team, every feature. For brands that want to sell without managing developers.",
+    forWho: `For brands launching their first online store. Live in about ${launchDays} days.`,
     // Every feature from the old Launch + Growth plans, de-duplicated, in the order a store comes together.
     features: [
       "We handle all the tech, end to end",
@@ -237,7 +208,21 @@ export const siteConfig = {
     ],
   } satisfies Plan as Plan,
 
-  /** Listed beneath the plan. Prices are intentionally not shown (the plan price is the only one). */
+  /** The second pricing card: bigger builds, quoted after a free call. */
+  customPlan: {
+    name: "Custom website",
+    forWho: "For growing brands that need more: custom design, integrations and scale.",
+    features: [
+      "Fully custom design and development",
+      "Large catalogues, filters and search",
+      "Integrations with your ERP, CRM or marketplaces",
+      "International shipping and multi-currency",
+      "Speed, SEO and conversion work",
+      "A dedicated team after launch",
+    ],
+  },
+
+  /** Listed beneath the plans, quoted for each brand. */
   addOns: [
     { icon: "boxes", name: "Catalogue upload", line: "We add and tidy your products, variants and photos." },
     { icon: "search", name: "SEO setup", line: "Search-friendly pages, titles and a sitemap that Google likes." },
@@ -246,44 +231,21 @@ export const siteConfig = {
     { icon: "wrench", name: "Care plan", line: "Monthly updates, festive banners and fixes." },
   ] satisfies AddOn[] as AddOn[],
 
+  /** "How we work": four steps, Discover → Design → Develop → Launch. */
   process: [
-    { title: "Free call", line: "20 minutes on your brand, products and where you sell today." },
-    { title: "Free preview", line: "We design a preview of your store using your real products." },
-    { title: "Build & launch", line: `Payments, COD, shipping and WhatsApp, set up and tested by us. Live in ${launchDays} days.` },
-    { title: "Grow together", line: "We stay on for drops, festive sales and new features." },
+    { title: "Discover", line: "A free call about your brand, your products and where you sell today." },
+    { title: "Design", line: "A free preview of your store with your real products, before you pay anything." },
+    { title: "Develop", line: "We build it: payments, COD, shipping and WhatsApp updates, set up and tested by us." },
+    { title: "Launch", line: `Live on your domain in about ${launchDays} days. We stay on for drops, fixes and festive sales.` },
   ] satisfies Step[] as Step[],
 
-  /** "Stores we've built". Adding a store = adding an object here. */
-  portfolio: [
-    {
-      name: "Ganges",
-      category: "Cross-border e-commerce",
-      url: "https://ganges.world/",
-      description:
-        "A platform that lets shoppers worldwide buy from Indian stores and artisans, with international shipping, a sourcing-agent service and bulk B2B ordering.",
-      tags: ["International shipping", "Sourcing requests", "WhatsApp support"],
-      image: "/portfolio/ganges-mobile.webp",
-      video: { src: "/videos/ganges.mp4", poster: "/videos/ganges.webp" },
-    },
-    {
-      name: "haat",
-      category: "Global marketplace",
-      url: "https://haatglobal.com/",
-      description:
-        "A premium marketplace for products made in India, with verified sellers, multi-currency pricing (USD, EUR, GBP, AED, CAD, AUD, SGD, INR) and shipping worldwide.",
-      tags: ["Multi-currency", "Seller onboarding", "Editorial stories"],
-      image: "/portfolio/haat-mobile.webp",
-      video: { src: "/videos/haat.mp4", poster: "/videos/haat.webp" },
-    },
-  ] satisfies PortfolioItem[] as PortfolioItem[],
 
-  /** Trust stats. Only true, verifiable figures. A "TODO…" value hides the stat. */
+  /** Trust stats (the owner's figures). A "TODO…" value hides the stat. */
   stats: [
-    { value: launchDays, suffix: " days", label: "average launch time" },
-    { value: 8999, inr: true, label: "one-time, no compulsory monthly fees" },
-    { value: 4, prefix: "< ", suffix: " hrs", label: "WhatsApp reply time" },
-    { value: 100, suffix: "%", label: "ownership of your domain, code and data" },
-    { value: "TODO: number of stores launched", label: "stores launched" },
+    { value: 450, suffix: "+", label: "websites and projects delivered" },
+    { value: 5, suffix: "+", label: "years building for D2C brands" },
+    { value: 4.9, decimals: 1, suffix: "/5", label: "average client rating" },
+    { value: 97, suffix: "%", label: "client satisfaction" },
   ] satisfies Stat[] as Stat[],
 
   /**
@@ -305,17 +267,22 @@ export const siteConfig = {
     { name: "Shiprocket", logo: "/logos/shiprocket.svg", verified: false }, // TODO: confirm shipping partner
   ] satisfies Integration[] as Integration[],
 
-  /** "The people behind Teamy". */
+
+  /** "About Teamy" section. */
   about: {
-    title: "The people behind Teamy.",
-    story: [
-      "Teamy is a small team in Jaipur that designs, builds and runs online stores for Indian D2C brands.",
-      "We started Teamy so founders could have a store of their own without hiring, briefing and chasing developers. You talk to the same few people on WhatsApp from the first call to your thousandth order, and we handle the tech in between.",
+    eyebrow: "About Teamy",
+    title: "Five years of building for India's D2C brands.",
+    emphasis: "D2C brands.",
+    body: [
+      "Teamy is a team of designers and developers in Patel Nagar, New Delhi. We've delivered 450+ websites and projects, for first-time founders and for brands featured on Shark Tank India.",
+      "Every site is designed and coded around the brand it's for: mobile-first, fast and built to sell. And you talk to the same people on WhatsApp from the first call to launch day, and long after it.",
     ],
-    team: [
-      { name: "TODO: founder name", role: "TODO: role", line: "TODO: one line about them", photo: "/team/member-1.webp" },
-      { name: "TODO: team member name", role: "TODO: role", line: "TODO: one line about them", photo: "/team/member-2.webp" },
-    ] satisfies TeamMember[] as TeamMember[],
+    highlights: [
+      { icon: "code", label: "Custom-coded, never a template", line: "Designed and built around your brand and your customers." },
+      { icon: "responsive", label: "Mobile-first and fast", line: "Pages that load quickly on everyday phones and networks." },
+      { icon: "clock", label: "Launch dates we keep", line: `A clear plan from day one. Starter stores go live in about ${launchDays} days.` },
+      { icon: "key", label: "You own everything", line: "Your domain, code and customer data, in your name." },
+    ] satisfies AboutHighlight[] as AboutHighlight[],
   },
 
   /** Home page FAQ (also emitted as FAQPage schema). Answers containing "TODO" are hidden in production. */
@@ -325,7 +292,11 @@ export const siteConfig = {
       a: "No. We build and set up your store for you, so you don't need a Shopify subscription or a stack of apps. If you already run a Shopify store, we can talk about moving it over.",
     },
     {
-      q: "What happens after the 7 days?",
+      q: "Have you worked with brands like mine?",
+      a: "Probably. We've delivered 450+ websites and projects across fashion, jewellery, food, home décor, wellness and more, including brands featured on Shark Tank India. See our work above, or ask us on WhatsApp for examples in your category.",
+    },
+    {
+      q: "What happens after launch?",
       a: "Your store is live on your domain and taking orders. We stay on WhatsApp for questions, small fixes and help with your first drops. For ongoing work like new banners and festive sales, there's an optional monthly care plan.",
     },
     {
@@ -333,8 +304,8 @@ export const siteConfig = {
       a: "You do. The domain is registered in your name, the payment gateway is in your business name, and your customer data is yours to export. You get access to your store's code and logins.",
     },
     {
-      q: "Are there monthly fees?",
-      a: "The build is ₹8,999, one-time. There's no compulsory monthly fee from Teamy. You pay your own domain renewal and payment-gateway charges directly, and you can choose the optional care plan if you want us to keep updating the store.",
+      q: "How much does a website cost?",
+      a: "Starter stores start at ₹8,999, one-time. Bigger or custom builds are quoted after a free call, once we know what you need. There's no compulsory monthly fee from Teamy: you pay your own domain renewal and payment-gateway charges directly, and an optional care plan is there if you want us to keep updating the site.",
     },
     {
       q: "Where is the store hosted, and what does hosting cost?",
@@ -362,44 +333,13 @@ export const siteConfig = {
     },
   ] satisfies Faq[] as Faq[],
 
-
-  /**
-   * Shark Tank India block. Words only: no logo, clips or styling that implies endorsement.
-   * Keep claims general and true. (Not: "they sell only from their website".)
-   */
+  /** Shark Tank India band. Brands come from content/projects.ts (sharkTankSeason). */
   sharkTank: {
-    title: "Most D2C brands on Shark Tank India sell from their own website.",
-    highlight: "their own website.",
-    sub: "Not just marketplace listings. Their own store tells them their margin, their repeat rate and who every customer is. You can have exactly that.",
-    questions: ["What's your margin?", "What's your repeat rate?", "How many customers can you reach directly?"],
-    punchline: "Your own website answers all three. A marketplace listing doesn't.",
-    disclaimer: "Teamy is not affiliated with, or endorsed by, Shark Tank India or its broadcasters.",
+    title: "Trusted by brands from Shark Tank India.",
+    highlight: "Shark Tank India.",
+    sub: "Founders who pitched to the Sharks trust us with the website their customers see first. Yours could be next.",
+    disclaimer: "Shark Tank India is a trademark of Sony Pictures Networks India. Teamy is not affiliated with, or endorsed by, the show.",
   },
-
-  /** Real testimonials only. Hidden unless permissionGiven is true. */
-  testimonials: [
-    {
-      name: "Jay Agrawal",
-      role: "Founder",
-      brand: "Ganges",
-      // ⚠️ CONFIRM: reworded from Jay's original (brand name and phrasing). Get his OK on this text.
-      quote:
-        "Teamy turned our idea into a fast, high-converting store in record time. Their clarity, speed of execution and attention to every step of the buying journey made a real difference to our early traction.",
-      rating: 5, // ⚠️ CONFIRM he gave 5 stars
-      link: "https://ganges.world/",
-      permissionGiven: true, // ⚠️ CONFIRM written permission
-      featured: true,
-    },
-    {
-      // TODO: haat testimonial. Paste the founder's own words, name and role, then set permissionGiven: true.
-      name: "TODO: haat founder name",
-      role: "TODO: role",
-      brand: "haat",
-      quote: "TODO: haat founder's quote (their exact words)",
-      link: "https://haatglobal.com/",
-      permissionGiven: false,
-    },
-  ] satisfies Testimonial[] as Testimonial[],
 } as const;
 
 export type SiteConfig = typeof siteConfig;

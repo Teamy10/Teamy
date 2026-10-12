@@ -23,7 +23,7 @@ const q = <T extends Element = HTMLElement>(sel: string, root: ParentNode = docu
 const qa = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => Array.from(root.querySelectorAll<T>(sel));
 const expoOut = (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
 
-export function initMotion(): () => void {
+export function initMotion(opts: { pendingAnchor?: string } = {}): () => void {
   gsap.registerPlugin(ScrollTrigger);
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -54,18 +54,17 @@ export function initMotion(): () => void {
 
   /* ---------- In-page anchors: smooth, header-aware, and focus moves to the target ---------- */
   const headerOffset = () => (q("header")?.getBoundingClientRect().height ?? 72) + 12;
-  on(document, "click", (e: MouseEvent) => {
-    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href^="#"], a[href^="/#"]');
-    if (!a) return;
-    const raw = a.getAttribute("href") ?? "";
+  /** The in-page target of an href ("#x", or "/#x" while on the home page), or null. */
+  const anchorTarget = (raw: string) => {
+    if (!raw.startsWith("#") && !raw.startsWith("/#")) return null;
     // "/#x" links are in-page only when we're already on the home page.
-    if (raw.startsWith("/#") && location.pathname !== "/") return;
+    if (raw.startsWith("/#") && location.pathname !== "/") return null;
     const hash = raw.startsWith("/") ? raw.slice(1) : raw;
     const id = hash.length > 1 ? decodeURIComponent(hash.slice(1)) : "top";
     const target = document.getElementById(id);
-    if (!target) return;
-    e.preventDefault();
+    return target ? { hash, id, target } : null;
+  };
+  const goTo = ({ id, target }: { id: string; target: HTMLElement }) => {
     const focusTarget = () => {
       if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
       target.focus({ preventScroll: true });
@@ -74,22 +73,35 @@ export function initMotion(): () => void {
       // Lenis already honours html { scroll-padding-top } (header height), so no extra offset here.
       const dest = id === "top" ? 0 : target;
       const expected = id === "top" || id === "main" ? 0 : headerOffset();
-      lenis.scrollTo(dest, {
-        duration: duration.slower,
-        easing: expoOut,
-        onComplete: () => {
-          // Correction pass: content above may have changed height mid-flight (fonts, lazy layout).
-          const drift = id === "top" ? window.scrollY : target.getBoundingClientRect().top - expected;
-          if (Math.abs(drift) > 4) lenis?.scrollTo(dest, { duration: duration.fast, easing: expoOut, onComplete: focusTarget });
-          else focusTarget();
-        },
-      });
+      // Correction passes: sections above may get their real height mid-flight (content-visibility,
+      // fonts), which moves the target. Re-check on arrival, a few times at most.
+      const land = (passesLeft: number) => {
+        const drift = id === "top" ? window.scrollY : target.getBoundingClientRect().top - expected;
+        if (Math.abs(drift) > 4 && passesLeft > 0)
+          lenis?.scrollTo(dest, { duration: duration.fast, easing: expoOut, onComplete: () => land(passesLeft - 1) });
+        else focusTarget();
+      };
+      lenis.scrollTo(dest, { duration: duration.slower, easing: expoOut, onComplete: () => land(3) });
     } else {
       target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
       focusTarget();
     }
-    if (hash.length > 1) history.pushState(null, "", hash);
+  };
+  on(document, "click", (e: MouseEvent) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href^="#"], a[href^="/#"]');
+    const dest = a && anchorTarget(a.getAttribute("href") ?? "");
+    if (!dest) return;
+    e.preventDefault();
+    goTo(dest);
+    if (dest.hash.length > 1) history.pushState(null, "", dest.hash);
   });
+  // The visitor's very first tap or keypress was on an in-page link: the browser started its own jump
+  // before this runtime existed, and setting up scroll triggers can cut that jump short. Finish it.
+  if (opts.pendingAnchor) {
+    const dest = anchorTarget(opts.pendingAnchor);
+    if (dest) requestAnimationFrame(() => goTo(dest));
+  }
 
   /* ---------- Spotlight borders follow the cursor (hover feedback, not movement) ---------- */
   if (fine) {
@@ -115,7 +127,12 @@ export function initMotion(): () => void {
     for (const el of qa("[data-countup]")) {
       const target = Number(el.dataset.countup);
       if (!Number.isFinite(target)) continue;
-      const fmt = el.dataset.format === "int" ? (n: number) => String(Math.round(n)) : formatINR;
+      const format = el.dataset.format ?? "";
+      const fmt = format.startsWith("dec")
+        ? (n: number) => n.toFixed(Number(format.slice(3)))
+        : format === "int"
+          ? (n: number) => String(Math.round(n))
+          : formatINR;
       if (el.getBoundingClientRect().top < window.innerHeight) continue;
       el.textContent = fmt(0);
       const io = new IntersectionObserver(
@@ -161,6 +178,23 @@ export function initMotion(): () => void {
 
   // Fonts change line heights; re-measure pins and triggers once they're in.
   document.fonts?.ready.then(() => ScrollTrigger.refresh());
+
+  // Sections with content-visibility: auto get their real height when they first render. Re-measure
+  // triggers whenever the page height changes (debounced), so scrubbed effects stay in sync.
+  let pageHeight = document.documentElement.scrollHeight;
+  let refreshTimer = 0;
+  const heightWatch = new ResizeObserver(() => {
+    const h = document.documentElement.scrollHeight;
+    if (Math.abs(h - pageHeight) < 2) return;
+    pageHeight = h;
+    window.clearTimeout(refreshTimer);
+    refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 200);
+  });
+  heightWatch.observe(document.body);
+  cleanups.push(() => {
+    heightWatch.disconnect();
+    window.clearTimeout(refreshTimer);
+  });
 
   return () => {
     cleanups.reverse().forEach((fn) => fn());

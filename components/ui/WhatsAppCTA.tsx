@@ -2,25 +2,21 @@
 
 import type { ComponentProps } from "react";
 import { trackLead } from "@/lib/analytics";
-import { buildWhatsAppLink, whatsAppMessage, type WhatsAppMessageKey } from "@/lib/whatsapp";
+import { buildWhatsAppLink } from "@/lib/whatsapp";
 
 type Props = Omit<ComponentProps<"a">, "href"> & {
   /** Where on the site this CTA is, sent with the Lead event (e.g. "hero", "pricing"). */
   source: string;
-  /** A message key from content/site.ts → whatsappMessages… */
-  message?: WhatsAppMessageKey;
-  /** …or a ready-made message. */
-  text?: string;
-  /** Values for {placeholders} in the message. */
-  vars?: Record<string, string>;
 };
 
-/** Every "Book a free call" / "Get a free preview" / "Talk to us" button: opens WhatsApp, fires a Lead event. */
-export function WhatsAppCTA({ source, message = "default", text, vars, onClick, ...props }: Props) {
-  const href = buildWhatsAppLink(text ?? whatsAppMessage(message, vars));
+/**
+ * Every contact button and link ("Book a free call", "Contact", "Let's talk"…): opens a WhatsApp
+ * chat with Teamy in a new tab, pre-filled with WHATSAPP_MESSAGE, and fires a Lead event.
+ */
+export function WhatsAppCTA({ source, onClick, children, ...props }: Props) {
   return (
     <a
-      href={href}
+      href={buildWhatsAppLink()}
       target="_blank"
       rel="noopener noreferrer"
       {...props}
@@ -28,6 +24,9 @@ export function WhatsAppCTA({ source, message = "default", text, vars, onClick, 
         trackLead(source);
         onClick?.(e);
       }}
-    />
+    >
+      {children}
+      <span className="sr-only"> (opens WhatsApp in a new tab)</span>
+    </a>
   );
 }

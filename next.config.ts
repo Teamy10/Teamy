@@ -12,10 +12,15 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   images: { formats: ["image/avif", "image/webp"] },
-  experimental: { optimizePackageImports: ["lucide-react", "framer-motion"] },
+  experimental: { optimizePackageImports: ["lucide-react"] },
+  // Pin the root: a stray package-lock.json in the home folder otherwise makes Next guess wrong (and warn).
+  turbopack: { root: __dirname },
   async redirects() {
-    if (!primaryDomainLive) return [];
+    // The local page moved with the studio, from Jaipur to Delhi.
+    const moved = [{ source: "/ecommerce-website-developer-jaipur", destination: "/ecommerce-website-developer-delhi", permanent: true }];
+    if (!primaryDomainLive) return moved;
     return [
+      ...moved,
       // www → apex, and the production vercel.app alias → teamy.in (301-equivalent permanent redirect).
       { source: "/:path*", has: [{ type: "host", value: `www.${primaryHost}` }], destination: `https://${primaryHost}/:path*`, permanent: true },
       { source: "/:path*", has: [{ type: "host", value: "teamy-blush.vercel.app" }], destination: `https://${primaryHost}/:path*`, permanent: true },

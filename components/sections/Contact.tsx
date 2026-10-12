@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, Mail, MapPin } from "lucide-react";
+import { Clock, MapPin } from "lucide-react";
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { FestiveDivider } from "@/components/festive/Motifs";
 import { Button, buttonClass } from "@/components/ui/Button";
@@ -10,24 +10,24 @@ import { Reveal } from "@/components/ui/Reveal";
 import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 import { isFilled, siteConfig } from "@/content/site";
 import { track, trackLead } from "@/lib/analytics";
-import { normaliseIndianMobile, normaliseInstagram } from "@/lib/leads";
-import { buildWhatsAppLink, openWhatsApp, previewRequestMessage } from "@/lib/whatsapp";
+import { buildWhatsAppLink, openWhatsApp, projectRequestMessage } from "@/lib/whatsapp";
 
-type Values = { name: string; brand: string; whatsapp: string; instagram: string; company: string };
+const PROJECT_TYPES = ["New online store", "Redesign or move my store", "Brand website", "Something else"];
+
+type Values = { name: string; projectType: string; message: string; company: string };
 type Errors = Partial<Record<keyof Values, string>>;
 
 function validate(v: Values): Errors {
   const e: Errors = {};
   if (!v.name.trim()) e.name = "What should we call you?";
-  if (!v.brand.trim()) e.brand = "Add your brand name.";
-  if (!normaliseIndianMobile(v.whatsapp)) e.whatsapp = "Enter a 10-digit Indian mobile number.";
-  if (v.instagram.trim() && !normaliseInstagram(v.instagram)) e.instagram = "That doesn't look like an Instagram handle.";
+  if (!v.projectType) e.projectType = "Pick the closest one.";
   return e;
 }
 
 // Error text #ff8f85 is 8:1 on the card surface.
-const inputClass =
-  "h-14 w-full rounded-xl bg-surface-2 px-4 text-base text-fg ring-1 ring-inset ring-line-strong outline-none transition-shadow placeholder:text-fg-3 focus:ring-2 focus:ring-accent aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-[#ff8f85]";
+const fieldClass =
+  "w-full rounded-xl bg-surface-2 px-4 text-base text-fg ring-1 ring-inset ring-line-strong outline-none transition-shadow placeholder:text-fg-3 focus:ring-2 focus:ring-accent aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-[#ff8f85]";
+const inputClass = `h-14 ${fieldClass}`;
 
 function Field({ id, label, hint, error, children }: { id: string; label: string; hint?: string; error?: string; children: ReactNode }) {
   return (
@@ -48,7 +48,7 @@ function Field({ id, label, hint, error, children }: { id: string; label: string
 
 export function Contact() {
   const { contact, responseHours } = siteConfig;
-  const [values, setValues] = useState<Values>({ name: "", brand: "", whatsapp: "", instagram: "", company: "" });
+  const [values, setValues] = useState<Values>({ name: "", projectType: "", message: "", company: "" });
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "opening">("idle");
   const formRef = useRef<HTMLFormElement>(null);
@@ -60,7 +60,7 @@ export function Contact() {
     return () => clearTimeout(t);
   }, [status]);
 
-  const set = (k: keyof Values) => (e: ChangeEvent<HTMLInputElement>) => {
+  const set = (k: keyof Values) => (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setValues((v) => ({ ...v, [k]: e.target.value }));
     if (errors[k]) setErrors((er) => ({ ...er, [k]: undefined }));
   };
@@ -73,17 +73,12 @@ export function Contact() {
     setErrors(errs);
     const firstBad = (Object.keys(errs) as (keyof Values)[])[0];
     if (firstBad) {
-      formRef.current?.querySelector<HTMLInputElement>(`[name="${firstBad}"]`)?.focus();
+      formRef.current?.querySelector<HTMLElement>(`[name="${firstBad}"]`)?.focus();
       return;
     }
     setStatus("opening");
     const url = buildWhatsAppLink(
-      previewRequestMessage({
-        name: values.name.trim(),
-        brand: values.brand.trim(),
-        whatsapp: normaliseIndianMobile(values.whatsapp)!,
-        instagram: values.instagram.trim() ? normaliseInstagram(values.instagram)! : undefined,
-      }),
+      projectRequestMessage({ name: values.name.trim(), projectType: values.projectType, message: values.message.trim() || undefined }),
     );
     track("form_submitted");
     trackLead("contact_form");
@@ -104,16 +99,13 @@ export function Contact() {
           </Reveal>
           <Reveal delay={0.15}>
             <p className="mt-6 max-w-md text-lg text-fg-2">
-              Tell us about your brand and we&apos;ll pick it up on WhatsApp with a free preview plan. No pitch decks, no
-              pressure.
+              Tell us about your project and we&apos;ll pick it up on WhatsApp, usually with a free preview plan. No pitch
+              decks, no pressure.
             </p>
             <div className="mt-9 flex flex-col items-start gap-4">
-              <WhatsAppCTA source="contact_call" message="bookCall" className={buttonClass("secondary")}>
-                <WhatsAppIcon className="size-5 text-accent" /> Book a free call on WhatsApp
+              <WhatsAppCTA source="contact_call" className={buttonClass("secondary")}>
+                <WhatsAppIcon className="size-5 text-accent" /> Let&apos;s talk on WhatsApp
               </WhatsAppCTA>
-              <a href={`mailto:${contact.email}`} className={buttonClass("ghost")}>
-                <Mail className="size-4" aria-hidden="true" /> {contact.email}
-              </a>
             </div>
             <p className="mt-10 flex items-center gap-2 text-fg-2">
               <Clock className="size-4 text-fg-3" aria-hidden="true" /> We reply within {responseHours} hours, Monday to Saturday.
@@ -141,52 +133,36 @@ export function Contact() {
                   className={inputClass}
                 />
               </Field>
-              <Field id="contact-brand" label="Brand name" error={errors.brand}>
-                <input
-                  id="contact-brand"
-                  name="brand"
-                  autoComplete="organization"
-                  value={values.brand}
-                  onChange={set("brand")}
-                  aria-invalid={!!errors.brand}
-                  aria-describedby={describedBy("brand")}
-                  className={inputClass}
+              <Field id="contact-projectType" label="Project type" error={errors.projectType}>
+                <select
+                  id="contact-projectType"
+                  name="projectType"
+                  value={values.projectType}
+                  onChange={set("projectType")}
+                  aria-invalid={!!errors.projectType}
+                  aria-describedby={describedBy("projectType")}
+                  className={`${inputClass} appearance-none bg-[url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23a7aebb'%20stroke-width='2'%3E%3Cpath%20d='m6%209%206%206%206-6'/%3E%3C/svg%3E")] bg-[length:20px] bg-[right_16px_center] bg-no-repeat pr-12 [&_option]:bg-surface [&_option]:text-fg ${values.projectType ? "" : "text-fg-3"}`}
+                >
+                  <option value="" disabled>
+                    Choose one
+                  </option>
+                  {PROJECT_TYPES.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field id="contact-message" label="Message" hint="Optional" error={errors.message}>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  rows={4}
+                  placeholder="Your brand, what you sell, and anything we should know."
+                  value={values.message}
+                  onChange={set("message")}
+                  className={`${fieldClass} min-h-32 resize-y py-3.5`}
                 />
-              </Field>
-              <Field id="contact-whatsapp" label="WhatsApp number" error={errors.whatsapp}>
-                <div className="relative">
-                  <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center font-mono text-fg-2">+91</span>
-                  <input
-                    id="contact-whatsapp"
-                    name="whatsapp"
-                    type="tel"
-                    inputMode="tel"
-                    autoComplete="tel-national"
-                    placeholder="98765 43210"
-                    value={values.whatsapp}
-                    onChange={set("whatsapp")}
-                    aria-invalid={!!errors.whatsapp}
-                    aria-describedby={describedBy("whatsapp")}
-                    className={`${inputClass} pl-14`}
-                  />
-                </div>
-              </Field>
-              <Field id="contact-instagram" label="Instagram handle" hint="Optional" error={errors.instagram}>
-                <div className="relative">
-                  <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-fg-2">@</span>
-                  <input
-                    id="contact-instagram"
-                    name="instagram"
-                    autoComplete="off"
-                    autoCapitalize="none"
-                    spellCheck={false}
-                    value={values.instagram}
-                    onChange={set("instagram")}
-                    aria-invalid={!!errors.instagram}
-                    aria-describedby={describedBy("instagram")}
-                    className={`${inputClass} pl-9`}
-                  />
-                </div>
               </Field>
 
               {/* Honeypot: hidden from people, tempting to bots. */}
@@ -198,12 +174,12 @@ export function Contact() {
 
               <Button type="submit" size="lg" disabled={status === "opening"} className="w-full">
                 <WhatsAppIcon className="size-5" />
-                {status === "opening" ? "Opening WhatsApp…" : "Get my free preview plan"}
+                {status === "opening" ? "Opening WhatsApp…" : "Send on WhatsApp"}
               </Button>
               <p className="text-center text-sm text-fg-3" aria-live="polite">
                 {status === "opening"
-                  ? "Your details are ready in WhatsApp. Just press send."
-                  : "This opens WhatsApp with your details filled in. Nothing is sent until you press send."}
+                  ? "Your message is ready in WhatsApp. Just press send."
+                  : "This opens WhatsApp with your message filled in. Nothing is sent until you press send."}
               </p>
             </form>
         </Reveal>

@@ -10,9 +10,9 @@ import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 
 // "/#…" so the same links work from service pages (on the home page the motion runtime smooth-scrolls them).
 const links = [
-  { href: "/#portfolio", label: "Work" },
+  { href: "/#work", label: "Work" },
   { href: "/#services", label: "Services" },
-  { href: "/#story", label: "7-day plan" },
+  { href: "/#process", label: "Process" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#faq", label: "FAQ" },
 ];
@@ -72,7 +72,7 @@ export function Header() {
           }`}
         />
         <div className="container-page relative flex h-[72px] items-center justify-between">
-          <Link href="/#top" aria-label="Teamy home" className="-ml-1 flex min-h-12 items-center px-1">
+          <Link href="/#top" prefetch={false} aria-label="Teamy home" className="-ml-1 flex min-h-12 items-center px-1">
             <Logo className="h-7 w-auto" />
           </Link>
 
@@ -82,16 +82,15 @@ export function Header() {
                 {l.label}
               </a>
             ))}
-            <WhatsAppCTA source="header" message="bookCall" data-magnetic="" className={buttonClass("primary", "ml-2 !min-h-11 !px-5")}>
-              Book a free call
+            <WhatsAppCTA source="header" data-magnetic="" className={buttonClass("primary", "ml-2 !min-h-11 !px-5")}>
+              Get a free quote
             </WhatsAppCTA>
           </nav>
 
           <div className="flex items-center gap-1 lg:hidden">
             <WhatsAppCTA
               source="header"
-              message="bookCall"
-              aria-label="Book a free call on WhatsApp"
+              aria-label="Get a free quote on WhatsApp"
               className="grid size-12 place-items-center rounded-full text-accent"
             >
               <WhatsAppIcon className="size-6" />
@@ -147,8 +146,8 @@ export function Header() {
             </a>
           ))}
           <div className="mt-auto pb-6">
-            <WhatsAppCTA source="mobile_menu" message="bookCall" onClick={() => setOpen(false)} className={buttonClass("primary", "w-full", "lg")}>
-              <WhatsAppIcon className="size-5" /> Book a free call
+            <WhatsAppCTA source="mobile_menu" onClick={() => setOpen(false)} className={buttonClass("primary", "w-full", "lg")}>
+              <WhatsAppIcon className="size-5" /> Get a free quote
             </WhatsAppCTA>
           </div>
         </nav>

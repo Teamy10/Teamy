@@ -108,7 +108,7 @@ export default function Terms() {
 
       <h2>12. Governing law</h2>
       <p>
-        These terms are governed by the laws of India. Courts at <Pending>confirm jurisdiction, e.g. Jaipur, Rajasthan</Pending>{" "}
+        These terms are governed by the laws of India. Courts at <Pending>confirm jurisdiction, e.g. New Delhi</Pending>{" "}
         have jurisdiction over any dispute.
       </p>
 

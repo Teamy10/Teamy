@@ -1,10 +1,12 @@
 import { ArrowUpRight, Star } from "lucide-react";
 import Image from "next/image";
 import { FestiveDivider } from "@/components/festive/Motifs";
+import { Carousel } from "@/components/ui/Carousel";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { TodoSlot } from "@/components/ui/TodoSlot";
-import { isFilled, siteConfig, type Testimonial } from "@/content/site";
+import { isFilled, siteConfig } from "@/content/site";
+import { testimonials, type Testimonial } from "@/content/testimonials";
 import { publicFileExists, showPlaceholders } from "@/lib/assets";
 
 const initials = (name: string) =>
@@ -19,7 +21,7 @@ const ready = (t: Testimonial) => t.permissionGiven && isFilled(t.quote) && isFi
 
 function Avatar({ t, size }: { t: Testimonial; size: number }) {
   return t.photo && publicFileExists(t.photo) ? (
-    <Image src={t.photo} alt={t.name} width={size} height={size} className="rounded-full object-cover" style={{ width: size, height: size }} />
+    <Image src={t.photo} alt="" width={size} height={size} className="shrink-0 rounded-full object-cover" style={{ width: size, height: size }} />
   ) : (
     <span
       aria-hidden="true"
@@ -42,14 +44,13 @@ function Stars({ rating }: { rating: number }) {
 }
 
 function Byline({ t, size }: { t: Testimonial; size: number }) {
+  const role = [t.role, t.company].filter(isFilled).join(", ");
   return (
     <figcaption className="flex items-center gap-4">
       <Avatar t={t} size={size} />
       <span className="min-w-0">
         <span className="block font-semibold">{t.name}</span>
-        <span className="label-mono block text-fg-3">
-          {t.role}, {t.brand}
-        </span>
+        {role && <span className="label-mono block text-fg-3">{role}</span>}
       </span>
       {t.link && (
         <a
@@ -58,14 +59,15 @@ function Byline({ t, size }: { t: Testimonial; size: number }) {
           rel="noopener noreferrer"
           className="ml-auto inline-flex min-h-12 shrink-0 items-center gap-1 text-[15px] font-semibold text-fg-2 hover:text-fg"
         >
-          {t.brand} <ArrowUpRight className="size-4" aria-hidden="true" />
-          <span className="sr-only">(opens the {t.brand} store in a new tab)</span>
+          {t.company} <ArrowUpRight className="size-4" aria-hidden="true" />
+          <span className="sr-only">(opens the {t.company} site in a new tab)</span>
         </a>
       )}
     </figcaption>
   );
 }
 
+/** A single testimonial on its own: one large, quiet card. */
 function FeaturedCard({ t }: { t: Testimonial }) {
   return (
     <figure className="card relative grid gap-10 overflow-hidden rounded-[32px] p-7 sm:p-12 lg:grid-cols-12 lg:gap-8">
@@ -85,60 +87,86 @@ function FeaturedCard({ t }: { t: Testimonial }) {
   );
 }
 
-function SmallCard({ t }: { t: Testimonial }) {
+/** One card in the carousel. */
+function Card({ t }: { t: Testimonial }) {
   return (
-    <figure className="card flex h-full flex-col rounded-[24px] p-6 sm:p-8">
+    <figure className="card relative flex h-full flex-col overflow-hidden rounded-[28px] p-7 sm:p-10">
+      <span aria-hidden="true" className="pointer-events-none absolute -right-2 -top-10 font-display text-[10rem] font-semibold leading-none text-fg/[0.04]">
+        &rdquo;
+      </span>
       {t.rating && <Stars rating={t.rating} />}
-      <blockquote className="mt-4 flex-1 text-lg leading-relaxed">&ldquo;{t.quote}&rdquo;</blockquote>
-      <div className="mt-6 border-t border-line pt-5">
-        <Byline t={t} size={44} />
+      <blockquote className="relative mt-6 flex-1 font-display text-[clamp(1.25rem,1.05rem+0.7vw,1.625rem)] font-light leading-[1.3] tracking-[-0.02em]">
+        &ldquo;{t.quote}&rdquo;
+      </blockquote>
+      <div className="mt-8 border-t border-line pt-6">
+        <Byline t={t} size={48} />
       </div>
     </figure>
   );
 }
 
+const slide = "w-[86%] shrink-0 snap-start sm:w-[calc(70%-12px)] lg:w-[calc(50%-12px)]";
+
 /**
- * Real testimonials only (permissionGiven + real quote). One featured card plus a grid
- * (a swipeable row on mobile), so a single quote still looks intentional. Unfilled slots
+ * Client testimonials from content/testimonials.ts, real words only. One testimonial shows as a
+ * single large card; two or more become a swipeable, keyboard-friendly carousel. Unfilled entries
  * show as placeholders in dev only.
  */
 export function Testimonials() {
-  const all = siteConfig.testimonials;
-  const items = all.filter(ready);
-  const todo = all.filter((t) => !ready(t));
-  if (items.length === 0 && !showPlaceholders) return null;
-  const featured = items.find((t) => t.featured) ?? items[0];
-  const rest = items.filter((t) => t !== featured);
+  const items = testimonials.filter(ready);
+  const todo = showPlaceholders ? testimonials.filter((t) => !ready(t)) : [];
+  if (items.length === 0 && todo.length === 0) return null;
+  const single = items.length === 1 && todo.length === 0;
 
   return (
-    <section id="testimonials" aria-labelledby="testimonials-title" className="section-pad relative">
+    <section id="testimonials" aria-labelledby="testimonials-title" className="section-pad cv-auto relative">
       <FestiveDivider />
       <div className="container-page">
-        <SectionHeading id="testimonials-title" title="Founders on working with Teamy." emphasis="working with Teamy." />
-        {featured && (
-          <Reveal className="mt-14">
-            <FeaturedCard t={featured} />
-          </Reveal>
-        )}
+        <SectionHeading
+          id="testimonials-title"
+          title="What our clients say."
+          emphasis="clients say."
+          sub={
+            <span className="inline-flex flex-wrap items-center gap-x-3 gap-y-1">
+              <span className="flex text-accent" aria-hidden="true">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Star key={i} className="size-4 fill-current" />
+                ))}
+              </span>
+              <span>
+                <strong className="font-semibold text-fg">{siteConfig.facts.rating}/5</strong> average rating from our clients
+              </span>
+              {isFilled(siteConfig.facts.reviewsUrl) && (
+                <a href={siteConfig.facts.reviewsUrl} target="_blank" rel="noopener noreferrer" className="underline-anim inline-flex items-center gap-1 font-semibold text-fg">
+                  Read the reviews <ArrowUpRight className="size-4" aria-hidden="true" />
+                </a>
+              )}
+            </span>
+          }
+        />
+        <Reveal className="mt-12">
+          {single ? (
+            <FeaturedCard t={items[0]!} />
+          ) : (
+            <Carousel label="Client testimonials" item="testimonial">
+              {items.map((t) => (
+                <li key={t.name} className={slide}>
+                  <Card t={t} />
+                </li>
+              ))}
+              {todo.map((t, i) => (
+                <li key={`todo-${i}`} className={slide}>
+                  <TodoSlot className="h-full min-h-64">
+                    Testimonial from <strong>{isFilled(t.name) ? t.name : t.company}</strong>: paste their exact words (and any
+                    missing name, role or company) in <code>content/testimonials.ts</code>, then set{" "}
+                    <code>permissionGiven: true</code>.
+                  </TodoSlot>
+                </li>
+              ))}
+            </Carousel>
+          )}
+        </Reveal>
       </div>
-      {(rest.length > 0 || (showPlaceholders && todo.length > 0)) && (
-        <ul className="no-scrollbar mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-2 md:container-page md:grid md:snap-none md:grid-cols-2 md:overflow-visible lg:grid-cols-3">
-          {rest.map((t, i) => (
-            <Reveal as="li" key={`${t.name}-${i}`} delay={i * 0.06} className="w-[85%] shrink-0 snap-center md:w-auto">
-              <SmallCard t={t} />
-            </Reveal>
-          ))}
-          {showPlaceholders &&
-            todo.map((t) => (
-              <li key={`todo-${t.brand}`} className="w-[85%] shrink-0 snap-center md:w-auto">
-                <TodoSlot className="h-full">
-                  Testimonial slot for <strong>{t.brand}</strong>: add the founder&apos;s own words, name and role in{" "}
-                  <code>content/site.ts</code>, then set <code>permissionGiven: true</code>.
-                </TodoSlot>
-              </li>
-            ))}
-        </ul>
-      )}
     </section>
   );
 }

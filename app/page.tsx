@@ -1,11 +1,10 @@
 import { About } from "@/components/sections/About";
-import { Benefits } from "@/components/sections/Benefits";
+import { ClientLogos } from "@/components/sections/ClientLogos";
 import { Contact } from "@/components/sections/Contact";
 import { Faq } from "@/components/sections/Faq";
 import { Footer } from "@/components/sections/Footer";
 import { Header } from "@/components/sections/Header";
 import { Hero } from "@/components/sections/Hero";
-import { Portfolio } from "@/components/sections/Portfolio";
 import { Pricing } from "@/components/sections/Pricing";
 import { Process } from "@/components/sections/Process";
 import { Services } from "@/components/sections/Services";
@@ -14,6 +13,7 @@ import { Stats } from "@/components/sections/Stats";
 import { Story } from "@/components/sections/Story";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Videos } from "@/components/sections/Videos";
+import { Work } from "@/components/sections/Work";
 import { WorksWith } from "@/components/sections/WorksWith";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { siteConfig } from "@/content/site";
@@ -26,17 +26,17 @@ export default function Home() {
       <Header />
       <main id="main">
         <Hero />
-        <WorksWith />
+        <ClientLogos />
+        <SharkTank />
         <Stats />
-        <Story />
-        <Portfolio />
+        <Work />
         <Videos />
-        <Benefits />
         <Services />
         <Process />
-        <SharkTank />
+        <Story />
         <Testimonials />
         <Pricing />
+        <WorksWith />
         <About />
         <Faq faqs={siteConfig.faqs} />
         <Contact />

@@ -54,8 +54,12 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-padding-top: calc(var(--header-h) + 12px);
 }
-/* Native smooth scrolling only when Lenis isn't running (Lenis drives it otherwise). */
-html:not(.lenis) {
+/*
+ * Native smooth scrolling only when Lenis isn't running (Lenis drives it otherwise), and only once the
+ * page has hydrated ([data-reveal] is set then). Opening a link like /#pricing must jump straight there:
+ * an animated jump gets cut short when the motion runtime starts on that first scroll.
+ */
+html[data-reveal="on"]:not(.lenis) {
   scroll-behavior: smooth;
 }
 
@@ -114,12 +118,15 @@ h3 {
 }
 
 /*
- * Only for the last section(s): anything above a scroll-linked animation or an anchor target must
- * keep its real height, or pins and in-page links land in the wrong place.
+ * Skip rendering a section until it's near the viewport: roughly halves the first layout of the long
+ * home page (measured). Put it only on sections where that's safe: never the hero, and on desktop never
+ * the pinned 7-day story or anything above it (GSAP measures the pin from real heights). Skipped
+ * sections get their real height when they first render, so the motion runtime re-measures its scroll
+ * triggers when the page height changes, and in-page links re-check where they landed.
  */
 @utility cv-auto {
   content-visibility: auto;
-  contain-intrinsic-size: auto 900px;
+  contain-intrinsic-size: auto var(--cv-h, 900px);
 }
 
 /* ---------- Type scale ---------- */
@@ -165,6 +172,14 @@ h3 {
 
 @utility hairline {
   border: 1px solid rgb(var(--text-rgb) / 0.08);
+}
+
+/* Horizontal scrollers (carousels) that swipe without a visible scrollbar. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @utility card {
@@ -220,7 +235,7 @@ h3 {
 
 /* ---------- Texture & light ---------- */
 
-/* Film grain: a 2KB tile over everything, jittering a few frames a second once the page is idle. */
+/* Film grain: a 2KB tile over everything. Shown and jittering a few frames a second once the page is idle. */
 .grain-overlay {
   position: fixed;
   inset: -50%;
@@ -422,6 +437,82 @@ main[tabindex="-1"]:focus {
   }
 }
 
+/* ---------- "Our work" cards: the full-page screenshot scrolls inside the browser frame ---------- */
+
+.work-viewport {
+  container-type: size;
+}
+.work-shot {
+  position: absolute;
+  inset: 0 0 auto;
+  width: 100%;
+  height: auto;
+  transform: translateY(0);
+  /* Back to the top a little faster than it went down. */
+  transition: transform calc(var(--work-dur, 6s) * 0.4) cubic-bezier(0.65, 0, 0.35, 1);
+  will-change: transform;
+}
+/* Desktop: scroll down on hover or keyboard focus, back up on leave. */
+@media (hover: hover) and (pointer: fine) {
+  .work-card:is(:hover, :focus-within) .work-shot {
+    transform: translateY(calc(-100% + 100cqh));
+    transition-duration: var(--work-dur, 6s);
+  }
+}
+/* Touch screens: scroll down and back while the card is on screen ([data-loop] pauses it offscreen). */
+@media (hover: none), (pointer: coarse) {
+  .work-shot {
+    animation: work-scroll calc(var(--work-dur, 6s) * 2 + 3s) cubic-bezier(0.65, 0, 0.35, 1) 1s infinite;
+  }
+}
+@keyframes work-scroll {
+  0%,
+  12% {
+    transform: translateY(0);
+  }
+  50%,
+  62% {
+    transform: translateY(calc(-100% + 100cqh));
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Client logos: light tiles, two rows drifting in opposite directions ---------- */
+
+.logo-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 80s linear infinite;
+}
+.logo-track--reverse {
+  animation-direction: reverse;
+}
+.logo-wall:hover .logo-track {
+  animation-play-state: paused;
+}
+.client-logo {
+  max-width: 100%;
+  object-fit: contain;
+  transition: filter var(--dur-base) var(--ease-quart-out);
+}
+/* Logos with their own white background: multiply drops the white into the tile. */
+.client-logo--opaque {
+  mix-blend-mode: multiply;
+}
+/* White or gold logos made for dark headers sit on dark tiles (see logoTile), in their own colours. */
+/* The wall is calm and monochrome at rest; a logo takes its own colours on hover. */
+.client-logo--mono {
+  filter: grayscale(1) contrast(1.15) opacity(0.7);
+}
+.client-logo--mono.client-logo--light {
+  filter: grayscale(1) brightness(1.5) opacity(0.72);
+}
+.group:hover .client-logo--mono {
+  filter: none;
+}
+
 /* Decorative "order placed" toast: slides in, holds, slides out, repeats. */
 .order-toast {
   animation: toast 6s var(--ease-expo-out) 1.6s infinite both;
@@ -489,14 +580,19 @@ main[tabindex="-1"]:focus {
   }
 }
 
-/* Decorative layers aren't drawn during first paint; they fade in once the page is idle. */
+/*
+ * Decorative layers aren't drawn during first paint; they fade in once the page is idle. The grain
+ * matters most: it's a translucent layer four times the screen size over everything, and compositing
+ * it held back the first frame (measured in a Lighthouse trace: ~2s of GPU work before first paint).
+ */
 .light-pool,
-.motif-layer {
+.motif-layer,
+.grain-overlay {
   transition:
     opacity 1.6s var(--ease-quart-out),
     visibility 0s;
 }
-:root:not([data-fx="on"]) :is(.light-pool, .motif-layer) {
+:root:not([data-fx="on"]) :is(.light-pool, .motif-layer, .grain-overlay) {
   visibility: hidden;
   opacity: 0;
 }
@@ -622,7 +718,8 @@ html.lenis body {
 /* ---------- Reduced motion: final states, no movement ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  html:not(.lenis) {
+  html:not(.lenis),
+  html[data-reveal="on"]:not(.lenis) {
     scroll-behavior: auto;
   }
   *,
@@ -654,6 +751,24 @@ html.lenis body {
   }
   .order-toast {
     opacity: 1;
+  }
+  .work-shot {
+    animation: none !important;
+    transform: none !important;
+  }
+  /* Logo wall: a static, centred grid with each logo once. */
+  .logo-track {
+    animation: none !important;
+    width: auto;
+    justify-content: center;
+  }
+  .logo-track__half {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-inline: 20px;
+  }
+  .logo-copy {
+    display: none !important;
   }
   .cursor-ring,
   .cursor-dot {

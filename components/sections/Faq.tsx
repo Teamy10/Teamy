@@ -28,7 +28,7 @@ export function Faq({
   const items = readyFaqs(faqs);
   if (items.length === 0) return null;
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="section-pad">
+    <section id={id} aria-labelledby={`${id}-title`} className="section-pad cv-auto">
       <JsonLd data={faqSchema(items)} />
       <div className="container-page grid gap-12 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-4">

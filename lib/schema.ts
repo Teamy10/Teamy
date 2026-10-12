@@ -44,7 +44,7 @@ export function localBusinessSchema() {
     "@type": ["ProfessionalService", "LocalBusiness"],
     "@id": BIZ_ID(),
     name: siteConfig.brand,
-    description: `${siteConfig.brand} designs, builds and runs online stores for Indian D2C brands: UPI, cards and COD checkout, WhatsApp order updates, live in ${siteConfig.launchDays} days.`,
+    description: `${siteConfig.brand} is a web team in ${siteConfig.contact.area}, New Delhi, building custom-coded websites and online stores for D2C brands across India.`,
     url: abs("/"),
     image: abs("/opengraph-image"),
     logo: abs("/logo.svg"),
@@ -57,9 +57,8 @@ export function localBusinessSchema() {
     parentOrganization: { "@id": ORG_ID() },
     makesOffer: {
       "@type": "Offer",
-      name: "Online store, designed, built and launched",
-      price: siteConfig.plan.price,
-      priceCurrency: "INR",
+      name: "Starter online store, designed, built and launched",
+      priceSpecification: { "@type": "PriceSpecification", minPrice: siteConfig.plan.price, priceCurrency: "INR" },
     },
   };
 }

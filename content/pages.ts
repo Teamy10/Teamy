@@ -25,7 +25,7 @@ export type LandingPage = {
   sections: { heading: string; paragraphs: string[] }[];
   /** Optional comparison table (Shopify page). */
   comparison?: { caption: string; columns: [string, string, string]; rows: [string, string, string][]; note: string };
-  /** Which portfolio store to show (name from content/site.ts → portfolio). */
+  /** Which project card to show (name from content/projects.ts). */
   portfolio: string;
   faqs: Faq[];
   related: string[];
@@ -552,77 +552,77 @@ export const pages: LandingPage[] = [
         a: "Yes. Look at the stores we've built, or message us on WhatsApp for a free preview of your own store before you pay anything.",
       },
     ],
-    related: ["custom-storefront-design", "upi-cod-checkout", "ecommerce-website-developer-jaipur"],
+    related: ["custom-storefront-design", "upi-cod-checkout", "ecommerce-website-developer-delhi"],
   },
   {
-    slug: "ecommerce-website-developer-jaipur",
-    path: "/ecommerce-website-developer-jaipur",
+    slug: "ecommerce-website-developer-delhi",
+    path: "/ecommerce-website-developer-delhi",
     kind: "landing",
-    name: "Ecommerce website developer in Jaipur",
-    title: "Ecommerce Website Developer in Jaipur | Teamy",
+    name: "Ecommerce website developer in Delhi",
+    title: "Ecommerce Website Developer in Delhi | Teamy",
     description:
-      "Teamy is an ecommerce website developer in Jaipur building online stores for D2C brands across India. UPI, COD, WhatsApp updates, one-time ₹8,999.",
-    h1: "Ecommerce website developer in Jaipur, for brands across India.",
+      "Teamy is an ecommerce website developer in Patel Nagar, New Delhi: custom-coded online stores for D2C brands across India. 450+ projects, from ₹8,999.",
+    h1: "Ecommerce website developer in Delhi, for brands across India.",
     h1Emphasis: "for brands across India.",
     intro: [
-      "Teamy is a website developer in Jaipur that designs, builds and runs online stores for D2C brands and small businesses. If you're looking for an ecommerce website for a small business in India, from a jewellery label in the Pink City to a skincare brand in Bengaluru, we build stores that sell from day one.",
-      "We're based in Jaipur, Rajasthan, and work with founders across India over WhatsApp and calls. You talk to the same small team from your first message to launch day and beyond.",
+      "Teamy is a website development team in Patel Nagar, New Delhi, that designs and builds custom-coded online stores for D2C brands. In five years we've delivered 450+ websites and projects, for first-time founders and for brands featured on Shark Tank India.",
+      "Founders across India work with us over WhatsApp and calls, and Delhi brands can meet us in person. You talk to the same people from your first message to launch day and long after it.",
     ],
     benefits: [
-      { title: "Local and reachable", line: "A Jaipur team on WhatsApp, Monday to Saturday, replying within 4 hours." },
+      { title: "A Delhi team you can reach", line: "On WhatsApp Monday to Saturday, replying within 4 hours, and a short drive away if you're in Delhi." },
+      { title: "Proven with real brands", line: "450+ projects, including brands seen on Shark Tank India." },
       { title: "Made for Indian buyers", line: "UPI, cards and COD checkout, with WhatsApp order updates and COD confirmation." },
-      { title: "Fast launch", line: "From a free preview to a live store in about 7 days." },
-      { title: "One clear price", line: "₹8,999 one-time for the build, with no compulsory monthly fee from Teamy." },
+      { title: "A clear starting price", line: "Starter stores from ₹8,999 one-time; bigger builds quoted after a free call." },
     ],
     sections: [
       {
         heading: "Who we build for",
         paragraphs: [
-          "Jaipur has a long tradition of makers: block printers, jewellers, textile houses, artisans and food brands. Many sell beautifully on Instagram and at exhibitions but don't yet have a store of their own. We build that store, so orders, customers and data stop living only in DMs.",
-          "We also work with D2C brands across India, from first-time founders to brands moving away from marketplaces and app-heavy platforms.",
+          "Delhi is home to thousands of D2C brands: fashion and ethnic wear labels, jewellers, skincare and wellness brands, food and snack makers, home décor studios and gifting businesses. Many sell well on Instagram and marketplaces but don't yet own a website that does the brand justice. We build that website, so orders, customers and data stop living only in DMs and marketplace dashboards.",
+          "We also work with brands across India, from founders launching their first store to established names moving to a faster, better-looking site. Our clients include Zoff, Bummer, Marbleous, True Diamond, Beyoung, Kimti and Gems for Luck.",
         ],
       },
       {
         heading: "What you get",
         paragraphs: [
-          "A custom-designed storefront on your own domain, a checkout with UPI, cards and cash on delivery, WhatsApp order updates and COD confirmation, abandoned-cart reminders, analytics and Meta Pixel, and tools for drops and reorders. Everything is set up and tested by us, and the store, code and data belong to you.",
+          "A custom-coded storefront on your own domain, designed around your brand rather than a template. A checkout with UPI, cards and cash on delivery. WhatsApp order updates and COD confirmation, abandoned-cart reminders, analytics and Meta Pixel, and tools for drops and reorders. Everything is set up and tested by us, and the site, code and data belong to you.",
         ],
       },
       {
         heading: "How to get started",
         paragraphs: [
-          "Message us on WhatsApp with your Instagram handle or a few product photos. We'll set up a short call, design a free preview of your store, and only start the build once you're happy with it.",
+          "Message us on WhatsApp with your Instagram handle, your current website or a few product photos. We'll set up a short call, share a plan and a quote, and start the build only once you're happy with the direction.",
         ],
       },
       {
-        heading: "Why founders choose a studio over a freelancer",
+        heading: "Why brands choose a team over a freelancer",
         paragraphs: [
-          "Freelancers can be great, but many founders have been burned by a developer who disappeared after launch, or by a store nobody else could maintain. As a small studio, we document what we build, hand over access, and stay reachable on WhatsApp after your store goes live.",
-          "You also get one clear price up front: ₹8,999 for the build, with no compulsory monthly fee from Teamy. Add-ons like catalogue upload, SEO setup or a care plan are quoted before we start, so there are no surprises later.",
+          "Freelancers can be great, but many founders have been burned by a developer who disappeared after launch, or by a website nobody else could maintain. As a team, we document what we build, hand over every login, and stay reachable on WhatsApp after your site goes live.",
+          "You also get a clear starting price: starter stores from ₹8,999, one-time, with no compulsory monthly fee from Teamy. Larger builds and add-ons like catalogue upload, SEO setup or a care plan are quoted before we start, so there are no surprises later.",
         ],
       },
       {
-        heading: "The kinds of stores we build",
+        heading: "The kinds of websites we build",
         paragraphs: [
-          "Clothing and ethnic wear, jewellery, home decor, skincare, food and snacks, and handmade products. If you sell physical products to customers in India, or from India to the world, we can build a store for it. If your idea needs something unusual, tell us on WhatsApp and we'll say honestly whether it fits.",
+          "Online stores for clothing and ethnic wear, jewellery and fine jewellery, home décor, skincare, food and spices, spiritual products and handmade goods, plus brand websites and marketplaces. If you sell to customers in India, or from India to the world, we can build it. If your idea needs something unusual, tell us on WhatsApp and we'll say honestly whether it fits.",
         ],
       },
       {
         heading: "Our address and hours",
         paragraphs: [
-          "Teamy is based in Jaipur, Rajasthan, India. We work Monday to Saturday and reply to WhatsApp messages within 4 hours on working days. You can also email us at hello@teamy.in.",
+          "Teamy is based in Patel Nagar, New Delhi, India. We work Monday to Saturday and reply to WhatsApp messages within 4 hours on working days. You can also email us at hello@teamy.in.",
         ],
       },
     ],
-    portfolio: "Ganges",
+    portfolio: "Zoff",
     faqs: [
       {
-        q: "Do you only work with brands in Jaipur?",
-        a: "No. We're based in Jaipur and work with brands across India. Everything can be done over WhatsApp and calls.",
+        q: "Do you only work with brands in Delhi?",
+        a: "No. We're based in Patel Nagar, New Delhi, and work with brands across India. Everything can be done over WhatsApp and calls.",
       },
       {
-        q: "How quickly can my store go live?",
-        a: "Usually about 7 days from when you approve your free preview, depending on your catalogue and how quickly the payment gateway approves your account.",
+        q: "How quickly can my site go live?",
+        a: "Starter stores usually go live in about 7 days once you approve the design. Bigger custom builds get a timeline with the quote, depending on your catalogue and integrations.",
       },
       {
         q: "What are your working hours?",
@@ -630,7 +630,7 @@ export const pages: LandingPage[] = [
       },
       {
         q: "Can I meet the team?",
-        a: "Most of our work happens over WhatsApp and calls, which keeps things quick for founders anywhere in India. If you're in Jaipur and would like to meet, ask us on WhatsApp.",
+        a: "Yes. Most of our work happens over WhatsApp and calls, which keeps things quick for founders anywhere in India, but if you're in Delhi and would like to meet, ask us on WhatsApp.",
       },
     ],
     related: ["custom-storefront-design", "shopify-alternative-india", "upi-cod-checkout"],

@@ -1,66 +1,55 @@
-import { MapPin } from "lucide-react";
-import Image from "next/image";
+import { Clock, Code2, KeyRound, MapPin, MonitorSmartphone, type LucideIcon } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { TodoSlot } from "@/components/ui/TodoSlot";
-import { isFilled, siteConfig, type TeamMember } from "@/content/site";
-import { publicFileExists, showPlaceholders } from "@/lib/assets";
+import { siteConfig, type HighlightIcon } from "@/content/site";
 
-const filled = (m: TeamMember) => isFilled(m.name) && isFilled(m.role);
+const icons: Record<HighlightIcon, LucideIcon> = {
+  responsive: MonitorSmartphone,
+  code: Code2,
+  clock: Clock,
+  key: KeyRound,
+};
 
-/** "The people behind Teamy": the story, team cards (only once filled in) and the Jaipur base. */
+/** "About Teamy": who we are, plus four highlights (2-up on mobile, 4-up on desktop). */
 export function About() {
   const { about, contact } = siteConfig;
-  const team = about.team.filter(filled);
-  const pending = about.team.filter((m) => !filled(m));
   return (
-    <section id="about" aria-labelledby="about-title" className="section-pad">
-      <div className="container-page grid gap-14 lg:grid-cols-12 lg:gap-8">
-        <div className="lg:col-span-5">
-          <SectionHeading id="about-title" title={about.title} emphasis="behind Teamy." />
-          <Reveal delay={0.12}>
-            <p className="mt-8 inline-flex items-center gap-2 text-fg">
-              <MapPin className="size-4 text-accent" aria-hidden="true" />
-              Based in {contact.address.locality}, {contact.address.region}
+    <section id="about" aria-labelledby="about-title" className="section-pad cv-auto">
+      <div className="container-page">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-7">
+            <SectionHeading id="about-title" eyebrow={about.eyebrow} title={about.title} emphasis={about.emphasis} />
+          </div>
+          <Reveal delay={0.12} className="space-y-5 text-lg text-fg-2 lg:col-span-5 lg:pt-12">
+            {about.body.map((p) => (
+              <p key={p.slice(0, 24)}>{p}</p>
+            ))}
+            <p className="flex items-center gap-2 text-base text-fg">
+              <MapPin className="size-4 shrink-0 text-accent" aria-hidden="true" />
+              Based in {contact.area}, {contact.address.locality}
             </p>
           </Reveal>
         </div>
-        <div className="lg:col-span-6 lg:col-start-7">
-          <Reveal className="space-y-5 text-lg text-fg-2">
-            {about.story.map((p) => (
-              <p key={p.slice(0, 24)}>{p}</p>
-            ))}
-          </Reveal>
-          {(team.length > 0 || showPlaceholders) && (
-            <ul className="mt-12 grid gap-4 sm:grid-cols-2">
-              {team.map((m, i) => (
-                <Reveal as="li" key={m.name} delay={i * 0.06} className="card flex items-center gap-4 rounded-[20px] p-5">
-                  {m.photo && publicFileExists(m.photo) ? (
-                    <Image src={m.photo} alt={m.name} width={64} height={64} className="size-16 rounded-full object-cover" />
-                  ) : (
-                    <span aria-hidden="true" className="grid size-16 shrink-0 place-items-center rounded-full bg-surface-2 font-mono text-fg ring-1 ring-line-strong">
-                      {m.name.split(/\s+/).map((w) => w[0]).slice(0, 2).join("").toUpperCase()}
-                    </span>
-                  )}
-                  <span className="min-w-0">
-                    <span className="block font-semibold">{m.name}</span>
-                    <span className="label-mono block text-fg-3">{m.role}</span>
-                    {isFilled(m.line) && <span className="mt-1 block text-[15px] leading-snug text-fg-2">{m.line}</span>}
-                  </span>
-                </Reveal>
-              ))}
-              {showPlaceholders &&
-                pending.map((m, i) => (
-                  <li key={`todo-${i}`}>
-                    <TodoSlot className="h-full">
-                      Team card: add name, role, a one-line bio and a square photo at <code>{m.photo}</code> in{" "}
-                      <code>content/site.ts</code>.
-                    </TodoSlot>
-                  </li>
-                ))}
-            </ul>
-          )}
-        </div>
+
+        <ul className="mt-16 grid grid-cols-2 border-t border-line lg:mt-20 lg:grid-cols-4">
+          {about.highlights.map((h, i) => {
+            const Icon = icons[h.icon];
+            return (
+              <Reveal
+                as="li"
+                key={h.label}
+                delay={i * 0.06}
+                className="border-b border-line py-8 pr-4 even:border-l even:pl-4 sm:pr-6 sm:even:pl-6 lg:border-b-0 lg:px-6 lg:first:pl-0 lg:[&:not(:first-child)]:border-l"
+              >
+                <span className="grid size-11 place-items-center rounded-full text-accent ring-1 ring-inset ring-line-strong">
+                  <Icon className="size-5" aria-hidden="true" strokeWidth={1.75} />
+                </span>
+                <h3 className="mt-6 text-lg font-semibold leading-snug tracking-[-0.02em] sm:text-xl">{h.label}</h3>
+                <p className="mt-2 text-[15px] text-fg-2 sm:text-base">{h.line}</p>
+              </Reveal>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );

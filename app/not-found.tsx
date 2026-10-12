@@ -24,10 +24,10 @@ export default function NotFound() {
             The link may be old or mistyped. Head back home, or tell us about your brand on WhatsApp.
           </p>
           <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7">
-            <Link href="/" className={buttonClass("primary", "w-full sm:w-auto", "lg")}>
+            <Link href="/" prefetch={false} className={buttonClass("primary", "w-full sm:w-auto", "lg")}>
               Back to the home page
             </Link>
-            <WhatsAppCTA source="not_found" message="default" className={buttonClass("ghost")}>
+            <WhatsAppCTA source="not_found" className={buttonClass("ghost")}>
               <WhatsAppIcon className="size-5" /> Message us on WhatsApp
             </WhatsAppCTA>
           </div>

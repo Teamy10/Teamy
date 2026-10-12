@@ -6,5 +6,5 @@ export const size = ogSize;
 export const contentType = "image/png";
 
 export default function OgImage() {
-  return renderOg({ kicker: "Web studio · Jaipur, India", title: "Stores that sell while you sleep." });
+  return renderOg({ kicker: "Web studio · New Delhi, India", title: "The web team behind India's D2C brands." });
 }

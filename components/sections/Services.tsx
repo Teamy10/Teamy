@@ -11,7 +11,7 @@ const spans = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-5", "lg:col-span-7
 
 export function Services() {
   return (
-    <section id="services" aria-labelledby="services-title" className="section-pad relative">
+    <section id="services" aria-labelledby="services-title" className="section-pad max-lg:cv-auto relative">
       <FestiveDivider />
       <div className="container-page">
         <SectionHeading

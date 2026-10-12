@@ -7,6 +7,7 @@ import { FacebookIcon, InstagramIcon, LinkedInIcon, WhatsAppIcon, YouTubeIcon } 
 import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 import { servicePages } from "@/content/pages";
 import { isFilled, siteConfig } from "@/content/site";
+import { formatINR } from "@/lib/format";
 
 const link = "underline-anim inline-flex min-h-11 items-center gap-2 text-fg-2 transition-colors hover:text-fg";
 
@@ -19,12 +20,11 @@ const socialIcons: Record<keyof typeof siteConfig.socials, [string, ComponentTyp
 
 const company = [
   { href: "/#about", label: "About" },
-  { href: "/#portfolio", label: "Portfolio" },
+  { href: "/#work", label: "Our work" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#faq", label: "FAQ" },
-  { href: "/#contact", label: "Contact" },
   { href: "/shopify-alternative-india", label: "Shopify alternative" },
-  { href: "/ecommerce-website-developer-jaipur", label: "Website developer in Jaipur" },
+  { href: "/ecommerce-website-developer-delhi", label: "Website developer in Delhi" },
 ];
 
 const legal = [
@@ -36,23 +36,25 @@ const legal = [
 /** Address line shared by the footer, contact section and local page (NAP stays identical everywhere). */
 export function addressLine() {
   const a = siteConfig.contact.address;
-  return [isFilled(a.street) ? a.street : null, a.locality, a.region, a.countryName].filter(Boolean).join(", ");
+  // "New Delhi, Delhi" reads twice: skip the region when the city already names it.
+  const region = a.locality.includes(a.region) ? null : a.region;
+  return [isFilled(a.street) ? a.street : null, a.locality, region, a.countryName].filter(Boolean).join(", ");
 }
 
 export function Footer() {
   const { contact, brand, socials } = siteConfig;
   const shownSocials = (Object.keys(socials) as (keyof typeof socials)[]).filter((k) => isFilled(socials[k]));
   return (
-    <footer className="relative border-t border-line pb-28 pt-20 md:pb-12">
+    <footer className="cv-auto relative border-t border-line pb-28 pt-20 md:pb-12">
       <FestiveDivider />
       <div className="container-page">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
-            <Link href="/" aria-label="Teamy home" className="inline-flex min-h-12 items-center">
+            <Link href="/" prefetch={false} aria-label="Teamy home" className="inline-flex min-h-12 items-center">
               <Logo className="h-8 w-auto" />
             </Link>
             <p className="mt-5 max-w-xs text-fg-2">
-              We design, build and run online stores for Indian D2C brands. ₹8,999 one-time, live in {siteConfig.launchDays} days.
+              Custom-coded websites for India&apos;s D2C brands. {siteConfig.facts.projects}+ projects in {siteConfig.facts.years}+ years, from {formatINR(siteConfig.plan.price)}.
             </p>
             {shownSocials.length > 0 && (
               <ul className="mt-6 flex gap-2" aria-label="Teamy on social media">
@@ -94,11 +96,16 @@ export function Footer() {
             <ul className="mt-3">
               {company.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className={link}>
+                  <Link href={l.href} prefetch={l.href.startsWith("/#") ? false : undefined} className={link}>
                     {l.label}
                   </Link>
                 </li>
               ))}
+              <li>
+                <WhatsAppCTA source="footer_contact" className={link}>
+                  Contact
+                </WhatsAppCTA>
+              </li>
             </ul>
           </nav>
 
@@ -107,7 +114,7 @@ export function Footer() {
             <address className="mt-3 not-italic">
               <ul>
                 <li>
-                  <WhatsAppCTA source="footer" message="talk" className={link}>
+                  <WhatsAppCTA source="footer" className={link}>
                     <WhatsAppIcon className="size-4 shrink-0 text-accent" /> {contact.whatsappDisplay}
                   </WhatsAppCTA>
                 </li>
@@ -142,7 +149,7 @@ export function Footer() {
               ))}
             </ul>
           </nav>
-          <p className="label-mono text-fg-3">Made in Jaipur, India</p>
+          <p className="label-mono text-fg-3">Made in Delhi, India</p>
         </div>
       </div>
     </footer>
