@@ -24,6 +24,16 @@ export type Testimonial = {
   permissionGiven: boolean;
 };
 
+/**
+ * The draft waiting for this brand's OK, if there is one. /review?brand=… starts the client's
+ * review from it, for them to change, rate and send themselves.
+ */
+export function draftFor(brand: string): Testimonial | undefined {
+  const b = brand.trim().toLowerCase();
+  if (!b) return undefined;
+  return testimonials.find((t) => !t.permissionGiven && !t.quote.startsWith("TODO") && t.company.toLowerCase() === b);
+}
+
 export const testimonials: Testimonial[] = [
   {
     name: "Jay Agrawal", // ⚠️ CONFIRM spelling: Agrawal or Agarwal

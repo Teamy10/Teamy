@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { ReviewForm } from "@/components/review/ReviewForm";
 import { Footer } from "@/components/sections/Footer";
 import { Header } from "@/components/sections/Header";
+import { isFilled } from "@/content/site";
+import { draftFor } from "@/content/testimonials";
 
 export const metadata: Metadata = {
   title: { absolute: "Leave a review | Teamy" },
@@ -14,12 +16,15 @@ export const metadata: Metadata = {
 type Search = Promise<Record<string, string | string[] | undefined>>;
 
 /**
- * /review: the link Teamy sends its clients (?brand=…&name=… fills those in). Reviews arrive on
- * WhatsApp, in the client's own words and with their consent. Out of search results.
+ * /review: the link Teamy sends its clients (?brand=…&name=… fills those in, and starts from that
+ * brand's draft if it has one). Reviews arrive on WhatsApp, as the client sent them and with their
+ * consent. Out of search results.
  */
 export default async function ReviewPage({ searchParams }: { searchParams: Search }) {
   const sp = await searchParams;
   const param = (k: string) => (typeof sp[k] === "string" ? sp[k].slice(0, 80) : "");
+  const draft = draftFor(param("brand"));
+  const name = param("name") || (draft && isFilled(draft.name) ? draft.name : "");
 
   return (
     <>
@@ -44,7 +49,18 @@ export default async function ReviewPage({ searchParams }: { searchParams: Searc
             </ul>
           </div>
           <div className="lg:col-span-6 lg:col-start-7">
-            <ReviewForm brand={param("brand")} name={param("name")} />
+            {draft && (
+              <p role="note" className="mb-6 rounded-2xl border border-dashed border-accent/60 px-5 py-4 text-[15px] text-fg-2">
+                <strong className="text-fg">We&apos;ve started it for you</strong> from our work together. Change anything you
+                like (or write your own), pick your stars and send.
+              </p>
+            )}
+            <ReviewForm
+              brand={param("brand")}
+              name={name}
+              role={draft && isFilled(draft.role) ? draft.role : ""}
+              review={draft?.quote ?? ""}
+            />
           </div>
         </section>
       </main>
