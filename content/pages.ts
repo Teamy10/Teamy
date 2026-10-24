@@ -610,7 +610,7 @@ export const pages: LandingPage[] = [
       {
         heading: "Our address and hours",
         paragraphs: [
-          "Teamy is based in Mehrauli, New Delhi 110030, India. We work Monday to Saturday and reply to WhatsApp messages within 4 hours on working days. You can also email us at hello@teamy.in.",
+          "Teamy is based in Mehrauli, New Delhi 110030, India. We work Monday to Saturday and reply to WhatsApp messages within 4 hours on working days. You can also email us at teamyindia@gmail.com.",
         ],
       },
     ],
