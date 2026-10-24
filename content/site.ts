@@ -116,7 +116,7 @@ export const siteConfig = {
     whatsappNumber: WHATSAPP_NUMBER.replace(/\D/g, ""),
     whatsappDisplay: WHATSAPP_NUMBER,
     phone: "+91-9509612425",
-    email: "hello@teamy.in", // ⚠️ CONFIRM mailbox exists
+    email: "teamyindia@gmail.com",
     address: {
       /** Area (or building and road). Shown before the city: "Mehrauli, New Delhi 110030". */
       street: "Mehrauli",
