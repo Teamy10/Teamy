@@ -90,7 +90,7 @@ export type Faq = { q: string; a: string };
  * Teamy's WhatsApp number. Every contact button and link on the site opens a chat with this
  * number (wa.me), pre-filled with WHATSAPP_MESSAGE.
  */
-export const WHATSAPP_NUMBER = "+91 82098 93843";
+export const WHATSAPP_NUMBER = "+91 87570 23236";
 /** The message every contact button pre-fills. The contact form adds the visitor's details below it. */
 export const WHATSAPP_MESSAGE = "Hi Teamy! I'd like to discuss a website project.";
 
@@ -115,7 +115,7 @@ export const siteConfig = {
     /** Digits only, for wa.me links. Edit WHATSAPP_NUMBER above, not this. */
     whatsappNumber: WHATSAPP_NUMBER.replace(/\D/g, ""),
     whatsappDisplay: WHATSAPP_NUMBER,
-    phone: "+91-8209893843",
+    phone: "+91-8757023236",
     email: "teamyindia@gmail.com",
     address: {
       /** Area (or building and road). Shown before the city: "Mehrauli, New Delhi 110030". */
