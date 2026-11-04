@@ -31,7 +31,7 @@ const logo = () => ({ "@type": "ImageObject", url: abs("/icon-512.png"), width: 
 /** The provider, inline, so pages that mention it don't depend on another page's markup. */
 const provider = () => ({ "@type": "ProfessionalService", "@id": BIZ_ID(), name: siteConfig.brand, url: abs("/") });
 
-/** "From ₹8,999": a starting price, not a fixed one. */
+/** "From ₹14,999": a starting price, not a fixed one. */
 const fromPrice = () => ({ "@type": "PriceSpecification", minPrice: siteConfig.plan.price, priceCurrency: "INR" });
 
 function postalAddress() {

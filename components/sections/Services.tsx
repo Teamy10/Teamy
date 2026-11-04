@@ -6,8 +6,9 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { siteConfig } from "@/content/site";
 
-// Bento rhythm on the 12-column grid: wide / narrow, narrow / wide, half / half.
-const spans = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-5", "lg:col-span-7", "lg:col-span-6", "lg:col-span-6"];
+// Bento rhythm on the 12-column grid: wide / narrow, narrow / wide, then three thirds. On tablets
+// (two columns) the seventh tile spans the full row.
+const spans = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-5", "lg:col-span-7", "lg:col-span-4", "lg:col-span-4", "md:col-span-2 lg:col-span-4"];
 
 export function Services() {
   return (

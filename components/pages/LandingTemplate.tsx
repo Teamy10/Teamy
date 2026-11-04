@@ -73,16 +73,29 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
                   ))}
                 </div>
                 <div className="hero-rise mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7" style={{ ["--d" as string]: "0.5s" }}>
-                  <WhatsAppCTA
-                    source={`page_${page.slug}`}
-                    data-magnetic=""
-                    className={buttonClass("primary", "w-full sm:w-auto", "lg")}
-                  >
-                    <WhatsAppIcon className="size-5" /> Talk to us on WhatsApp
-                  </WhatsAppCTA>
-                  <Link href="/#pricing" prefetch={false} className={buttonClass("ghost")}>
-                    From {formatINR(siteConfig.plan.price)}, see what&apos;s included <ArrowRight className="size-4" aria-hidden="true" />
-                  </Link>
+                  {page.heroCta ? (
+                    <>
+                      <Link href={page.heroCta.href} prefetch={false} data-magnetic="" className={buttonClass("primary", "w-full sm:w-auto", "lg")}>
+                        {page.heroCta.label} <ArrowRight className="size-5" aria-hidden="true" />
+                      </Link>
+                      <WhatsAppCTA source={`page_${page.slug}`} className={buttonClass("secondary", "w-full sm:w-auto", "lg")}>
+                        <WhatsAppIcon className="size-5 text-accent" /> Talk to us on WhatsApp
+                      </WhatsAppCTA>
+                    </>
+                  ) : (
+                    <>
+                      <WhatsAppCTA
+                        source={`page_${page.slug}`}
+                        data-magnetic=""
+                        className={buttonClass("primary", "w-full sm:w-auto", "lg")}
+                      >
+                        <WhatsAppIcon className="size-5" /> Talk to us on WhatsApp
+                      </WhatsAppCTA>
+                      <Link href="/#pricing" prefetch={false} className={buttonClass("ghost")}>
+                        From {formatINR(siteConfig.plan.price)}, see what&apos;s included <ArrowRight className="size-4" aria-hidden="true" />
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -92,10 +105,16 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
         {/* Benefits */}
         <section aria-labelledby="benefits-title" className="cv-auto pb-8 [--cv-h:400px]">
           <div className="container-page">
-            <h2 id="benefits-title" className="sr-only">
-              What you get
-            </h2>
-            <ul className="grid border-t border-line sm:grid-cols-2 lg:grid-cols-4">
+            {page.benefitsTitle ? (
+              <h2 id="benefits-title" className="display-m mb-10">
+                {page.benefitsTitle}
+              </h2>
+            ) : (
+              <h2 id="benefits-title" className="sr-only">
+                What you get
+              </h2>
+            )}
+            <ul className={`grid border-t border-line sm:grid-cols-2 ${page.benefits.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"}`}>
               {page.benefits.map((b, i) => (
                 <Reveal
                   as="li"
@@ -158,11 +177,22 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
               <Reveal key={sec.heading} delay={(i % 2) * 0.06} className="lg:col-span-6 [&:nth-child(odd)]:lg:col-start-1">
                 <article>
                   <h2 className="display-m">{sec.heading}</h2>
-                  <div className="mt-5 space-y-4 text-lg text-fg-2">
-                    {sec.paragraphs.map((p) => (
-                      <p key={p.slice(0, 32)}>{p}</p>
-                    ))}
-                  </div>
+                  {sec.paragraphs.length > 0 && (
+                    <div className="mt-5 space-y-4 text-lg text-fg-2">
+                      {sec.paragraphs.map((p) => (
+                        <p key={p.slice(0, 32)}>{p}</p>
+                      ))}
+                    </div>
+                  )}
+                  {sec.list && (
+                    <ul className="mt-5 space-y-3.5 text-lg text-fg-2">
+                      {sec.list.map((item) => (
+                        <li key={item} className="flex gap-3">
+                          <Check className="mt-1.5 size-4 shrink-0 text-accent" strokeWidth={3} aria-hidden="true" /> {item}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </article>
               </Reveal>
             ))}

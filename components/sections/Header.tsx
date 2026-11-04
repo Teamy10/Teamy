@@ -15,6 +15,7 @@ const links = [
   { href: "/#process", label: "Process" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#faq", label: "FAQ" },
+  { href: "/#audit", label: "Free audit" },
 ];
 
 /** Sticky header: transparent over the hero, then a blurred dark bar with a hairline once you scroll. */
