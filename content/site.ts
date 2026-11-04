@@ -39,7 +39,7 @@ export type StoryPiece = "domain" | "storefront" | "checkout" | "whatsapp" | "an
 export type StoryDay = { title: string; line: string; piece: StoryPiece };
 
 /** Bento tile icons (custom animated SVGs in components/icons/AnimatedIcons.tsx). */
-export type ServiceIcon = "storefront" | "checkout" | "whatsapp" | "cart" | "analytics" | "drops";
+export type ServiceIcon = "storefront" | "checkout" | "whatsapp" | "cart" | "agent" | "analytics" | "drops";
 export type ServiceTile = { icon: ServiceIcon; stage: "Launch" | "Sell" | "Grow"; title: string; line: string; slug: string };
 
 
@@ -65,7 +65,7 @@ export type Stat = {
   value: number | string;
   prefix?: string;
   suffix?: string;
-  /** Format the number as Indian rupees (₹8,999). */
+  /** Format the number as Indian rupees (₹14,999). */
   inr?: boolean;
   /** Decimal places to show (e.g. 1 for a 4.9 rating). */
   decimals?: number;
@@ -98,7 +98,7 @@ export const WHATSAPP_MESSAGE = "Hi Teamy! I'd like to discuss a website project
 const launchDays = 7; // ⚠️ CONFIRM
 
 /** The starter store's price in rupees: shown on the site and charged at checkout. */
-const starterPrice = 8999;
+const starterPrice = 14999;
 
 export const siteConfig = {
   brand: "Teamy",
@@ -156,12 +156,16 @@ export const siteConfig = {
   audience: "D2C brands",
 
   hero: {
+    /** Small line above the headline. */
+    eyebrow: "Web & AI studio for D2C brands",
     /** Two lines, revealed word by word with a mask wipe on load. */
     lines: [
-      { text: "The web team behind", emphasis: "behind" },
-      { text: "India's D2C brands.", emphasis: "D2C", heroWord: true },
+      { text: "Your store, built to sell.", emphasis: "built to sell." },
+      { text: "Your WhatsApp, answering 24/7.", emphasis: "24/7.", heroWord: true },
     ] satisfies HeroLine[] as HeroLine[],
-    sub: "We design and build custom-coded ecommerce websites that make D2C brands look as big as their ambition, from first launches to brands seen on Shark Tank India.",
+    sub: "Custom-coded ecommerce stores and WhatsApp AI agents that confirm COD orders, answer customers and bring back abandoned carts. Built by the team that has built and worked on websites for brands seen on Shark Tank India.",
+    /** Under the hero buttons. */
+    note: "A free 2-minute video audit of your store. No pitch, no pressure.",
     /** The two client sites shown in the hero (slugs from content/projects.ts): desktop frame, then phone. */
     showcase: ["zoff", "truediamond"],
   },
@@ -182,18 +186,19 @@ export const siteConfig = {
     ] satisfies StoryDay[] as StoryDay[],
   },
 
-  /** "What we build for D2C brands": six bento tiles covering every Launch / Sell / Grow item. */
+  /** "What we build for D2C brands": seven bento tiles covering every Launch / Sell / Grow item. */
   services: [
     { icon: "storefront", slug: "custom-storefront-design", stage: "Launch", title: "Custom storefront design", line: "A store that looks like your brand, not a template, on your own domain." },
     { icon: "checkout", slug: "upi-cod-checkout", stage: "Launch", title: "UPI, cards & COD checkout", line: "Plus shipping and GST-ready invoices, set up and tested for you." },
     { icon: "whatsapp", slug: "whatsapp-order-updates", stage: "Sell", title: "WhatsApp order updates", line: "Confirmed, shipped, delivered. COD confirmed before you dispatch." },
     { icon: "cart", slug: "abandoned-cart-recovery", stage: "Sell", title: "Abandoned-cart nudges", line: "Gentle reminders and fast, mobile-first product pages that win carts back." },
+    { icon: "agent", slug: "whatsapp-ai-agent", stage: "Sell", title: "WhatsApp AI agent", line: "24/7 answers, COD confirmation and cart recovery on WhatsApp." },
     { icon: "analytics", slug: "analytics-meta-pixel", stage: "Grow", title: "Analytics & Meta Pixel", line: "See what sells, with SEO basics that compound over time." },
     { icon: "drops", slug: "drops-waitlists-reorders", stage: "Grow", title: "Drops, waitlists & reorders", line: "Restock alerts and reorder reminders that bring customers back." },
   ] satisfies ServiceTile[] as ServiceTile[],
 
   plan: {
-    name: "Starter store",
+    name: "Starter Store",
     price: starterPrice,
     forWho: `For brands launching their first online store. Live in about ${launchDays} days.`,
     // Every feature from the old Launch + Growth plans, de-duplicated, in the order a store comes together.
@@ -224,7 +229,35 @@ export const siteConfig = {
     description: "Starter store: design and build",
   },
 
-  /** The second pricing card: bigger builds, quoted after a free call. */
+  /** The first pricing card: WhatsApp AI agents added to a store the brand already has. */
+  agentPlan: {
+    name: "AI Agent Add-on",
+    badge: "No rebuild needed",
+    forWho: "For brands that already have a store.",
+    setup: 14999,
+    monthly: 4999,
+    features: [
+      "COD confirmation on WhatsApp",
+      "24/7 AI customer support, English & Hindi",
+      "Abandoned-cart recovery",
+      "Reorder & restock alerts",
+      "Set up on your own WhatsApp Business number",
+      "Monthly tuning and report",
+      "Live in 5–7 days",
+    ],
+  },
+
+  /** The third pricing card: a new custom store with every AI agent built in. */
+  aiStorePlan: {
+    name: "AI Store",
+    badge: "Best value",
+    forWho: "A new custom store with every AI agent built in.",
+    price: 29999,
+    monthly: 4999,
+    features: ["Everything in Starter Store", "Everything in AI Agent Add-on", "Live in about 10 days"],
+  },
+
+  /** The last pricing card: bigger builds, quoted after a free call. */
   customPlan: {
     name: "Custom website",
     forWho: "For growing brands that need more: custom design, integrations and scale.",
@@ -244,8 +277,38 @@ export const siteConfig = {
     { icon: "search", name: "SEO setup", line: "Search-friendly pages, titles and a sitemap that Google likes." },
     { icon: "sync", name: "Marketplace sync", line: "Keep stock in step with Amazon, Flipkart and others." },
     { icon: "palette", name: "Brand refresh", line: "Logo polish, colours and type, before we build." },
-    { icon: "wrench", name: "Care plan", line: "Monthly updates, festive banners and fixes." },
   ] satisfies AddOn[] as AddOn[],
+
+  /** Lines under the pricing cards. */
+  pricingNotes: {
+    carePlan: "Care plan for any store: ₹4,999/month — banner updates, festive drops, small fixes and a monthly performance check.",
+    payment:
+      "Stores: 50% to start, 50% before launch. AI Agent Add-on: setup and first month paid upfront. UPI, cards and net banking via Razorpay. International clients can pay via PayPal.",
+    whatsappFees: "WhatsApp Business Platform message charges from Meta are billed to your account at cost. Teamy doesn't mark them up.",
+  },
+
+  /** "AI agents that work your WhatsApp, 24/7": the homepage section after the services bento. */
+  aiAgents: {
+    title: "AI agents that work your WhatsApp, 24/7.",
+    emphasis: "24/7.",
+    sub: "Most D2C brands lose money in the same three places: fake COD orders, unanswered messages at midnight, and carts left behind. Our AI agents handle all three. Already have a store? We add the agent to it, no rebuild needed. Launching a new one? We build it in.",
+    agents: [
+      { title: "COD confirmation agent", line: "Every cash-on-delivery order gets a WhatsApp confirmation. Unconfirmed orders are flagged before you pay to ship them, so fewer parcels come back." },
+      { title: "Customer support agent", line: "Answers order status, sizing, shipping and return questions instantly, in English or Hindi, using your store's real data. Hands the chat to your team when a human is needed." },
+      { title: "Abandoned-cart recovery", line: "Friendly WhatsApp reminders that bring shoppers back to finish checkout." },
+      { title: "Reorders & restock alerts", line: "Reminds customers when it's time to reorder, and tells waitlisted customers the moment an item is back." },
+    ],
+    note: "Built on the official WhatsApp Business Platform. Your number, your customers, your data.",
+    worksWith: ["WooCommerce", "Custom-coded stores"],
+  },
+
+  /** The free store audit (id="audit", before the contact section). Requests go out on WhatsApp. */
+  audit: {
+    title: "Get a free 2-minute video audit of your store.",
+    body: "Send us your store link. Within 24 hours you'll get a short screen-recorded video showing what's slowing your store down, where customers drop off, and one fix you can make today, whether or not you work with us.",
+    platforms: ["Shopify", "WooCommerce", "Custom", "Other", "No store yet"],
+    orders: ["Under 100", "100–1,000", "1,000+"],
+  },
 
   /** "How we work": four steps, Discover → Design → Develop → Launch. */
   process: [
@@ -321,7 +384,7 @@ export const siteConfig = {
     },
     {
       q: "What happens after launch?",
-      a: "Your store is live on your domain and taking orders. We stay on WhatsApp for questions, small fixes and help with your first drops. For ongoing work like new banners and festive sales, there's an optional monthly care plan.",
+      a: "Your store is live on your domain and taking orders. We stay on WhatsApp for questions, small fixes and help with your first drops. For ongoing work like new banners and festive sales, there's an optional care plan at ₹4,999/month.",
     },
     {
       q: "Who owns the code and the domain?",
@@ -329,7 +392,7 @@ export const siteConfig = {
     },
     {
       q: "How much does a website cost?",
-      a: "Starter stores start at ₹8,999, one-time. Bigger or custom builds are quoted after a free call, once we know what you need. There's no compulsory monthly fee from Teamy: you pay your own domain renewal and payment-gateway charges directly, and an optional care plan is there if you want us to keep updating the site.",
+      a: "Starter stores start at ₹14,999, one-time. If you already have a store, the AI Agent Add-on is ₹14,999 setup plus ₹4,999/month. Bigger or custom builds are quoted after a free call. For stores, there's no compulsory monthly fee from Teamy: you pay your own domain renewal and payment-gateway charges directly, and an optional care plan at ₹4,999/month is there if you want us to keep updating the site.",
     },
     {
       q: "Where is the store hosted, and what does hosting cost?",
@@ -354,6 +417,26 @@ export const siteConfig = {
     {
       q: "What if I need changes later?",
       a: "Message us on WhatsApp. Small fixes after launch are part of our support, and larger changes or new features are quoted up front before we start.",
+    },
+    {
+      q: "What does the WhatsApp AI agent actually do?",
+      a: "It confirms COD orders, answers customer questions about orders, shipping, sizing and returns, reminds shoppers about abandoned carts, and sends reorder and restock alerts, all on your own WhatsApp Business number.",
+    },
+    {
+      q: "Do I need to rebuild my store to add the AI agent?",
+      a: "No. The AI Agent Add-on connects to your existing store. Nothing about your current website changes.",
+    },
+    {
+      q: "Will the AI say something wrong to my customers?",
+      a: "The agent answers only from your store data and the policies you approve. When it isn't sure, it hands the chat to your team. You can see every conversation.",
+    },
+    {
+      q: "What does WhatsApp charge?",
+      a: "Meta charges small fees for some business messages on the WhatsApp Business Platform. These are billed to your account at cost. Teamy doesn't add a markup.",
+    },
+    {
+      q: "How do payments work?",
+      a: "For stores, 50% to start and 50% before launch. For the AI Agent Add-on, the setup fee and first month are paid upfront. We accept UPI, cards and net banking via Razorpay, and international clients can pay via PayPal.",
     },
   ] satisfies Faq[] as Faq[],
 

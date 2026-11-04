@@ -1,11 +1,9 @@
-import { ArrowDown, Lock, Star } from "lucide-react";
+import { ArrowDown, ArrowRight, Lock, Star } from "lucide-react";
 import type { CSSProperties } from "react";
 import { FestiveHeroNote, HeroMotif } from "@/components/festive/Motifs";
 import { buttonClass } from "@/components/ui/Button";
-import { WhatsAppIcon } from "@/components/ui/Icons";
 import { MaskWords } from "@/components/ui/MaskWords";
 import { TrackedLink } from "@/components/ui/TrackedLink";
-import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
 import { assets, projects } from "@/content/projects";
 import { siteConfig } from "@/content/site";
 import { publicFileExists } from "@/lib/assets";
@@ -82,15 +80,8 @@ export function Hero() {
       <HeroMotif />
       <div className="container-page relative grid grid-cols-1 items-center gap-y-14 pb-12 pt-10 lg:grid-cols-12 lg:gap-x-10 lg:pb-14 lg:pt-14">
         <div className="relative z-10 lg:col-span-7">
-          <p className="hero-rise inline-flex items-center gap-2.5 text-[15px] text-fg-2" style={rise(0.05)}>
-            <span className="flex text-accent" aria-hidden="true">
-              {Array.from({ length: 5 }, (_, i) => (
-                <Star key={i} className="size-4 fill-current" />
-              ))}
-            </span>
-            <span>
-              <strong className="font-semibold text-fg">{facts.rating}/5</strong> from our clients · {facts.projects}+ projects
-            </span>
+          <p className="hero-rise label-mono text-accent" style={rise(0.05)}>
+            {hero.eyebrow}
           </p>
           {/* Kinetic headline: each word wipes up from a mask, on load, with CSS only. */}
           <h1 id="hero-title" className="hero-mask display-xl mt-6 lg:text-[clamp(3.5rem,1.2rem+3.6vw,4.4rem)]">
@@ -107,15 +98,32 @@ export function Hero() {
             <FestiveHeroNote />
           </div>
           <div className="hero-rise mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7" style={rise(0.6)}>
-            <WhatsAppCTA source="hero_quote" data-magnetic="" className={buttonClass("primary", "w-full sm:w-auto", "lg")}>
-              <WhatsAppIcon className="size-5" /> Get a free quote
-            </WhatsAppCTA>
+            <TrackedLink
+              href="#audit"
+              event="hero_cta_click"
+              params={{ location: "hero_audit" }}
+              data-magnetic=""
+              className={buttonClass("primary", "w-full sm:w-auto", "lg")}
+            >
+              Get a free store audit <ArrowRight className="size-5" aria-hidden="true" />
+            </TrackedLink>
             <TrackedLink href="#work" event="hero_cta_click" params={{ location: "hero_work" }} className={buttonClass("ghost")}>
               See our work <ArrowDown className="size-4" aria-hidden="true" />
             </TrackedLink>
           </div>
-          <ul className="hero-rise label-mono mt-10 flex flex-wrap gap-x-6 gap-y-2 text-fg-3" style={rise(0.7)}>
-            {[`${facts.years}+ years`, `${facts.satisfaction}% client satisfaction`, "Shark Tank India brands"].map((t) => (
+          <p className="hero-rise mt-4 text-[15px] text-fg-3" style={rise(0.65)}>
+            {hero.note}
+          </p>
+          <ul className="hero-rise label-mono mt-8 flex flex-wrap gap-x-6 gap-y-2 text-fg-3" style={rise(0.7)}>
+            <li className="flex items-center gap-2">
+              <span className="flex text-accent" aria-hidden="true">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Star key={i} className="size-3.5 fill-current" />
+                ))}
+              </span>
+              {facts.rating}/5 from our clients
+            </li>
+            {[`${facts.projects}+ projects`, `${facts.years}+ years`, `${facts.satisfaction}% client satisfaction`, "Shark Tank India brands"].map((t) => (
               <li key={t} className="flex items-center gap-2">
                 <span aria-hidden="true" className="size-1 rounded-full bg-accent" />
                 {t}

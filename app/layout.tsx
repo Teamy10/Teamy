@@ -41,9 +41,9 @@ const mono = localFont({
   preload: false,
 });
 
-// Home page title (≤ 60 chars) and description (≤ 155 chars). Other pages set their own via lib/metadata.ts.
-const title = `Ecommerce Website Development Company in India | ${siteConfig.brand}`;
-const description = `Custom-coded ecommerce websites for D2C brands, including Shark Tank India brands. ${siteConfig.facts.projects}+ projects, rated ${siteConfig.facts.rating}/5. New Delhi. From ${formatINR(siteConfig.plan.price)}.`;
+// Home page title and description. Other pages set their own via lib/metadata.ts.
+const title = `${siteConfig.brand} | Ecommerce Websites & WhatsApp AI Agents for D2C Brands`;
+const description = `Custom-coded ecommerce stores and WhatsApp AI agents for India’s D2C brands. COD confirmation, 24/7 support and cart recovery. Free store audit. From ${formatINR(siteConfig.plan.price)}.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),

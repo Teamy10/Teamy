@@ -36,7 +36,7 @@ testimonials in **`content/testimonials.ts`**, and service and landing page copy
 | Hero headline, sub line, the two client sites shown | `hero` (`showcase` = project slugs) |
 | "Idea → live in 7 days" scroll story | `story` |
 | "What we build" bento tiles (each links to `/services/<slug>`) | `services` |
-| Pricing: starter store ("from ₹8,999"), custom website (quoted), add-ons | `plan`, `customPlan`, `addOns` |
+| Pricing: starter store ("from ₹14,999"), custom website (quoted), add-ons | `plan`, `customPlan`, `addOns` |
 | "How we work" steps (Discover → Design → Develop → Launch) | `process` |
 | Trust numbers (count up on scroll) | `stats` |
 | "Works with" logos (`verified: false` = hidden) | `integrations` |
@@ -129,7 +129,7 @@ Every WhatsApp click and form submit fires GA4 `generate_lead` (with `lead_sourc
   other sites, a strict referrer policy, and camera, microphone and location turned off.
 - JSON-LD: Organization (logo, address, contact point, topics), ProfessionalService/LocalBusiness
   (with the service catalogue) and WebSite on the home page; Service or LocalBusiness, BreadcrumbList and
-  FAQPage on landing pages. Prices are "from ₹8,999". No ratings or reviews markup (Google ignores
+  FAQPage on landing pages. Prices are "from ₹14,999". No ratings or reviews markup (Google ignores
   self-published ratings and can treat them as spam).
 - `sitemap.xml` (with lastmod, refreshed on every deploy), `robots.txt`, and `/llms.txt`: a plain
   summary of Teamy for AI search (ChatGPT, Perplexity, Gemini), generated from the content files.

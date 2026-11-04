@@ -62,6 +62,17 @@ function Cart() {
   );
 }
 
+function Agent() {
+  return (
+    <svg {...common}>
+      <path d="M12 8h20a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4H19l-7 6v-6a4 4 0 0 1-4-4V12a4 4 0 0 1 4-4z" />
+      <path d="M15 17h14" />
+      <path d="M15 22h8" />
+      <path className="ia-pop" d="M40 29l1.4 3.2 3.2 1.4-3.2 1.4L40 38.2l-1.4-3.2-3.2-1.4 3.2-1.4z" fill="var(--accent)" stroke="none" />
+    </svg>
+  );
+}
+
 function Analytics() {
   return (
     <svg {...common}>
@@ -90,6 +101,7 @@ const map: Record<ServiceIcon, () => React.ReactElement> = {
   checkout: Checkout,
   whatsapp: WhatsApp,
   cart: Cart,
+  agent: Agent,
   analytics: Analytics,
   drops: Drops,
 };

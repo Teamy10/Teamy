@@ -1,4 +1,6 @@
 import { About } from "@/components/sections/About";
+import { AiAgents } from "@/components/sections/AiAgents";
+import { Audit } from "@/components/sections/Audit";
 import { ClientLogos } from "@/components/sections/ClientLogos";
 import { Contact } from "@/components/sections/Contact";
 import { Faq } from "@/components/sections/Faq";
@@ -32,6 +34,7 @@ export default function Home() {
         <Work />
         <Videos />
         <Services />
+        <AiAgents />
         <Process />
         <Story />
         <Testimonials />
@@ -39,6 +42,7 @@ export default function Home() {
         <WorksWith />
         <About />
         <Faq faqs={siteConfig.faqs} />
+        <Audit />
         <Contact />
       </main>
       <Footer />

@@ -12,6 +12,18 @@ export function projectRequestMessage(v: { name: string; projectType: string; me
   );
 }
 
+/** The free store audit request, on one line. Optional fields left empty are left out. */
+export function auditRequestMessage(v: { url: string; name: string; number: string; platform?: string; orders?: string }): string {
+  const parts = [
+    v.url && `Store: ${v.url}`,
+    `Name: ${v.name}`,
+    `WhatsApp: ${v.number}`,
+    v.platform && `Platform: ${v.platform}`,
+    v.orders && `Orders/month: ${v.orders}`,
+  ].filter(Boolean);
+  return `Hi Teamy! I'd like a free store audit. ${parts.join(" · ")}`;
+}
+
 /**
  * A client's review, as the WhatsApp message they send from /review: their own words, with their
  * consent written into the message itself.

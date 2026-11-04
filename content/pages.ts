@@ -1,10 +1,10 @@
 /**
  * Service and landing pages, rendered by app/services/[slug] and the two landing routes.
- * Copy rules: original, useful, true to the offer in content/site.ts (₹8,999 one-time,
+ * Copy rules: original, useful, true to the offer in content/site.ts (₹14,999 one-time,
  * live in about 7 days, you own everything). No invented numbers, clients or claims about
  * other companies. `tests/pages.test.ts` checks title/description length and word count.
  */
-import type { Faq } from "./site";
+import { siteConfig, type Faq } from "./site";
 
 export type LandingPage = {
   slug: string;
@@ -21,12 +21,17 @@ export type LandingPage = {
   /** Word(s) in the H1 set in the light contrast weight. */
   h1Emphasis?: string;
   intro: string[];
+  /** Optional hero button shown first, in place of the price link (WhatsApp then comes second). */
+  heroCta?: { label: string; href: string };
+  /** Optional visible heading over the benefits row (otherwise it's for screen readers only). */
+  benefitsTitle?: string;
   benefits: { title: string; line: string }[];
-  sections: { heading: string; paragraphs: string[] }[];
+  /** A section can end in a checklist. */
+  sections: { heading: string; paragraphs: string[]; list?: string[] }[];
   /** Optional comparison table (Shopify page). */
   comparison?: { caption: string; columns: [string, string, string]; rows: [string, string, string][]; note: string };
-  /** Which project card to show (name from content/projects.ts). */
-  portfolio: string;
+  /** Which project card to show (name from content/projects.ts). Left out where no store fits the page. */
+  portfolio?: string;
   faqs: Faq[];
   related: string[];
 };
@@ -39,7 +44,7 @@ export const pages: LandingPage[] = [
     name: "Custom storefront design",
     title: "Custom Storefront Design for D2C Brands | Teamy",
     description:
-      "A custom-designed online store for your D2C brand, built around your products and photos, on your own domain. One-time ₹8,999, live in about 7 days.",
+      "A custom-designed online store for your D2C brand, built around your products and photos, on your own domain. One-time ₹14,999, live in about 7 days.",
     h1: "A storefront designed around your brand, not a template.",
     h1Emphasis: "not a template.",
     intro: [
@@ -242,7 +247,7 @@ export const pages: LandingPage[] = [
         a: "Yes. Replies come to your business WhatsApp, so a customer with a question about their order can just answer the message.",
       },
       {
-        q: "Are the order updates included in the ₹8,999 build?",
+        q: "Are the order updates included in the ₹14,999 build?",
         a: "Yes. Setting up WhatsApp order updates and COD confirmation is part of the standard build. Any messaging charges from WhatsApp itself depend on your volume, and we explain them before you switch anything on.",
       },
     ],
@@ -255,7 +260,7 @@ export const pages: LandingPage[] = [
     name: "Abandoned-cart recovery",
     title: "Abandoned Cart Recovery for D2C Stores | Teamy",
     description:
-      "Win back abandoned carts with timely, polite reminders and a checkout that's fast on mobile. Set up for your D2C store by Teamy, one-time ₹8,999.",
+      "Win back abandoned carts with timely, polite reminders and a checkout that's fast on mobile. Set up for your D2C store by Teamy, one-time ₹14,999.",
     h1: "Win back the carts that almost became orders.",
     h1Emphasis: "almost became orders.",
     intro: [
@@ -314,7 +319,7 @@ export const pages: LandingPage[] = [
         a: "No. You can start with a simple reminder and test an offer later if your numbers suggest it would help.",
       },
       {
-        q: "Is this included in the ₹8,999 build?",
+        q: "Is this included in the ₹14,999 build?",
         a: "Yes. Abandoned-cart nudges are part of the standard build, along with the checkout improvements described here.",
       },
       {
@@ -323,6 +328,56 @@ export const pages: LandingPage[] = [
       },
     ],
     related: ["upi-cod-checkout", "whatsapp-order-updates", "analytics-meta-pixel"],
+  },
+  {
+    // Copy from docs/website-update-kit.md (section 5), word for word: shorter than the other pages by design.
+    slug: "whatsapp-ai-agent",
+    path: "/services/whatsapp-ai-agent",
+    kind: "service",
+    name: "WhatsApp AI agent",
+    title: "WhatsApp AI Agent for D2C Brands | Teamy",
+    description:
+      "A WhatsApp AI agent that confirms COD orders, answers customers 24/7 and recovers abandoned carts. Works with your existing store. ₹14,999 setup + ₹4,999/month.",
+    h1: "An AI agent that confirms orders, answers customers and recovers carts on WhatsApp.",
+    h1Emphasis: "on WhatsApp.",
+    intro: [
+      "Your customers message at 11 PM asking where their order is. COD buyers change their mind and refuse the parcel after you've paid to ship it. Shoppers add to cart and disappear. Every one of these costs you money, and nobody can sit on WhatsApp all day.",
+    ],
+    heroCta: { label: "Get a free store audit", href: "/#audit" },
+    benefitsTitle: "How it works",
+    benefits: [
+      { title: "We connect your store and WhatsApp.", line: "Your store's orders and products are linked to your WhatsApp Business number." },
+      { title: "We train the agent on your brand.", line: "Your products, policies, shipping times and tone of voice. It only answers from what you approve." },
+      { title: "Live in 5–7 days.", line: "You can see every conversation, and the agent hands the chat to your team whenever it isn't sure." },
+    ],
+    sections: [
+      {
+        heading: "What you get",
+        paragraphs: [],
+        list: [
+          "COD order confirmation on WhatsApp",
+          "24/7 answers to order status, shipping, sizing and returns, in English or Hindi",
+          "Abandoned-cart reminders",
+          "Reorder and restock alerts",
+          "A monthly report: conversations handled, orders confirmed, carts recovered",
+          "Monthly tuning as your products and policies change",
+        ],
+      },
+      {
+        heading: "Pricing",
+        paragraphs: ["₹14,999 setup + ₹4,999/month. Cancel the monthly plan any time."],
+      },
+    ],
+    // The AI agent questions from the home page FAQ.
+    faqs: siteConfig.faqs.filter((f) =>
+      [
+        "What does the WhatsApp AI agent actually do?",
+        "Do I need to rebuild my store to add the AI agent?",
+        "Will the AI say something wrong to my customers?",
+        "What does WhatsApp charge?",
+      ].includes(f.q),
+    ),
+    related: ["whatsapp-order-updates", "abandoned-cart-recovery", "drops-waitlists-reorders"],
   },
   {
     slug: "analytics-meta-pixel",
@@ -478,17 +533,17 @@ export const pages: LandingPage[] = [
     path: "/shopify-alternative-india",
     kind: "landing",
     name: "Shopify alternative for India",
-    title: "Shopify Alternative in India: One-Time ₹8,999 | Teamy",
+    title: "Shopify Alternative in India: One-Time ₹14,999 | Teamy",
     description:
-      "Looking for a Shopify alternative in India? An honest comparison of monthly-subscription platforms and a one-time ₹8,999 store you own outright.",
+      "Looking for a Shopify alternative in India? An honest comparison of monthly-subscription platforms and a one-time ₹14,999 store you own outright.",
     h1: "A Shopify alternative for Indian brands that want to own their store.",
     h1Emphasis: "own their store.",
     intro: [
       "Shopify is a good platform, and plenty of brands do well on it. If you're searching for a Shopify alternative in India, it's usually for one of three reasons: the monthly subscription and paid apps add up, you don't have time to build and maintain the store yourself, or you want more control over a store you own.",
-      "Here's an honest look at how a subscription platform compares with a store Teamy designs and builds for you for a one-time ₹8,999, so you can choose what fits your brand.",
+      "Here's an honest look at how a subscription platform compares with a store Teamy designs and builds for you for a one-time ₹14,999, so you can choose what fits your brand.",
     ],
     benefits: [
-      { title: "One-time cost", line: "₹8,999 for the build, with no compulsory monthly fee from Teamy." },
+      { title: "One-time cost", line: "₹14,999 for the build, with no compulsory monthly fee from Teamy." },
       { title: "Built for you", line: "We design, build and set up the store; you don't need to learn a platform or hire a developer." },
       { title: "Indian checkout", line: "UPI, cards and COD with WhatsApp COD confirmation, set up from day one." },
       { title: "You own it", line: "Your domain, your code and your customer data, yours to keep and take anywhere." },
@@ -497,7 +552,7 @@ export const pages: LandingPage[] = [
       caption: "Subscription platform vs a Teamy store",
       columns: ["", "Typical subscription platform", "Teamy"],
       rows: [
-        ["How you pay", "Monthly subscription; some features need paid apps", "₹8,999 one-time; optional care plan if you want ongoing updates"],
+        ["How you pay", "Monthly subscription; some features need paid apps", "₹14,999 one-time; optional care plan if you want ongoing updates"],
         ["Who builds it", "You, or a developer you hire and brief", "We do, after a free preview you approve"],
         ["COD and WhatsApp", "Usually added with apps and setup", "Included: COD with WhatsApp confirmation and order updates"],
         ["Ownership", "Your store runs on the platform; your data is exportable", "Your domain, code and data; access handed over to you"],
@@ -540,7 +595,7 @@ export const pages: LandingPage[] = [
         a: "No. Teamy is a studio. We design, build and run your store for you, so you're not signing up to a platform and building it yourself.",
       },
       {
-        q: "What will I pay after the ₹8,999?",
+        q: "What will I pay after the ₹14,999?",
         a: "There's no compulsory monthly fee from Teamy. You pay your own domain renewal and payment-gateway charges directly, and the care plan is optional.",
       },
       {
@@ -561,7 +616,7 @@ export const pages: LandingPage[] = [
     name: "Ecommerce website developer in Delhi",
     title: "Website Design & Ecommerce Development in Delhi | Teamy",
     description:
-      "Teamy is an ecommerce website developer in New Delhi: custom-coded online stores for D2C brands across India. 450+ projects, from ₹8,999.",
+      "Teamy is an ecommerce website developer in New Delhi: custom-coded online stores for D2C brands across India. 450+ projects, from ₹14,999.",
     h1: "Ecommerce website developer in Delhi, for brands across India.",
     h1Emphasis: "for brands across India.",
     intro: [
@@ -572,7 +627,7 @@ export const pages: LandingPage[] = [
       { title: "A Delhi team you can reach", line: "On WhatsApp Monday to Saturday, replying within 4 hours, and a short drive away if you're in Delhi." },
       { title: "Proven with real brands", line: "450+ projects, including brands seen on Shark Tank India." },
       { title: "Made for Indian buyers", line: "UPI, cards and COD checkout, with WhatsApp order updates and COD confirmation." },
-      { title: "A clear starting price", line: "Starter stores from ₹8,999 one-time; bigger builds quoted after a free call." },
+      { title: "A clear starting price", line: "Starter stores from ₹14,999 one-time; bigger builds quoted after a free call." },
     ],
     sections: [
       {
@@ -598,7 +653,7 @@ export const pages: LandingPage[] = [
         heading: "Why brands choose a team over a freelancer",
         paragraphs: [
           "Freelancers can be great, but many founders have been burned by a developer who disappeared after launch, or by a website nobody else could maintain. As a team, we document what we build, hand over every login, and stay reachable on WhatsApp after your site goes live.",
-          "You also get a clear starting price: starter stores from ₹8,999, one-time, with no compulsory monthly fee from Teamy. Larger builds and add-ons like catalogue upload, SEO setup or a care plan are quoted before we start, so there are no surprises later.",
+          "You also get a clear starting price: starter stores from ₹14,999, one-time, with no compulsory monthly fee from Teamy. Larger builds and add-ons like catalogue upload, SEO setup or a care plan are quoted before we start, so there are no surprises later.",
         ],
       },
       {
