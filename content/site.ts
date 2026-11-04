@@ -156,12 +156,16 @@ export const siteConfig = {
   audience: "D2C brands",
 
   hero: {
+    /** Small line above the headline. */
+    eyebrow: "Web & AI studio for D2C brands",
     /** Two lines, revealed word by word with a mask wipe on load. */
     lines: [
-      { text: "The web team behind", emphasis: "behind" },
-      { text: "India's D2C brands.", emphasis: "D2C", heroWord: true },
+      { text: "Your store, built to sell.", emphasis: "built to sell." },
+      { text: "Your WhatsApp, answering 24/7.", emphasis: "24/7.", heroWord: true },
     ] satisfies HeroLine[] as HeroLine[],
-    sub: "We design and build custom-coded ecommerce websites that make D2C brands look as big as their ambition, from first launches to brands seen on Shark Tank India.",
+    sub: "Custom-coded ecommerce stores and WhatsApp AI agents that confirm COD orders, answer customers and bring back abandoned carts. Built by the team that has built and worked on websites for brands seen on Shark Tank India.",
+    /** Under the hero buttons. */
+    note: "A free 2-minute video audit of your store. No pitch, no pressure.",
     /** The two client sites shown in the hero (slugs from content/projects.ts): desktop frame, then phone. */
     showcase: ["zoff", "truediamond"],
   },
